@@ -1,4 +1,6 @@
 # Twitch-Plays-Bot
+
+Thank you Sunshinekitty and friends!
 This is a bot for Twitch Plays based on https://github.com/sunshinekitty/TwitchPlaysPokemon
 
 Currently supported emulators include:
