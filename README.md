@@ -12,6 +12,7 @@ and pcsx2
 --------------------------
 # Setup
 You will need the following to run this bot.
+
 Python 2.7
 https://www.python.org/download/releases/2.7/
 
