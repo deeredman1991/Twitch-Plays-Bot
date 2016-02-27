@@ -1,6 +1,6 @@
 # Twitch-Plays-Bot
 
-Thank you Sunshinekitty and friends!
+Thank you Sunshinekitty and friends! (RDJ, MZ, AP, and Oriax)
 
 This is a bot for Twitch Plays based on https://github.com/sunshinekitty/TwitchPlaysPokemon
 
