@@ -200,14 +200,23 @@ Right Stick Left or C Left:
 Other Commands:
 	Chat Commands:
 		'!pausingon', '!pon', #Turns pausing on between key presses
+		
 		'!pausingoff', '!poff', #Turns pausing off between key presses
+		
 		Anarchy Only Commands:
+		
 			'!smoothon', '!son', #Turns Smooth Movement on (i.e. Instead of pressing a button multiple times the bot will hold the button down.)
+			
 			'!smoothoff', '!soff', #Turns Smooth Movement off (i.e. Instead of holding a button down the bot will press the button multiple times.)
+			
 			'!autosmoothon', '!ason', #Auto smoothing will smooth or unsmooth a button automatically based on the "auto_smooth_settings" config file.
+			
 			'!autosmoothoff', '!asoff', #Turns auto smoothing off.
+			
 			'!hold <button>', '!h <button>' #Holds a button until the "release" command is pressed.
+			
 			'!release <button>', '!r <button>', #Releases a button if it is currently being held down.
+			
 			'!r all', #Releases all buttons currently being held down.
 			
 # Please make sure that the game is the active window at ALL times. The bot should give you a few seconds to make sure that is the case before it activates.
