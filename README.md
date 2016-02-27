@@ -221,4 +221,4 @@ Other Commands:
 			
 			'!r all', #Releases all buttons currently being held down.
 			
-# Please make sure that the game is the active window at ALL times. The bot should give you a few seconds to make sure that is the case before it activates.
+# After the bot is properly setup and configured; please make sure that the emulator is the active window.
