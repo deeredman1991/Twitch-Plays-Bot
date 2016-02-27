@@ -221,4 +221,7 @@ Other Commands:
 			
 			'!r all', #Releases all buttons currently being held down.
 			
+#More Configuring
+After the bot is properly setup it will ask you a bunch of questions to help generate a settings file. The answers to those questions are outside the scope of this readme however knowing how to setup sunshinekitty's bot will help a LOT with knowing how to configure my bot as my bot uses sunshinekitty's code as a base.
+			
 # After the bot is properly setup and configured; please make sure that the emulator is the active window.
