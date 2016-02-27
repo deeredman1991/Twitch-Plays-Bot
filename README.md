@@ -228,5 +228,7 @@ Other Commands:
 			
 #More Configuring
 After the bot is properly setup it will ask you a bunch of questions to help generate a settings file. The answers to those questions are outside the scope of this readme however knowing how to setup sunshinekitty's bot will help a LOT with knowing how to configure my bot as my bot uses sunshinekitty's code as a base.
+
+One thing that does differ from sunshineketty's bot is that for any emulator other then VBA you will need to go to the "Launchers" folder and put the appropriate .bat file into the "game" folder then you will need to edit the .bat file so that the paths point to the correct files on your machine.
 			
-# After the bot is properly setup and configured; please make sure that the emulator is the active window.
+# After the bot is properly setup and configured; please make sure that the emulator is the active window. Especially when using the pcsx2 emulator.
