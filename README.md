@@ -1,6 +1,11 @@
 # Twitch-Plays-Bot
 This is a bot for Twitch Plays based on https://github.com/sunshinekitty/TwitchPlaysPokemon
 
+Currently supported emulators include:
+VBA,
+epsxe,
+and pcsx2
+
 --------------------------
 # Setup
 You will need the following to run this bot.
