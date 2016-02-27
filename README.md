@@ -23,7 +23,7 @@ psutil for Python 2.7
 https://pypi.python.org/pypi?:action=display&name=psutil#downloads
 
 
-Then for any emulator other then VBA you will need to go to the "Launchers" folder and put the appropriate .bat file into the "game" folder then you will need to edit the .bat file so that the paths point to the correct files on your machine.
+Then for any emulator other then VBA you will need to go to the "Launchers" folder and put the appropriate .bat file into the "game" folder then you will need to edit the .bat file so that the paths point to the correct files on your machine. For VBA the setup is exactly the same as you would do for sunshinekitty's bot just move the rom into the "game" folder.
 
 ----------------------
 
