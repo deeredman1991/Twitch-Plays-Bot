@@ -236,6 +236,6 @@ Other Commands:
 #More Configuring
 You are now ready to start the bot. Now it will ask you a bunch of questions to help generate a settings file. The answers to those questions are outside the scope of this readme however knowing how to setup sunshinekitty's bot will help a LOT with knowing how to configure my bot as my bot uses sunshinekitty's code as a base.
 
-Don't worry all of these settings can be changed later in the "settings.txt" file and as a bonus the "BUTTON_DELAY" setting can even be changed while the emulator is running for on the fly fine tuning. (This is the only setting that can be adjusted without restarting the emulator)
+Don't worry all of these settings can be changed later in the "settings.txt" file and as a bonus the "BUTTON_DELAY" setting can even be changed while the bot is running for on the fly fine tuning. (This is the only setting that can be adjusted without restarting the emulator)
 			
 # After the bot is properly setup and configured; please make sure that the emulator is the active window. Especially when using the pcsx2 emulator.
