@@ -200,6 +200,7 @@ Right Stick Left or C Left:
 
 Other Commands:
 	Chat Commands:
+	
 		'!pausingon', '!pon', #Turns pausing on between key presses
 		
 		'!pausingoff', '!poff', #Turns pausing off between key presses
