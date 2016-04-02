@@ -674,7 +674,7 @@ while True:
 		
 		settings.append("; Where you're connecting to, if it's Twitch leave it as is")
 		with consoleLock:
-			print("Where you're connecting to, if it's Twitch use irc.twitch.tv")
+			print("Where you're connecting to, if it's Twitch use irc.chat.twitch.tv")
 			settings_host = raw_input("Hostname: ")
 		settings.append("HOST = " + settings_host + "\n")
 		
