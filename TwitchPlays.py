@@ -426,6 +426,11 @@ def getEmuProcessID():
 						print 'Found process Dolphin.exe! PID: ' + str(pinfo['pid'])
 					EMUPROCESSID = pinfo['pid']
 					EMUPROCESS = psutil.Process(EMUPROCESSID)
+				elif pinfo['name'] == "Prison Architect.exe" and APP.lower() == 'pat':
+                                        with consoleLock:
+                                                print 'Found process <PriArc>! PID: ' + str(pinfo['pid'])
+                                        EMUPROCESSID = pinfo['pid']
+                                        EMUPROCESS = psutil.Process(EMUPROCESSID)
 			except psutil.NoSuchProcess:
 				pass
 	
