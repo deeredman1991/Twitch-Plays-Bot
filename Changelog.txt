@@ -1,7 +1,0 @@
-Created Support for fractional movements while smoothing is on (i.e. "lsup 0.5" or "lsd 1.2" )
-Created Shorthand of commands !hold = !h, !release = !r, !pausingon = !pon, !pausingoff = !poff, !smoothon = !son, !smoothoff = !soff (long commands still work as they did before)
-Added Autosmoothing that can be personalized from the "auto_smooth_settings.txt" file
-reworked smoothing so that while pausing is on the executing the same command twice will execute both commands as one continuous command
-added !autosmoothon/!ason and !autosmoothoff/!asoff to control auto smoothing and added !wait and !w to allow the user to wait without pressing any buttons
-!hold and !release are no longer case sensitive
-allows the !hold and !release modifiers to be put before the command (still allows for modifiers to be put after the command as well)
