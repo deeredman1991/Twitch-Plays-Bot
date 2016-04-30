@@ -1,3 +1,3 @@
 @echo off
-"%~dp0\TwitchPlays.py" %*
+ "%~dp0\TwitchPlays.py" %*
 pause

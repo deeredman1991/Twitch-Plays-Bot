@@ -393,6 +393,19 @@ def startEmulator():
 		print("Starting %s" % GAME)
 	emulator_thread = threading.Thread(target = runEmulator, args = ())
 	emulator_thread.start()
+	
+	with consoleLock:
+		raw_input("Press Enter to Start!")
+		print 'Starting in...'
+		print '~*3*~'
+		time.sleep(0.5)
+		print ' *2* '
+		time.sleep(0.5)
+		print ' *1* '
+		time.sleep(0.5)
+		print ' GO! '
+		time.sleep(0.1)
+	
 	getEmuProcessID()
 
 def runEmulator():
@@ -426,11 +439,11 @@ def getEmuProcessID():
 						print 'Found process Dolphin.exe! PID: ' + str(pinfo['pid'])
 					EMUPROCESSID = pinfo['pid']
 					EMUPROCESS = psutil.Process(EMUPROCESSID)
-				elif pinfo['name'] == "Prison Architect.exe" and APP.lower() == 'pat':
-                                        with consoleLock:
-                                                print 'Found process <PriArc>! PID: ' + str(pinfo['pid'])
-                                        EMUPROCESSID = pinfo['pid']
-                                        EMUPROCESS = psutil.Process(EMUPROCESSID)
+				elif pinfo['name'] == "ggpofba-ng.exe" and APP.lower() == 'fightcade':
+					with consoleLock:
+						print 'Found process Fightcade.exe! PID: ' + str(pinfo['pid'])
+					EMUPROCESSID = pinfo['pid']
+					EMUPROCESS = psutil.Process(EMUPROCESSID)
 			except psutil.NoSuchProcess:
 				pass
 	
@@ -866,8 +879,6 @@ while True:
 if mode.lower() == "anarchy":
 	with open("lastsaid.txt", "w") as f:
 		f.write("")
-		
-	startEmulator()
 	
 	s=socket.socket( )
 	s.connect((HOST, PORT))
@@ -876,17 +887,7 @@ if mode.lower() == "anarchy":
 	s.send(bytes("NICK %s\r\n" % NICK))
 	s.send(bytes("USER %s %s bla :%s\r\n" % (NICK, HOST, NICK)))
 	
-	with consoleLock:
-		raw_input("Press Enter to Start!")
-		print 'Starting in...'
-		print '~*3*~'
-		time.sleep(0.5)
-		print ' *2* '
-		time.sleep(0.5)
-		print ' *1* '
-		time.sleep(0.5)
-		print ' GO! '
-		time.sleep(0.1)
+	startEmulator()
 	
 	if APP.lower() != 'pcsx2':
 		while EMUPROCESS.status() != 'stopped' and PAUSING == True:
@@ -1204,18 +1205,8 @@ if mode.lower() == "democracy":
 	s.send(bytes("PASS %s\r\n" % AUTH))
 	s.send(bytes("NICK %s\r\n" % NICK))
 	s.send(bytes("USER %s %s bla :%s\r\n" % (NICK, HOST, NICK)))
-	
-	with consoleLock:
-		raw_input("Press Enter to Start!")
-		print 'Starting in...'
-		print '~*3*~'
-		time.sleep(0.5)
-		print ' *2* '
-		time.sleep(0.5)
-		print ' *1* '
-		time.sleep(0.5)
-		print ' GO! '
-		time.sleep(0.1)
+		
+	startEmulator()
 		
 	if APP.lower() != 'pcsx2':
 		while EMUPROCESS.status() != 'stopped' and PAUSING == True:
