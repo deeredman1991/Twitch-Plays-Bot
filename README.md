@@ -3,7 +3,7 @@
 
 * full support for FightCade
 * wip support for prison architect escape mode
-* 
+* not woking with FightCade is game freeze
 
 
 # Twitch-Plays-Bot
