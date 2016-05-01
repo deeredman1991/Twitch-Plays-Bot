@@ -3,7 +3,7 @@
 
 * full support for FightCade
 * wip support for prison architect escape mode
-* game freeze will not work with FightCade it is a bug 
+* game freeze sort of working so test it out 
 
 setup is still the same as before
 
