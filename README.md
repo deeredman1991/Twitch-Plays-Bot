@@ -18,7 +18,8 @@ This is a bot for Twitch Plays based on https://github.com/sunshinekitty/TwitchP
 Currently supported emulators include:
 VBA,
 epsxe,
-and pcsx2
+pcsx2
+and fightcade
 
 --------------------------
 # Setup
