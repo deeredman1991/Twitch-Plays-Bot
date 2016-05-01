@@ -6,6 +6,7 @@
 * game freeze will not work with FightCade it is a bug 
 
 setup is still the same as before
+Anarchy is is best for fightcade
 
 # Twitch-Plays-Bot
 
