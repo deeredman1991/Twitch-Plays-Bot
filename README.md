@@ -3,7 +3,7 @@
 
 * full support for FightCade
 * wip support for prison architect escape mode
-* game PAUSING is  sort of working so test it out 
+* game PAUSING for FightCade is sort of working so test it out 
 
 setup is still the same as before
 
