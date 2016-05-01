@@ -715,10 +715,10 @@ while True:
 		settings.append("USERNAME = " + settings_bot + "\n")
 		
 		settings.append("; Name of the application you run the file from")
-		settings.append("; Currently Supported: vba, epsxe, and pcsx2")
+		settings.append("; Currently Supported: vba, epsxe, and pcsx2 fightcade,")
 		with consoleLock:
 			print("Name of the application you run the file from.")
-			print("Currently Supported: vba, epsxe, pcsx2")
+			print("Currently Supported: vba, epsxe, pcsx2 fightcade,")
 			settings_app = raw_input("Application name: ")
 		settings.append("APP = " + settings_app + "\n")
 		
