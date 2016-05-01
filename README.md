@@ -5,6 +5,7 @@
 * wip support for prison architect escape mode
 * game freeze will not work with FightCade it is a bug 
 
+setup is still the same as before
 
 # Twitch-Plays-Bot
 
