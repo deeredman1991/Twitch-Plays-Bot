@@ -1,9 +1,9 @@
 
 # Beta Update
 
-. full support for FightCade
+* full support for FightCade
 
-. wip support for prison architect escape mode
+* wip support for prison architect escape mode
 
 # Twitch-Plays-Bot
 
