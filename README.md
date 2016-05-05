@@ -1,3 +1,14 @@
+
+# NEW
+
+* full support for FightCade
+* wip support for prison architect escape mode
+* game PAUSING for FightCade is sort of working so test it out 
+
+setup is still the same as before
+
+Anarchy is is best for fightcade
+
 # Twitch-Plays-Bot
 
 Thank you Sunshinekitty and friends! (RDJ, MZ, AP, and Oriax)
@@ -7,7 +18,8 @@ This is a bot for Twitch Plays based on https://github.com/sunshinekitty/TwitchP
 Currently supported emulators include:
 VBA,
 epsxe,
-and pcsx2
+pcsx2
+and fightcade
 
 --------------------------
 # Setup
