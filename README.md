@@ -1,5 +1,5 @@
 
-# Beta Update
+# NEW
 
 * full support for FightCade
 * wip support for prison architect escape mode
