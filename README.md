@@ -4,6 +4,10 @@
 * full support for FightCade
 * wip support for prison architect escape mode
 * game PAUSING for FightCade is sort of working so test it out 
+* 
+
+# Beta News june 29
+a new beta bot will be out soon for testing with support for 5 new emulators 
 
 setup is still the same as before
 
