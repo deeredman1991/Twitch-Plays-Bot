@@ -1,7 +1,7 @@
 
 # NEW
 
-* full support for FightCade Anarchy is is best for fightcade
+* full support for FightCade Anarchy is best for fightcade
 * wip support for prison architect escape mode
 * game PAUSING for FightCade is sort of working so test it out 
 
