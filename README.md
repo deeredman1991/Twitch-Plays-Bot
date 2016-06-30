@@ -1,11 +1,16 @@
 
-# NEW
+# all in one twitch plays starter kit
+. overlays
+. bot 
+. full suport 24/7
+. Currently supported emulators include:
+  VBA,
+  epsxe,
+  pcsx2
+  fightcade
+  pc games
 
-* full support for FightCade Anarchy is best for fightcade
-* wip support for prison architect escape mode
-* game PAUSING for FightCade is sort of working so test it out 
 
-# NEW twitch overlay starter pack 
 
 
 # Twitch-Plays-Bot
@@ -13,12 +18,6 @@
 Thank you Sunshinekitty and friends! (RDJ, MZ, AP, and Oriax)
 
 This is a bot for Twitch Plays based on https://github.com/sunshinekitty/TwitchPlaysPokemon
-
-Currently supported emulators include:
-VBA,
-epsxe,
-pcsx2
-and fightcade
 
 --------------------------
 # Setup
