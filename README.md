@@ -1,23 +1,14 @@
 
 # all in one twitch plays starter kit
 
-. overlays
+. a set of psd overlays with 4.3 and 16.9 support
 
-. bot 
+. full open source bot from start to end 
 
-. full suport 24/7
+. have a bug well we have a full 24/7 suport
 
 . Currently supported emulators include:
-
-  VBA,
-  
-  epsxe,
-  
-  pcsx2
-  
-  fightcade
-  
-  pc games
+  VBA, epsxe, pcsx2, fightcade, pc games
   
 
 
