@@ -1,3 +1,4 @@
+![](http://i.imgur.com/7coHzcE.png)
 
 # all in one twitch plays starter kit
 
