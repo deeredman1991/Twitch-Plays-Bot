@@ -1,14 +1,24 @@
 
 # all in one twitch plays starter kit
+
 . overlays
+
 . bot 
+
 . full suport 24/7
+
 . Currently supported emulators include:
+
   VBA,
+  
   epsxe,
+  
   pcsx2
+  
   fightcade
+  
   pc games
+  
 
 
 
