@@ -6,7 +6,7 @@
 
 . full open source bot from start to end 
 
-. have a bug well we have a full 24/7 suport
+. have a bug well we have full 24/7 suport
 
 . Currently supported emulators include:
   VBA, epsxe, pcsx2, fightcade, pc games
