@@ -1,12 +1,3 @@
-![](http://i.imgur.com/7coHzcE.png)
-                               just put #tpinitiative in the twitch title if you are part of this 
-# all in one twitch plays starter kit
-
-. a set of psd overlays with 4.3 and 16.9 support
-
-. full open source bot from start to end 
-
-. have a bug well we have full 24/7 suport
 
 . Currently supported emulators include:
   VBA, epsxe, pcsx2, fightcade, pc games
