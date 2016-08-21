@@ -1,0 +1,8 @@
+*.pypirc
+*.bat
+*.pyc
+
+images/Resources/*
+audio/Resources/*
+
+test.py
