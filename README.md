@@ -1,6 +1,6 @@
 # TP v1.1 (SNOW)
 
-A twitch plays bot for twitch to send cmds to games for chat to play
+A twitch plays bot for twitch to send cmds to games for chat to play.
 This is bot is based on https://github.com/sunshinekitty/TwitchPlaysPokemon
 
 
