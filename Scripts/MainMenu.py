@@ -9,16 +9,28 @@ class MainMenu(Widget):
         super(MainMenu, self).__init__()
         
         Window.bind(on_resize=self._on_resize)
-        self.size = Window.size
         
-        self.test_button = Button()
-        self.add_widget(self.test_button)
+        self.configButton = ConfigButton()
+        self.configButton.text = "Config"
+        
+        self.add_widget(self.configButton)
         
         self._on_resize()
         
     def _on_resize(self, *ignore):
-        self.test_button.text = "Test Button"
-        self.test_button.height = Window.height/10
-        self.test_button.width = Window.width/10
-        self.test_button.font_size = self.test_button.width/7
-        self.test_button.center = self.center
+        self.size = Window.size
+        self.configButton.height = Window.height/10
+        self.configButton.width = Window.width/10
+        self.configButton.font_size = self.configButton.width/7
+        self.configButton.center = self.center
+        
+        
+class ConfigButton(Button):
+    def __init__(self):
+        super(ConfigButton, self).__init__()
+        
+    def on_press(self, *ignore):
+        #Need to use screen manager
+        self.parent.right = 0
+        self.parent._on_resize()
+        print (self.parent.pos)
