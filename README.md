@@ -1,5 +1,4 @@
-# TP v1.1 (SNOW)
-
+# this bot is old new one in the works https://github.com/plusrep/TWP
 A twitch plays bot for twitch to send cmds to games for chat to play.
 This is bot is based on and uses code from https://github.com/sunshinekitty/TwitchPlaysPokemon
 
