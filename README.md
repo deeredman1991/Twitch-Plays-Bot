@@ -7,17 +7,6 @@ A twitch plays bot for twitch to send cmds to games for chat to play.
 This is bot is based on and uses code from https://github.com/sunshinekitty/TwitchPlaysPokemon
 
 
-### Prerequisities
-
-You will need the following to run this bot.
-
-Python 2.7 https://www.python.org/download/releases/2.7/
-
-Pywin32 for Python 2.7 https://sourceforge.net/projects/pywin32/files/pywin32/Build%20220/
-
-psutil for Python 2.7 https://pypi.python.org/pypi?:action=display&name=psutil#downloads
-
-
 
 
 ### Installing
