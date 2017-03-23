@@ -1,5 +1,5 @@
 # EXE 
-as of today march 2017 are bot runs from a exe that you can  download from the releases tab
+as of today march 2017 the bot runs from a exe that you can  download from the releases tab
 # V2 bot work no more Python 
 V2 of are bot is in the works at https://github.com/plusrep/TWP
 
