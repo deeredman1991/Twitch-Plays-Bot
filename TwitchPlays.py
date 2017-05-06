@@ -20,7 +20,9 @@ import string
 import time
 import socket
 import threading
-import win32com.client, win32api, win32con
+import win32com.client
+import win32api 
+iport win32con
 import psutil
 import math
 import sys
