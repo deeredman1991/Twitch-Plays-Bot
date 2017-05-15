@@ -1,7 +1,6 @@
 ### EXE 
 as of today march 2017 the bot runs from a exe that you can  download from the releases tab
-### V2 bot work no more Python 
-V2 of are bot is in the works at https://github.com/plusrep/TWP
+
 
 A twitch plays bot for twitch to send cmds to games for chat to play.
 This is bot is based on and uses code from https://github.com/sunshinekitty/TwitchPlaysPokemon
