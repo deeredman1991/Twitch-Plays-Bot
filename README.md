@@ -1,7 +1,7 @@
 ### EXE 
 as of today march 2017 the bot runs from a exe that you can  download from the releases tab
 
-###EMU
+### EMU
 pcsx2
 gba
 fight cade
