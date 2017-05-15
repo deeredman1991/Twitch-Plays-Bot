@@ -3,15 +3,7 @@ as of today march 2017 the bot runs from a exe that you can  download from the r
 
 ### EMU
 
-pcsx2
-
-gba
-
-fightcade
-
-ps1
-
-pc
+pcsx2//gba//fightcade//ps1//pc
 
 
 A twitch plays bot for twitch to send cmds to games for chat to play.
