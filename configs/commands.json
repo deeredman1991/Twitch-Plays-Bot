@@ -1,0 +1,15 @@
+{
+        '!u': '<Up_Arrow>',
+        '!d': '<Down_Arrow>',
+        '!l': '<Left_Arrow>',
+        '!r': '<Right_Arrow>',
+        
+        '!se': '<Backspace>',
+        '!st': '<Enter>',
+
+        '!a': 'z',
+        '!b': 'x',
+        
+        '!lb': 'a',
+        '!rb': 's'
+}

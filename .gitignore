@@ -1,8 +1,10 @@
 *.pypirc
-*.bat
 *.pyc
+*.txt
+*.log
+*.sw*
+*.bat
 
-images/Resources/*
-audio/Resources/*
-
-test.py
+images/resources/*
+audio/resources/*
+logs/*
