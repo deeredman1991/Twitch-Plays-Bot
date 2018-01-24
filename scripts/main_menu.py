@@ -1,64 +1,67 @@
-""" This modules holds the main menu screen.
-
+""" This module holds the main menu screen.
 """
 
-import os
+#TODO impliment logging
 
 from kivy.core.window import Window
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
+from kivy.uix.screenmanager import Screen
+from kivy.uix.relativelayout import RelativeLayout
 
+from scripts.buttons.commands_button import CommandsButton
+from scripts.buttons.exit_button import ExitButton
 
-
-class MainMenu(Widget):
+class MainMenu(Screen, RelativeLayout):
     """ This is the main menu Widget which holds the main menu.
 
+        #TODO: doctest here.
     """
-    def __init__(self):
-        super(MainMenu, self).__init__()
+    def __init__(self, *args, **kwargs):
+        """ Method gets called when class in instantiated.
+        """
 
+        #Calls inherited classes __init__() functions for consistency.
+        super(MainMenu, self).__init__(*args, **kwargs)
+
+        #Makes self._on_resize get called when Window.on_resize gets called.
         Window.bind(on_resize=self._on_resize)
 
-        self._config_button = ConfigButton()
-        self._config_button.text = "Commands"
-        self.add_widget(self._config_button)
+        #Creates the Command Button and sets it as a child of self.
+        self._commands_button = CommandsButton()
+        self._commands_button.text = "Commands"
+        self.add_widget(self._commands_button)
 
+        #Creates the Exit Button and sets it as a child of self.
         self._exit_button = ExitButton()
         self._exit_button.text = "Exit"
         self.add_widget(self._exit_button)
 
-        self._on_resize()
+        #Initializes screen's size and position by calling self._on_resize().
+        self._on_resize(Window, Window.width, Window.height)
 
-    def _on_resize(self, *ignore):
-        self.size = Window.size
+        #Calls all children's on_start method.
+        for child in self.children:
+            childs_start = getattr(child, 'on_start', None)
+            if callable(childs_start):
+                childs_start()
 
-        self._config_button.height = Window.height/10
-        self._config_button.width = Window.width/10
-        self._config_button.font_size = self._config_button.width/7
-        self._config_button.center = self.center
+    def _on_resize(self, sdl2_handle, width, height):
+        """ Method gets called when the window gets resized
 
-        self._exit_button.height = Window.height/10
-        self._exit_button.width = Window.width/10
-        self._exit_button.font_size = self._exit_button.width/7
-        self._exit_button.center = (self.center_x,
-                                    self.center_y-self._config_button.height)
-        return ignore
+            #TODO: doctest here
+        """
 
-class ConfigButton(Button):
-    """ Class to define the config button.
-            when pressed: this button should open configs/commands.json
-    """
-    def on_press(self):
-        _command_file = os.getcwd()
-        _command_file = _command_file.split('\\')
-        _command_file.append('configs\\commands.json')
-        _command_file = '\\'.join(_command_file)
-        os.startfile(_command_file)
+        #Sets the size of the Screen to be that of the Window.
+        self.size = (width, height)
 
-class ExitButton(Button):
-    """ Class to define the exit button.
-            when pressed: this button should kill the application.
-    """
+        #Centers the Screen inside the Window
+        self.center = (width/2,
+                       height/2)
 
-    def on_press(self):
-        Window.close()
+        #Calls all children's on_resize method.
+        for child in self.children:
+            childs_on_resize = getattr(child, 'on_resize', None)
+            if callable(childs_on_resize):
+                childs_on_resize(sdl2_handle, width, height)
+
+        #Returns the function's inputs.
+        return self, sdl2_handle, width, height
