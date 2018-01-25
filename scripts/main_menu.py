@@ -1,7 +1,7 @@
 """ This module holds the main menu screen.
 """
 
-#TODO impliment logging
+#TODO: finish logging
 
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen
@@ -9,6 +9,7 @@ from kivy.uix.relativelayout import RelativeLayout
 
 from scripts.buttons.commands_button import CommandsButton
 from scripts.buttons.exit_button import ExitButton
+from scripts.logger import LOGGER
 
 class MainMenu(Screen, RelativeLayout):
     """ This is the main menu Widget which holds the main menu.
@@ -18,8 +19,11 @@ class MainMenu(Screen, RelativeLayout):
     def __init__(self, *args, **kwargs):
         """ Method gets called when class in instantiated.
         """
+        LOGGER.info('%s: Running - %s.__init__(%s, %s)',
+                    __file__, self, args, kwargs)
 
         #Calls inherited classes __init__() functions for consistency.
+        LOGGER.debug()
         super(MainMenu, self).__init__(*args, **kwargs)
 
         #Makes self._on_resize get called when Window.on_resize gets called.
@@ -50,6 +54,12 @@ class MainMenu(Screen, RelativeLayout):
             #TODO: doctest here
         """
 
+        LOGGER.info('%s: Running - %s._on_resize(%s(%s), %s(%s), %s(%s))',
+                    __file__, self,
+                    type(sdl2_handle), sdl2_handle,
+                    type(width), width,
+                    type(height), height)
+
         #Sets the size of the Screen to be that of the Window.
         self.size = (width, height)
 
@@ -63,5 +73,10 @@ class MainMenu(Screen, RelativeLayout):
             if callable(childs_on_resize):
                 childs_on_resize(sdl2_handle, width, height)
 
+        LOGGER.info('%s: In: %s._on_resize(%s(%s), %s(%s), %s(%s))',
+                    __file__, self,
+                    type(sdl2_handle), sdl2_handle,
+                    type(width), width,
+                    type(height), height)
         #Returns the function's inputs.
         return self, sdl2_handle, width, height

@@ -1,15 +1,15 @@
 {
-        '!u': '<Up_Arrow>',
-        '!d': '<Down_Arrow>',
-        '!l': '<Left_Arrow>',
-        '!r': '<Right_Arrow>',
-        
-        '!se': '<Backspace>',
-        '!st': '<Enter>',
+	"!u": ":mash <Up_Arrow>",
+	"!d": ":mash <Down_Arrow>",
+	"!l": ":mash <Left_Arrow>",
+	"!r": ":mash <Right_Arrow>",
+	
+	"!se": ":mash <Backspace>",
+	"!st": ":mash <Enter>",
 
-        '!a': 'z',
-        '!b': 'x',
-        
-        '!lb': 'a',
-        '!rb': 's'
+	"!a": ":mash z",
+	"!b": ":mash x",
+	
+	"!lb": ":mash a",
+	"!rb": ":mash s"
 }
