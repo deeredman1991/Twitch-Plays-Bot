@@ -66,7 +66,7 @@ class GameApp(App):
         LOGGER.debug(
             '%s: In: %s.build() | Declared - icons = %s', __file__, self, icons)
 
-        #Iterates over the icons list and log each element seperately.
+        #Iterates over the icons list and logs each element seperately.
         for key, value in icons.items():
             LOGGER.debug(
                 '%s: In: %s.build() | icons[\'%s\'] = %s(%s)',
