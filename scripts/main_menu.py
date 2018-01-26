@@ -25,7 +25,7 @@ class MainMenu(Screen, RelativeLayout):
         #Calls inherited classes __init__() functions for consistency.
         LOGGER.debug('%s: In: %s.__init__() | Calling - '\
                      'super(MainMenu, self).__init(%s, %s)',
-                     __file__, self, *args, **kwargs)
+                     __file__, self, args, kwargs)
         super(MainMenu, self).__init__(*args, **kwargs)
 
         #Makes self._on_resize get called when Window.on_resize gets called.
@@ -115,7 +115,7 @@ class MainMenu(Screen, RelativeLayout):
                      'self.center = (%s(%s), %s(%s))',
                      __file__, self,
                      type(width/2), width/2,
-                     type(height/2, height/2))
+                     type(height/2), height/2)
 
         #Calls all children's on_resize method.
         LOGGER.debug('%s: In: %s._on_resize() | Iterating - '\
