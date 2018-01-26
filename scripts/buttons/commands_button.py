@@ -30,7 +30,7 @@ class CommandsButton(Button):
         #Centers the button in the middle of the screen.
         #TODO: put buttons inside a widget and place buttons based on their
         #   index within the widget object.
-        self.center = (width, height)
+        self.center = (width/2, height/2)
 
         #Returns function's inputs.
         return self, sdl2_handle, width, height

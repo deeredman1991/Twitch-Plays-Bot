@@ -30,7 +30,7 @@ class ExitButton(Button):
         #Centers the button in the middle of the screen and 1 button down.
         #TODO: put buttons inside a widget and place buttons based on their
         #   index within the widget object.
-        self.center = (width/2, height/2)
+        self.center = (width/2, height/2-self.height)
 
         return self, sdl2_handle, width, height
 
