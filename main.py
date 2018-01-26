@@ -13,6 +13,7 @@ from kivy.utils import platform as PLATFORM
 from scripts.screen_manager import ScreenManager
 from scripts.logger import LOGGER
 
+
 class GameApp(App):
     """The GameApp class which contains the game.
 
@@ -24,33 +25,24 @@ class GameApp(App):
 
             #TODO: doctest here
         """
-        LOGGER.info('%s: Running - %s.build()', __file__, self)
+        LOGGER.info('Running - build()')
 
         #FIXME: Window.size gets set to a random size for debugging but
         #   before release the window should have a default size and
         #   should also save it's size on_resize() to a file and then
         #   load in those settings.
         _x, _y = random.randint(500, 1000), random.randint(500, 1000)
-        LOGGER.debug(
-            '%s: In: %s.build() | Declared - _x, _y = %s(%d), %s(%d)',
-            __file__, self, type(_x), _x, type(_y), _y)
-        LOGGER.debug(
-            '%s: In: %s.build() | Setting - %s(%s).size = %s(%d), %s(%d)',
-            __file__, self, type(Window), Window, type(_x), _x, type(_y), _y)
+        LOGGER.debug('Declared - _x, _y = %s(%d), %s(%d)',
+                     type(_x), _x, type(_y), _y)
+        LOGGER.debug('Setting - %s(%s).size = %s(%d), %s(%d)',
+                     type(Window), Window, type(_x), _x, type(_y), _y)
         Window.size = (random.randint(500, 1000), random.randint(500, 1000))
         #Window.size = (300, 500)
 
         #Sets the title of the application window.
         self.title = 'Twitch Plays Bot'
-        LOGGER.debug(
-            '%(file)s: In: %(self)s.build() | Setting - '\
-            '%(self)s.title=%(title_type)s(%(title)s)',
-            {
-                'file': __file__,
-                'self': self,
-                'title_type': type(self.title),
-                'title': self.title
-            })
+        LOGGER.debug('Setting - %s.title=%s(%s)',
+                     self, type(self.title),self.title)
 
         #Declares a dictionary to hold icon file path objects.
         icons = {
@@ -63,17 +55,16 @@ class GameApp(App):
             '256': Path('images/icons/icon-256.png'),
             '512': Path('images/icons/icon-256.png'),
         }
-        LOGGER.debug(
-            '%s: In: %s.build() | Declared - icons = %s', __file__, self, icons)
+        LOGGER.debug('Declared - icons = %s(%s)', type(icons), icons)
 
         #Iterates over the icons list and logs each element seperately.
         for key, value in icons.items():
-            LOGGER.debug(
-                '%s: In: %s.build() | icons[\'%s\'] = %s(%s)',
-                __file__, self, key, type(value), value)
+            LOGGER.debug('Iterating - icons[\'%4s\'] = %s(%s)',
+                         key, type(value), value)
 
         #Trys to determine the size an icon should be based on the os.
-        if  icons['256'].is_file() and PLATFORM == 'linux' or PLATFORM == 'macosx':
+        if  icons['256'].is_file() and PLATFORM == 'linux' or\
+                                       PLATFORM == 'macosx':
             #Sets the icon for the window to the 256x256 version.
             self.icon = str(icons['256'])
         elif icons['32'].is_file():
@@ -84,63 +75,51 @@ class GameApp(App):
             for icon in icons.items():
                 if icon.is_file():
                     self.icon = str(icon)
-        LOGGER.debug(
-            '%(file)s: In: %(self)s.build() | Setting - %(self)s.icon = '\
-            '%(icon_type)s(%(icon)s)',
-            {
-                'file': __file__,
-                'self': self,
-                'icon_type': type(self.icon),
-                'icon': self.icon
-            })
+        LOGGER.debug('Setting - %s.icon = %s(%s)',
+                     self, type(self.icon), self.icon)
 
         #Creates a ScreenManager that will hold all our screens
         #   i.e. MainMenu(), TwitchPlaysSession(), etc..etc..
         _r = ScreenManager()
-        LOGGER.info('%s: In: %s.build() | Returning - %s(%s)',
-                    __file__,
-                    self,
-                    type(_r),
-                    _r)
+        LOGGER.info('Returning - %s(%s)', type(_r), _r)
 
         #Returns the ScreenManager mentioned earlier.
         return _r
 
 if __name__ == "__main__":
-    #Sets the logdir #TODO: mode this action to the custom logger module.
+    #TODO: Move these out to a config file.
+    Config.set('kivy', 'log_name', 'log_%y-%m-%d_%_.txt')
     LOG_DIR = os.path.dirname(os.path.abspath(__file__)) + '\\logs'
     Config.set('kivy', 'log_dir', LOG_DIR)
 
-    #Reads the kivy_config.ini file? #TODO: This might not work...find out.
-    Config.read('kivy_config.ini')
-
-    LOGGER.info('%s: In: __main__ | Finished Configuring - Starting Logging.',
-                __file__)
+    LOGGER.info('Starting Logging.')
 
     #Declares a variable to hold the current working directory.
     CURRENT_WORKING_DIRECTORY = os.getcwd()
-    LOGGER.debug('%s: In: __main__ | Declared - CURRENT_WORKING_DIRECTORY ='\
-                 ' %s', __file__, CURRENT_WORKING_DIRECTORY)
+    LOGGER.debug('Declared - CURRENT_WORKING_DIRECTORY ='\
+                 ' %s', CURRENT_WORKING_DIRECTORY)
 
     #Sets kivy's home to the current worlding directory.
     os.environ['KIVY_HOME'] = CURRENT_WORKING_DIRECTORY
-    LOGGER.debug('%s: In: __main__ | Setting - %s.environ[\'KIVY_HOME\'] = '\
-                 '%s', __file__, os, CURRENT_WORKING_DIRECTORY)
+    LOGGER.debug('Setting - %s.environ[\'KIVY_HOME\'] = '\
+                 '%s', os, CURRENT_WORKING_DIRECTORY)
+
+    for key, value in os.environ.items():
+        LOGGER.debug('Iterating - os.environ[\'%25s\'] = %s(%s)',
+                     key, type(value), value)
 
     #Prints the os's environment variables to the logfile.
-    LOGGER.debug('%s: In: __main__ | Check - os.environ = %s(%s)',
-                 __file__, type(os.environ), os.environ)
+    #LOGGER.debug('Check - os.environ = %s(%s)',
+    #             type(os.environ), os.environ)
 
     #Creates a GameApp object defined above.
     GAMEAPP = GameApp()
-    LOGGER.debug('%s: In: __main__ | Declared - GAMEAPP = %s',
-                 __file__, GAMEAPP)
+    LOGGER.debug('Declared - GAMEAPP = %s', GAMEAPP)
 
     #Calls GAMEAPP's run method which calls GAMEAPP.build().
-    LOGGER.info('%s: In: __main__ | Calling - %s.run().',
-                __file__, GAMEAPP)
+    LOGGER.info('Calling - %s.run().', GAMEAPP)
     GAMEAPP.run()
 
     #Gracefully exits python.
-    LOGGER.info('%s: In: __main__ | Calling - quit().', __file__)
+    LOGGER.info('Calling - quit()')
     quit()
