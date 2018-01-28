@@ -3,7 +3,8 @@
 """
 import os
 
-from kivy.uix.button import Button
+from scripts.buttons.button import Button
+
 
 class CommandsButton(Button):
     """ Class to define the command button for the main menu..

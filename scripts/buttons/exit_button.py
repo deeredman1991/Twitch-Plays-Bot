@@ -2,9 +2,9 @@
 
 """
 
-#TODO: impliment logging
 from kivy.core.window import Window
-from kivy.uix.button import Button
+
+from scripts.buttons.button import Button
 
 
 class ExitButton(Button):

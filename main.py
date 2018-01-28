@@ -42,7 +42,7 @@ class GameApp(App):
         #Sets the title of the application window.
         self.title = 'Twitch Plays Bot'
         LOGGER.debug('Setting - %s.title=%s(%s)',
-                     self, type(self.title),self.title)
+                     self, type(self.title), self.title)
 
         #Declares a dictionary to hold icon file path objects.
         icons = {
@@ -93,8 +93,6 @@ if __name__ == "__main__":
     Config.set('kivy', 'log_dir', LOG_DIR)
 
     LOGGER.info('Starting Logging.')
-
-    #Declares a variable to hold the current working directory.
     CURRENT_WORKING_DIRECTORY = os.getcwd()
     LOGGER.debug('Declared - CURRENT_WORKING_DIRECTORY ='\
                  ' %s', CURRENT_WORKING_DIRECTORY)
@@ -104,9 +102,9 @@ if __name__ == "__main__":
     LOGGER.debug('Setting - %s.environ[\'KIVY_HOME\'] = '\
                  '%s', os, CURRENT_WORKING_DIRECTORY)
 
-    for key, value in os.environ.items():
+    for k, v in os.environ.items():
         LOGGER.debug('Iterating - os.environ[\'%25s\'] = %s(%s)',
-                     key, type(value), value)
+                     k, type(v), v)
 
     #Prints the os's environment variables to the logfile.
     #LOGGER.debug('Check - os.environ = %s(%s)',
