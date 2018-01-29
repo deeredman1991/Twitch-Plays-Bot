@@ -69,6 +69,7 @@ class AutoLogger(object):
     _extremely_verbose = False
     _is_setting = False
     _is_getting = False
+    _is_disabled = True
 
     @property
     def auto_logger_ignore_type_change(self):
@@ -92,14 +93,76 @@ class AutoLogger(object):
 
     def __getattribute__(self, name):
         value = super(AutoLogger, self).__getattribute__(name)
+        if not super(AutoLogger, self).__getattribute__('_is_disabled'):
+            if name != '_is_setting' and \
+               not super(AutoLogger, self).__getattribute__('_is_setting') and\
+               not super(AutoLogger, self).__getattribute__('_is_getting') and\
+               (name != '__class__' or super(AutoLogger,
+                                             self).__getattribute__(
+                                                 '_extremely_verbose')):
+                super(AutoLogger, self).__setattr__('_is_getting', True)
 
-        if name != '_is_setting' and \
-           not super(AutoLogger, self).__getattribute__('_is_setting') and\
-           not super(AutoLogger, self).__getattribute__('_is_getting') and\
-           (name != '__class__' or super(AutoLogger,
-                                         self).__getattribute__(
-                                             '_extremely_verbose')):
-            super(AutoLogger, self).__setattr__('_is_getting', True)
+                # Gets the currentframe and the call frame off the stack.
+                curframe = inspect.currentframe()
+                calframe = inspect.getouterframes(curframe, 2)
+
+                # Gets a bunch of information about the object calling
+                #    __setattr__ from the call frame.
+                real_path = calframe[1][1]
+
+                if '\\kivy\\' not in real_path or \
+                  super(AutoLogger, self).__getattribute__('_extremely_verbose'):
+                    real_line_no = calframe[1][2]
+                    real_func = calframe[1][3]
+                    previous_line = calframe[1][4][0].split('\n')[0]
+                    real_line = calframe[1][4][1].split('\n')[0]
+
+                    # If you are inheriting from AutoLogger;
+                    #    __setattr__ should do sufficient logging
+                    #    on it's own, and so we don't need to log.
+                    # Calls the function that normally gets called when you
+                    #    print(or log) 'self'
+                    myself = super(AutoLogger, self).__repr__()
+
+                    # Logs a message to let the log file know
+                    #     we are about to start logging.
+                    AUTOLOGGER.debug('')
+                    AUTOLOGGER.debug('###AutoLogger### Starting: '\
+                                     '\'__getattribute__\' '\
+                                     'for %s.%s',
+                                     super(AutoLogger, self).__repr__(),
+                                     name)
+
+                    #NOTE: Consider just iterating over the call frame and sending
+                    #           it all out to the log.
+                    # Logs some information about
+                    #    the object calling __getattribute__.
+                    AUTOLOGGER.debug(' + REALPATH ~ %-100s | REALFUNC ~ %-18s | ',
+                                     real_path, real_func)
+                    AUTOLOGGER.debug('Last two lines: ')
+                    AUTOLOGGER.debug('REALLINENO: %5d | %s', real_line_no-1, previous_line)
+                    AUTOLOGGER.debug('REALLINENO: %5d | %s', real_line_no, real_line)
+
+                    # Log the some information about the object actually being
+                    #    gotten.
+                    AUTOLOGGER.debug('Getting -  %s.%s = %s(%s)',
+                                     myself, name,
+                                     type(value), value)
+                    AUTOLOGGER.debug('###AutoLogger### Finishing: '\
+                                     '\'__getattribute__\' '\
+                                     'for %s.%s',
+                                     super(AutoLogger, self).__repr__(),
+                                     name)
+                    AUTOLOGGER.debug('')
+                super(AutoLogger, self).__setattr__('_is_getting', False)
+
+        #Actually retuns the attribute i.e.(where the magic happens).
+        return value
+
+    def __setattr__(self, name, value):
+        if not super(AutoLogger, self).__getattribute__('_is_disabled'):
+            super(AutoLogger, self).__setattr__('_is_setting', True)
+            myself = super(AutoLogger, self).__getattribute__('__repr__')()
 
             # Gets the currentframe and the call frame off the stack.
             curframe = inspect.currentframe()
@@ -108,127 +171,67 @@ class AutoLogger(object):
             # Gets a bunch of information about the object calling
             #    __setattr__ from the call frame.
             real_path = calframe[1][1]
+            real_line_no = calframe[1][2]
+            real_func = calframe[1][3]
+            previous_line = calframe[1][4][0].split('\n')[0]
+            real_line = calframe[1][4][1].split('\n')[0]
 
-            if '\\kivy\\' not in real_path or \
-              super(AutoLogger, self).__getattribute__('_extremely_verbose'):
-                real_line_no = calframe[1][2]
-                real_func = calframe[1][3]
-                previous_line = calframe[1][4][0].split('\n')[0]
-                real_line = calframe[1][4][1].split('\n')[0]
+            # Logs a message to let the log file know we are about to start logging.
+            AUTOLOGGER.debug('')
+            AUTOLOGGER.debug('###AutoLogger### Starting: \'__setattr__\' '\
+                             'for %s.%s', self, name)
 
-                # If you are inheriting from AutoLogger;
-                #    __setattr__ should do sufficient logging
-                #    on it's own, and so we don't need to log.
-                # Calls the function that normally gets called when you
-                #    print(or log) 'self'
-                myself = super(AutoLogger, self).__repr__()
+            #NOTE: Consider just iterating over the call frame and sending
+            #           it all out to the log.
+            # Logs some information about the object calling __setattr__.
+            AUTOLOGGER.debug(' + REALPATH ~ %s', real_path)
+            AUTOLOGGER.debug(' + REALFUNC ~ %s', real_func)
+            AUTOLOGGER.debug('Last two lines: ')
+            AUTOLOGGER.debug('%5d : %s', real_line_no-1, previous_line)
+            AUTOLOGGER.debug('%5d : %s', real_line_no, real_line)
 
-                # Logs a message to let the log file know
-                #     we are about to start logging.
-                AUTOLOGGER.debug('')
-                AUTOLOGGER.debug('###AutoLogger### Starting: '\
-                                 '\'__getattribute__\' '\
-                                 'for %s.%s',
-                                 super(AutoLogger, self).__repr__(),
-                                 name)
-
-                #NOTE: Consider just iterating over the call frame and sending
-                #           it all out to the log.
-                # Logs some information about
-                #    the object calling __getattribute__.
-                AUTOLOGGER.debug(' + REALPATH ~ %-100s | REALFUNC ~ %-18s | ',
-                                 real_path, real_func)
-                AUTOLOGGER.debug('Last two lines: ')
-                AUTOLOGGER.debug('REALLINENO: %5d | %s', real_line_no-1, previous_line)
-                AUTOLOGGER.debug('REALLINENO: %5d | %s', real_line_no, real_line)
-
-                # Log the some information about the object actually being
-                #    gotten.
-                AUTOLOGGER.debug('Getting -  %s.%s = %s(%s)',
+            # Checks to see if we are setting an
+            #   existing attribute, or creating a new one.
+            if hasattr(self, name):
+                # Logs the setting action about to occur.
+                AUTOLOGGER.debug('Setting - %s.%s from %s(%s) to %s(%s)',
                                  myself, name,
+                                 type(super(AutoLogger,
+                                            self).__getattribute__(name)),
+                                 super(AutoLogger, self).__getattribute__(name),
                                  type(value), value)
-                AUTOLOGGER.debug('###AutoLogger### Finishing: '\
-                                 '\'__getattribute__\' '\
-                                 'for %s.%s',
-                                 super(AutoLogger, self).__repr__(),
-                                 name)
-                AUTOLOGGER.debug('')
-            super(AutoLogger, self).__setattr__('_is_getting', False)
-
-        #Actually retuns the attribute i.e.(where the magic happens).
-        return value
-
-    def __setattr__(self, name, value):
-        super(AutoLogger, self).__setattr__('_is_setting', True)
-        myself = super(AutoLogger, self).__getattribute__('__repr__')()
-
-        # Gets the currentframe and the call frame off the stack.
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-
-        # Gets a bunch of information about the object calling
-        #    __setattr__ from the call frame.
-        real_path = calframe[1][1]
-        real_line_no = calframe[1][2]
-        real_func = calframe[1][3]
-        previous_line = calframe[1][4][0].split('\n')[0]
-        real_line = calframe[1][4][1].split('\n')[0]
-
-        # Logs a message to let the log file know we are about to start logging.
-        AUTOLOGGER.debug('')
-        AUTOLOGGER.debug('###AutoLogger### Starting: \'__setattr__\' '\
-                         'for %s.%s', self, name)
-
-        #NOTE: Consider just iterating over the call frame and sending
-        #           it all out to the log.
-        # Logs some information about the object calling __setattr__.
-        AUTOLOGGER.debug(' + REALPATH ~ %s', real_path)
-        AUTOLOGGER.debug(' + REALFUNC ~ %s', real_func)
-        AUTOLOGGER.debug('Last two lines: ')
-        AUTOLOGGER.debug('%5d : %s', real_line_no-1, previous_line)
-        AUTOLOGGER.debug('%5d : %s', real_line_no, real_line)
-
-        # Checks to see if we are setting an
-        #   existing attribute, or creating a new one.
-        if hasattr(self, name):
-            # Logs the setting action about to occur.
-            AUTOLOGGER.debug('Setting - %s.%s from %s(%s) to %s(%s)',
-                             myself, name,
-                             type(super(AutoLogger,
-                                        self).__getattribute__(name)),
-                             super(AutoLogger, self).__getattribute__(name),
-                             type(value), value)
-            if type(super(AutoLogger, self).__getattribute__(name)) !=\
-              type(value):
-                if super(AutoLogger, self).__getattribute__(name) is not ''\
-                  and type(super(AutoLogger, self).__getattribute__(name)) !=\
-                  type(None) and not self.ignore_type_change:
-                    # Warns the logger if we are changing the type of an
-                    #    existing variable. However; if the variable was just
-                    #    an empty string we assume it's fine.
-                    AUTOLOGGER.warning('Warning - The type of %s.%s '\
-                                       'was changed from type %s to type %s. '\
-                                       'Was this intentional?',
-                                       myself,
-                                       name,
-                                       type( super(AutoLogger,
-                                                   self).__getattribute__(name)),
-                                       type(value))
-        else:
-            # Logs the creating of the new attribute that is about to occur.
-            AUTOLOGGER.debug('Creating - %s.%s = %s', myself, name, value)
+                if type(super(AutoLogger, self).__getattribute__(name)) !=\
+                  type(value):
+                    if super(AutoLogger, self).__getattribute__(name) is not ''\
+                      and type(super(AutoLogger, self).__getattribute__(name)) !=\
+                      type(None) and not self.ignore_type_change:
+                        # Warns the logger if we are changing the type of an
+                        #    existing variable. However; if the variable was just
+                        #    an empty string we assume it's fine.
+                        AUTOLOGGER.warning('Warning - The type of %s.%s '\
+                                           'was changed from type %s to type %s. '\
+                                           'Was this intentional?',
+                                           myself,
+                                           name,
+                                           type( super(AutoLogger,
+                                                       self).__getattribute__(name)),
+                                           type(value))
+            else:
+                # Logs the creating of the new attribute that is about to occur.
+                AUTOLOGGER.debug('Creating - %s.%s = %s', myself, name, value)
 
         # ACTUALLY sets the attribute (here is where the magic happens).
         super(AutoLogger, self).__setattr__(name, value)
 
-        # Verifies that the setting has acctually occured.
-        AUTOLOGGER.debug('Verifying - %s.%s = %s(%s)',
-                         self, name,
-                         type(super(AutoLogger, self).__getattribute__(name)),
-                         super(AutoLogger, self).__getattribute__(name))
+        if not super(AutoLogger, self).__getattribute__('_is_disabled'):
+            # Verifies that the setting has acctually occured.
+            AUTOLOGGER.debug('Verifying - %s.%s = %s(%s)',
+                             self, name,
+                             type(super(AutoLogger, self).__getattribute__(name)),
+                             super(AutoLogger, self).__getattribute__(name))
 
-        # Logs a message to let the log file know we are done logging.
-        AUTOLOGGER.debug('###Autologger### Finishing: \'__setattr__\' '\
-                         'for %s.%s', self, name)
-        AUTOLOGGER.debug('')
-        super(AutoLogger, self).__setattr__('_is_setting', False)
+            # Logs a message to let the log file know we are done logging.
+            AUTOLOGGER.debug('###Autologger### Finishing: \'__setattr__\' '\
+                             'for %s.%s', self, name)
+            AUTOLOGGER.debug('')
+            super(AutoLogger, self).__setattr__('_is_setting', False)

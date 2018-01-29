@@ -2,12 +2,14 @@
 
 """
 
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager as KivyScreenManager
+from kivy.uix.screenmanager import WipeTransition
 
-from scripts.main_menu import MainMenu
-from scripts.logger import LOGGER
+from screens.main_menu.main_menu import MainMenu
+from screens.session.session import Session
 
-class ScreenManager(ScreenManager):
+
+class ScreenManager(KivyScreenManager):
     """ Screen Manager class is responsible for swapping between screens.
 
         #TODO: doctest here
@@ -15,6 +17,9 @@ class ScreenManager(ScreenManager):
     def __init__(self, *args, **kwargs):
         super(ScreenManager, self).__init__(*args, **kwargs)
 
-        main_menu = MainMenu()
-
-        self.switch_to(main_menu)
+        self.transition=WipeTransition()
+        
+        self.add_widget(MainMenu(name='Main Menu'))
+        self.add_widget(Session(name='Session'))
+        
+        self.current = 'Main Menu'
