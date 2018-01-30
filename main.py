@@ -87,10 +87,14 @@ class GameApp(App):
         return _r
 
 if __name__ == "__main__":
+
+    os.environ['KIVY_NO_CONSOLELOG'] = "1"
+
     #TODO: Move these out to a config file.
     Config.set('kivy', 'log_name', 'log_%y-%m-%d_%_.txt')
     LOG_DIR = os.path.dirname(os.path.abspath(__file__)) + '\\logs'
     Config.set('kivy', 'log_dir', LOG_DIR)
+
 
     LOGGER.info('Starting Logging.')
     CURRENT_WORKING_DIRECTORY = os.getcwd()

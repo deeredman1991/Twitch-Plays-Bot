@@ -16,7 +16,9 @@ class Session(Screen):
         """ Method gets called when class is instantiated.
         """
         super(Session, self).__init__(*args, **kwargs)
-        
+
+        #TODO: Move buttons out to a BoxLayout to be consistent with
+        #       MainMenu.
         #Creates the Back Button and sets it as a child of self.
         self._back_button = BackButton()
         self._back_button.text = "Back"

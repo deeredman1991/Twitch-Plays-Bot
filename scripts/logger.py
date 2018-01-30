@@ -25,9 +25,11 @@ for handler in KivyLogger.handlers:
 #   the logging developer's feeling. :'(
 #Config.set('kivy', 'log_enable', 1)
 
+KivyLogger.level = logging.LOG_LEVELS['warning']
+
 #Creates a logger and sets it's debug level.
 LOGGER = KivyLogger.getChild('Twitch-Plays-Bot')
-LOGGER.level = logging.LOG_LEVELS['debug']
+LOGGER.level = logging.LOG_LEVELS['warning']
 
 AUTOLOGGER = LOGGER.getChild('AutoLogger')
 AUTOLOGGER.level = logging.LOG_LEVELS['debug']

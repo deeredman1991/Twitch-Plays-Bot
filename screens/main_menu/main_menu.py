@@ -20,6 +20,8 @@ class MainMenu(Screen):
 
         super(MainMenu, self).__init__(*args, **kwargs)
 
+        #TODO: Move these out to a BoxLayout. So they can be centered
+        #       Easier.
         #Creates the Start Session button and sets it as a child of self.
         self._session_button = SessionButton()
         self._session_button.text = "Start Session"

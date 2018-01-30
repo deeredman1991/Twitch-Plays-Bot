@@ -5,13 +5,13 @@
 
 from functools import partial
 
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import BorderImage
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen as KivyScreen
 
 from scripts.logger import AutoLogger
-from scripts.sprite import Sprite
+
 
 class Screen(KivyScreen, AutoLogger):
     """ This is the main Screen class which all screens will inherit from.
@@ -24,8 +24,7 @@ class Screen(KivyScreen, AutoLogger):
             child gui elements are assigned.
         """
 
-        self.bg_img='images/generic_background.png'
-        self.background = Rectangle(source=self.bg_img)
+        self.background = BorderImage(source='images/generic_background.png')
 
         #Sets self._on_resize to get called when Window.on_resize gets called.
         Window.bind(on_resize=self._on_resize)
@@ -33,16 +32,17 @@ class Screen(KivyScreen, AutoLogger):
         #Calls inherited classes __init__() function.
         super(Screen, self).__init__(*args, **kwargs)
 
-    def on_enter(self, *args, **kwargs):
+    def on_pre_enter(self, *args, **kwargs):
         self.canvas.before.add(self.background)
         self._scale_and_center(Window.width, Window.height)
+        print(self)
 
     def _scale_and_center(self, width, height):
         """ Method gets called whenever the screen needs to
             reset it's size and center.
         """
         self.size = (width, height)
-        self.center = (width/2, height/2)
+        self.center = (width*0.5, height*0.5)
 
         self.background.size = self.size
         self.background.pos = self.pos
