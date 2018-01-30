@@ -52,9 +52,9 @@ class ScreenManager(KivyScreenManager, AutoLogger):
         self.canvas.before.add(self.current_screen.background)
 
         #NOTE: Displays the transition name...also temporary.
-        self.get_screen(self.current).add_widget(Label(text=str(type(self.transition)),
-                                                       pos_hint={'x': .5,
-                                                                 'y': .10},
-                                                       size_hint=[.3, .1],
-                                                       outline_width=3
-                                                      ))
+        self.get_screen(self.current).add_widget(
+            Label(text=str(type(self.transition)),
+                  pos_hint={'center_x': .5,
+                            'y': 0},
+                  size_hint=[.3, .05],
+                  outline_width=3))

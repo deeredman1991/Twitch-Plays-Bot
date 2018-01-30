@@ -4,7 +4,7 @@
 #pylint: disable=locally-disabled, too-many-ancestors
 
 from screens.main_menu.buttons.session_button import SessionButton
-from screens.main_menu.buttons.commands_button import CommandsButton
+from screens.main_menu.buttons.user_commands_button import UserCommandsButton
 from screens.main_menu.buttons.exit_button import ExitButton
 from scripts.screen import Screen
 
@@ -28,9 +28,9 @@ class MainMenu(Screen):
         self.add_widget(self._session_button)
 
         #Creates the Command Button and sets it as a child of self.
-        self._commands_button = CommandsButton()
-        self._commands_button.text = "Commands"
-        self.add_widget(self._commands_button)
+        self._user_commands_button = UserCommandsButton()
+        self._user_commands_button.text = "Commands"
+        self.add_widget(self._user_commands_button)
 
         #Creates the Exit Button and sets it as a child of self.
         self._exit_button = ExitButton()
