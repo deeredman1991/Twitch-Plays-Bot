@@ -1,6 +1,9 @@
 """ The module containing the screen manager class
 
 """
+import os
+import shutil
+import ctypes
 import random
 from functools import partial
 
@@ -43,6 +46,18 @@ class ScreenManager(KivyScreenManager, AutoLogger):
         self.transition.direction = dirs[random.randrange(4)]
         modes = ['push', 'pop']
         self.transition.mode = modes[random.randrange(2)]
+
+        #NOTE: Consider moving this as it really doesn't belong here.
+        cd = os.getcwd()
+        default = cd+'\\configs\\default'
+        default_backup = cd+'\\configs\\.default'
+        if not os.path.isdir(default_backup):
+            shutil.copytree(default, default_backup)
+            if os.name == 'nt':
+                ret = ctypes.windll.kernel32.SetFileAttributesW(
+                    default_backup, 0x02)
+        #TODO: should select the last loaded user profile.
+        self.profile = 'default'
 
         self.add_widget(MainMenu(name='Main Menu'))
         self.add_widget(Session(name='Session'))

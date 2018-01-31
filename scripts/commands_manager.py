@@ -2,22 +2,39 @@
     processing any and all incoming commands.
 """
 
-#TODO: Ideally a user_command definition will look like this:
-#      "!go": ":set smooth_movement 0; :tilt x 100 1; :set smooth_movement 1"
-#      Ideally a twitch_command would look like this:
-#      "!go; !a 4; !b 1 3; !x; !y"
+#NOTE: Ideally a user_command will look like: "definition": "command_string"
+#       parameters with an '=' sign are optional and the value after the = are
+#       their defaults.
+#      "!go #(seconds=1)": ":set smooth_movement 1; :tilt x 1.0 #(seconds); :set smooth_movement 0"
+#      "!push a #(times=1) #(delay=1.5)": ":mash 1 #(times) #(delay) 1"
+#TODO: implement CommandParser
+
+#NOTE:      Ideally a twitch_command_string would look like this:
+#      "!go; !push a; !push b 1 3; !push x; !push y"
+
+
 from threading import Lock
 
 class CommandError(Exception):
     pass
 
+#NOTE: Consider changing CommandsManager name to InternalCommandProcessor and
+#      doing process_command_string() on __init__() in this instance;
+#      user_variables would have to be moved out to a UserCommandManager to make
+#      sure they persist across commands as well as their corresponding locks.
+#      I also need a TwitchCommandProcessor which would read Twitch Chat and
+#      submit commands to UserCommandManager...this way we can support
+#      platforms other than Twitch.
 class CommandsManager(object):
     """ This is the CommandsManager class that processes all incoming commands
     """
     def __init__(self, joystick, *args, **kwargs):
         self.user_variables = {
-            'smooth_movement': 1,
-            'pausing': 0}
+            'smooth_movement': 1, #If 1 and pausing; when an axis is tilted;
+                                  #    Do not reset axis until a button is
+                                  #    pushed or axis is tilted that is not
+                                  #    the last axis to be tilted.
+            'pausing': 0} #if 1; pause emulator process between commands.
 
         self._user_variable_locks = {}
         for key, _ in self.user_variables.items():
@@ -27,9 +44,11 @@ class CommandsManager(object):
         self.joystick = joystick
 
         self._commands_list = {
-            ':mash': self._mash, #For mashing buttons.
-            ':tilt': self._tilt, #For tilting axies.
-            ':set': self._set}  #For setting user_variables.
+            ':mash': self._mash,       #For mashing buttons.
+            ':hold': self._hold,       #For holding a button indefinitely.
+            ':release': self._release, #For releasing a held button.
+            ':tilt': self._tilt,       #For tilting axies.
+            ':set': self._set}         #For setting user_variables.
 
         #A call to a blocking command in a command string should; run all
         #   previous commands, in unison, run the blocking command, then run
@@ -66,6 +85,26 @@ class CommandsManager(object):
         #      file
         pass
 
+    #TODO: Move command functions to another file. CommandsManager is getting
+    #       too big.
+    def _hold(self, args):
+        #:hold command usage: :hold button
+        if len(args) != 2:
+            raise CommandError(
+                'hold command takes 1 argument, got %s; %s' % len(args), args)
+        button = args[0]
+        self.joystick.hold(button)
+
+    def _release(self, args):
+        #:release command usage: :release [button]
+        #       if button is not specified: release all held buttons.
+        if len(args) > 1:
+            raise CommandError(
+                'release command takes between 0 and 1 arguments, '\
+                'got %s; %s' % len(args), args)
+        button = args[0] or None
+        self.joystick.release(button)
+
     def _mash(self, args):
         #:mash command usage: :mash button, [times, delay, hold_for]
         if len(args) < 1 or len(args) > 4:
@@ -73,10 +112,11 @@ class CommandsManager(object):
                 'mash command takes between 1 and 3 argument, got %s; %s' %
                 len(args), args)
 
-        button = args[0] # Which button to press.
-        times = args[1] # How many times to press it.
-        delay = args[2] # How long to wait between each button press.
-        hold_for = args[3] # How long to hold each button for.
+        button = args[0]           # Which button to press.
+        times = args[1] or 1       # How many times to press it.
+        #TODO: Get defaults from config file for delay and hold_for.
+        delay = args[2] or None    # How long to wait between each button press.
+        hold_for = args[3] or None # How long to hold each button for.
 
         for _ in range(times):
             self.joystick.mash(button, delay, hold_for, self.user_variables[:])
@@ -88,15 +128,16 @@ class CommandsManager(object):
                 'tilt command takes between 2 and 3 arguments, got %s; %s' %
                 len(args), args)
 
-        axis = args[0] # Which axis to tilt
-        degree = args[1] # How far(and which direction) to tilt it.
-        hold_for = args[2] # How long to tilt axis.
+        axis = args[0]             # Which axis to tilt
+        degree = args[1]           # How far(and which direction) to tilt it.
+        #TODO: Get defaults from config file for hold_for.
+        hold_for = args[2] or None # How long to tilt axis.
 
         self.joystick.tilt(axis, degree, hold_for, self.user_variables[:])
 
     def _set(self, args):
         #:set command usage: :set var value
-        if not len(args) == 2:
+        if len(args) != 2:
             raise CommandError(
                 'set command takes 2 argument, got %s; %s' %
                 len(args), args)

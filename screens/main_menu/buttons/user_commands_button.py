@@ -28,7 +28,8 @@ class UserCommandsButton(Button):
             #TODO: doctest here
         """
         #Creates a string equal to %cd%/configs/commands.json
-        _user_commands_file = str(os.getcwd()) + '/configs/user_commands.json'
+        _user_commands_file = str(os.getcwd()) + '/configs/' +\
+                self.parent.parent.profile + '/user_commands.json'
 
         #executes the string created earlier as a console command.
         os.startfile(_user_commands_file)

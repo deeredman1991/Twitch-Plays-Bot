@@ -8,3 +8,4 @@
 images/resources/*
 audio/resources/*
 logs/*
+configs/.default/*
