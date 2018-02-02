@@ -1,15 +1,31 @@
 {
-	"!u": ":mash <Up_Arrow>",
-	"!d": ":mash <Down_Arrow>",
-	"!l": ":mash <Left_Arrow>",
-	"!r": ":mash <Right_Arrow>",
+	"!up #(hold_for=1) #(degree=fd)": ":tilt lx #(degree) #(hold_for)",
+	"!dn #(hold_for=1) #(degree=bk)": ":tilt lx #(degree) #(hold_for)",
+	"!lf #(hold_for=1) #(degree=lf)": ":tilt ly #(degree) #(hold_for)",
+	"!ri #(hold_for=1) #(degree=ri)": ":tilt ly #(degree) #(hold_for)",
 	
-	"!se": ":mash <Backspace>",
-	"!st": ":mash <Enter>",
+	"!cu #(hold_for=1) #(degree=fd)": ":tilt rx #(degree) #(hold_for)",
+	"!cd #(hold_for=1) #(degree=bk)": ":tilt rx #(degree) #(hold_for)",
+	"!cl #(hold_for=1) #(degree=lf)": ":tilt ry #(degree) #(hold_for)",
+	"!cr #(hold_for=1) #(degree=ri)": ":tilt ry #(degree) #(hold_for)",
+	
+	"!l #(hold_for=1) #(degree=lf)": ":tilt z (#degree) #(hold_for)",
+	"!r #(hold_for=1) #(degree=ri)": ":tilt z (#degree) #(hold_for)",
+	
+	"!du #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 0.0 1.0 #(times) #(delay) #(hold_for)",
+	"!dd #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 0.0 -1.0 #(times) #(delay) #(hold_for)",
+	"!dl #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat -1.0 0.0 #(times) #(delay) #(hold_for)",
+	"!dr #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1.0 0.0 #(times) #(delay) #(hold_for)",
+	
+	"!dp #(degree_x=nu) #(degree_y=nu) #(times=1) #(hold_for=0.3) #(delay=0.1": ":hat #(degree_x) #(degree_y) #(times) #(delay) #(hold_for)",
+	
+	"!s": ":mash s 1 0.1 0.3",
 
-	"!a": ":mash z",
-	"!b": ":mash x",
+	"!a #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash a #(times) #(delay) #(hold_for)",
+	"!b #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash b #(times) #(delay) #(hold_for)",
+	"!x #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash x #(times) #(delay) #(hold_for)",
+	"!y #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash y #(times) #(delay) #(hold_for)",
+	"!z #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash z #(times) #(delay) #(hold_for)",
 	
-	"!lb": ":mash a",
-	"!rb": ":mash s"
+	"!press #(button) #(hold_for=0.3) #(delay=0.1)": ":mash #(button) #(times) #(delay) #(hold_for)"
 }
