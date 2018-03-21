@@ -30,7 +30,6 @@ class CommandsManager(object):
 
         super(CommandsManager, self).__init__(*args, **kwargs)
 
-
     def process_command_string(self, command_string):
         command_string = command_string.split(';')
         for command in command_string:
@@ -39,9 +38,14 @@ class CommandsManager(object):
                 if command == user_command:
                     internal_command_string = \
                                     self.dealias(internal_command_string)
+                    #TODO: insert pausing stuff here
                     CommandsProcessor(self.joystick, internal_command_string)
 
     def dealias(self, command_string):
+        #TODO: finish dealiasing.
+        #      In a command definition there are; roots, variables, and values
+        #"!root #(var1) #(var2=value1)": ":root value2 value3 #(var1) #(var2)"
+        #      only values have aliases
         assert False, "Unfinished Function!!!"
 
     def read_configs(self, filepath):
