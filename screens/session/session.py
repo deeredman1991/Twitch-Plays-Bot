@@ -6,6 +6,7 @@
 from screens.session.buttons.back_button import BackButton
 from scripts.screen import Screen
 
+from scripts.commands_manager import CommandsManager
 
 class Session(Screen):
     """ This is the Sessions screen which holds the session
@@ -16,10 +17,13 @@ class Session(Screen):
         """ Method gets called when class is instantiated.
         """
         super(Session, self).__init__(*args, **kwargs)
-
+        
         #TODO: Move buttons out to a BoxLayout to be consistent with
         #       MainMenu.
         #Creates the Back Button and sets it as a child of self.
         self._back_button = BackButton()
         self._back_button.text = "Back"
         self.add_widget(self._back_button)
+        
+    def on_enter(self):
+        self.commands_manager = CommandsManager('J:\ProgrammingStuff\Python Scripts\Twitch-Plays-Bot\configs\default')

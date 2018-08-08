@@ -1,24 +1,33 @@
 {
-	"!up #(hold_for=1) #(degree=fd)": ":tilt lx #(degree) #(hold_for)",
-	"!dn #(hold_for=1) #(degree=bk)": ":tilt lx #(degree) #(hold_for)",
-	"!lf #(hold_for=1) #(degree=lf)": ":tilt ly #(degree) #(hold_for)",
-	"!ri #(hold_for=1) #(degree=ri)": ":tilt ly #(degree) #(hold_for)",
-	
-	"!cu #(hold_for=1) #(degree=fd)": ":tilt rx #(degree) #(hold_for)",
-	"!cd #(hold_for=1) #(degree=bk)": ":tilt rx #(degree) #(hold_for)",
-	"!cl #(hold_for=1) #(degree=lf)": ":tilt ry #(degree) #(hold_for)",
-	"!cr #(hold_for=1) #(degree=ri)": ":tilt ry #(degree) #(hold_for)",
-	
-	"!l #(hold_for=1) #(degree=lf)": ":tilt z (#degree) #(hold_for)",
-	"!r #(hold_for=1) #(degree=ri)": ":tilt z (#degree) #(hold_for)",
-	
-	"!du #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 0.0 1.0 #(times) #(delay) #(hold_for)",
-	"!dd #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 0.0 -1.0 #(times) #(delay) #(hold_for)",
-	"!dl #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat -1.0 0.0 #(times) #(delay) #(hold_for)",
-	"!dr #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1.0 0.0 #(times) #(delay) #(hold_for)",
-	
-	"!dp #(degree_x=nu) #(degree_y=nu) #(times=1) #(hold_for=0.3) #(delay=0.1": ":hat #(degree_x) #(degree_y) #(times) #(delay) #(hold_for)",
-	
+    "_comment": "On the left is the Twitch/External Command and properties on the right is the Bot/Internal Command",
+	"_comment2": "Degrees for the 'tilt' internal command range from -1 : 1",
+    "!su #(hold_for=1)": ":tilt lx fd #(hold_for)",
+	"!sd #(hold_for=1)": ":tilt lx bk #(hold_for)",
+	"!sl #(hold_for=1)": ":tilt ly lf #(hold_for)",
+	"!sr #(hold_for=1)": ":tilt ly ri #(hold_for)",
+
+	"!cu #(hold_for=1)": ":tilt rx fd #(hold_for)",
+	"!cd #(hold_for=1)": ":tilt rx bk #(hold_for)",
+	"!cl #(hold_for=1)": ":tilt ry lf #(hold_for)",
+	"!cr #(hold_for=1)": ":tilt ry ri #(hold_for)",
+
+	"!l #(hold_for=1)": ":tilt z lf #(hold_for)",
+	"!r #(hold_for=1)": ":tilt z ri #(hold_for)",
+
+    "!tilt #(axis=lx) #(degree=fd) #(hold_for=1)": ":tilt #(axis) #(degree) #(hold_for)",
+
+    "_comment3": "Degrees for the 'hat' internal command range from 0-359 (with 360 or -1 being neutral).",
+	"!dn #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 n #(times) #(delay) #(hold_for)",
+    "!dne #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 ne #(times) #(delay) #(hold_for)",
+    "!de #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 e #(times) #(delay) #(hold_for)",
+    "!dse #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 se #(times) #(delay) #(hold_for)",
+	"!ds #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 s #(times) #(delay) #(hold_for)",
+    "!dsw #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 sw #(times) #(delay) #(hold_for)",
+	"!dw #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 w #(times) #(delay) #(hold_for)",
+    "!dnw #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 nw #(times) #(delay) #(hold_for)",
+
+	"!dpad #(degree=nu) #(times=1) #(hold_for=0.3) #(delay=0.1": ":hat 1 #(degree) #(times) #(delay) #(hold_for)",
+
 	"!s": ":mash s 1 0.1 0.3",
 
 	"!a #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash a #(times) #(delay) #(hold_for)",
@@ -26,6 +35,16 @@
 	"!x #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash x #(times) #(delay) #(hold_for)",
 	"!y #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash y #(times) #(delay) #(hold_for)",
 	"!z #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash z #(times) #(delay) #(hold_for)",
-	
-	"!press #(button) #(hold_for=0.3) #(delay=0.1)": ":mash #(button) #(times) #(delay) #(hold_for)"
+
+	"!press #(button) #(hold_for=0.3) #(delay=0.1)": ":mash #(button) #(times) #(delay) #(hold_for)",
+
+    "!w #(wait_time=1)": ":wait #(wait_time)",
+    
+    "!h #(degree=-2) #(button_or_axis=a)": ":hold #(button_or_axis) #(degree)",
+
+    "!pon": ":set pausing 1",
+    "!poff": ":set pausing 0",
+    
+    "!smon": ":set smooth_movement 1",
+    "!smoff": ":set smooth_movement 0"
 }

@@ -4,14 +4,20 @@ import time
 import subprocess
 from ctypes import cdll, c_byte, c_long, wintypes, Structure
 
-VJOYPATH = 'vJoy' + os.sep
+VJOYPATH = 'scripts' + os.sep + 'vJoy' + os.sep + 'vJoy' + os.sep
+VJOYPATH2 = 'vJoy' + os.sep
 
 DLLPATH = VJOYPATH + "vJoyInterface.dll"
+DLLPATH2 = VJOYPATH2 + "vJoyInterface.dll"
 
 try:
     vJoy = cdll.LoadLibrary(DLLPATH)
 except OSError:
-    sys.exit("Unable to load vJoy SDK DLL.  Ensure that vJoyInterface.dll is present")
+    try:
+        vJoy = cdll.LoadLibrary(DLLPATH2)
+        VJOYPATH = VJOYPATH2
+    except OSError:
+        sys.exit("Unable to load vJoy SDK DLL.  Ensure that vJoyInterface.dll is present")
 
 '''
 vJoyConfig Dn [-f][-l][-aAi [Ai+1 …]] [-bn] {[-pm] | [-sj]} [-e [{all | Ei ...}]]
@@ -197,52 +203,6 @@ def vJoyConfig_Create(# The index of the target joystick device in the range of 
         raise vJoyConfigError('Failed to create vJoy device.')
 
     time.sleep(wait_for)
-
-rID = 1
-
-vJoyConfig_Create(rID, force=True, buttons=128, analog_hat_switches=4)
-
-#vJoyConfig_Delete(rID)
-
-vJoyConfig_Get_Config()
-
-vJoy.vJoyEnabled()
-vJoy.AcquireVJD(rID)
-
-#    -1 or 36000 = neutral
-#     0 = North
-#  4500 = North-East
-#  9000 = East
-# 13500 = South-East
-# 18000 = South
-# 22500 = South-West
-# 27000 = West
-# 31500 = North-West
-for x in range(4):
-    for y in range(0, 36000, 4500):
-        vJoy.SetContPov(y, rID, x+1)
-        time.sleep(.1)
-    vJoy.SetContPov(-1, rID, x+1)
-
-#Between 0x0 and 0x8000
-for i in range(0x30, 0x37+0x01, 0x01):
-    vJoy.SetAxis(0x8000, rID, i)
-    time.sleep(.1)
-    vJoy.SetAxis(0x0, rID, i)
-    time.sleep(.1)
-    vJoy.SetAxis(0x4000, rID, i)
-
-#Between 1 and 128
-for i in range(128):
-    """Sets the state of a vJoy Button to on or off.  SetBtn(state,rID,buttonID)"""
-    vJoy.SetBtn(1, rID, i+1)
-    time.sleep(0.05)
-    vJoy.SetBtn(0, rID, i+1)
-
-#vJoy.ResetButtons()
-#vJoy.ResetPovs()
-"""Reset all axes and buttons to default for specified vJoy Device"""
-#vJoy.ResetVJD()
 
 class JOYSTICK_POSITION_V2(Structure):
     _fields_ = [
@@ -489,48 +449,104 @@ class JOYSTICK_POSITION_V2(Structure):
     def update(self):
         vJoy.UpdateVJD(self.bDevice, self)
 
-jspos = JOYSTICK_POSITION_V2(rID)
+if __name__ == '__main__':
+    rID = 1
 
-#buttons: | 1 | 2 | 3 | 4 |  5 |  6 |  7 |  8  |  9  |  10  |
-#values : | 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 512 | 1024 |
-#jspos.lButtons = 32+64+128 #Turn on buttons 6, 7, and 8
+    vJoyConfig_Create(rID, force=True, buttons=128, analog_hat_switches=4)
 
-jspos.bHats    = 0
-jspos.bHatsEx1 = 18000
-jspos.bHatsEx2 = 0
-jspos.bHatsEx3 = 18000
+    #vJoyConfig_Delete(rID)
 
-jspos.lButtons = 0xFFFFFFFF
-jspos.lButtonsEx1 = 0xFFFFFFFF
-jspos.lButtonsEx2 = 0xFFFFFFFF
-jspos.lButtonsEx3 = 0xFFFFFFFF
+    #vJoyConfig_Get_Config()
 
-jspos.wAxisX = 0x8000
-jspos.wAxisY = 0x0000
-jspos.wAxisZ = 0x8000
+    #vJoyConfig_Reset
+    
+    vJoy.vJoyEnabled()
+    vJoy.AcquireVJD(rID)
 
-jspos.wAxisXRot = 0x0000
-jspos.wAxisYRot = 0x8000
-jspos.wAxisZRot = 0x0000
+    #Hat Controls.
+    #    -1 or 36000 = neutral
+    #     0 = North
+    #  4500 = North-East
+    #  9000 = East
+    # 13500 = South-East
+    # 18000 = South
+    # 22500 = South-West
+    # 27000 = West
+    # 31500 = North-West
+    print("Running Hat Test")
+    for x in range(4):
+        for y in range(0, 36000, 4500):
+            vJoy.SetContPov(y, rID, x+1)
+            time.sleep(.3)
+        vJoy.SetContPov(-1, rID, x+1)
 
-jspos.wSlider = 0x8000
-jspos.wDial = 0x0000
+    #Axis Controls.
+    #Between 0x0 and 0x8000
+    print("Running Axes Test")
+    for i in range(0x30, 0x37+0x01, 0x01):
+        vJoy.SetAxis(0x8000, rID, i)
+        time.sleep(.1)
+        vJoy.SetAxis(0x0, rID, i)
+        time.sleep(.1)
+        vJoy.SetAxis(0x4000, rID, i)
 
-jspos.update()
-time.sleep(1)
+    #Button Controls.
+    #Between 1 and 128
+    print("Running Button Test")
+    for i in range(128):
+        """Sets the state of a vJoy Button to on or off.  SetBtn(state,rID,buttonID)"""
+        vJoy.SetBtn(1, rID, i+1)
+        time.sleep(0.05)
+        vJoy.SetBtn(0, rID, i+1)
 
-jspos.reset()
+    #vJoy.ResetButtons()
+    #vJoy.ResetPovs()
+    """Reset all axes and buttons to default for specified vJoy Device"""
+    #vJoy.ResetVJD()
+    
+    print("Running jspos Test")
+    jspos = JOYSTICK_POSITION_V2(rID)
 
-#The 'efficient' method as described in vJoy's docs - set multiple values at once
-#j.data
+    #buttons: | 1 | 2 | 3 | 4 |  5 |  6 |  7 |  8  |  9  |  10  |
+    #values : | 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 512 | 1024 |
+    #jspos.lButtons = 32+64+128 #Turn on buttons 6, 7, and 8
 
-#j.data.lButtons = 19 # buttons number 1,2 and 5 (1+2+16)
-#j.data.wAxisX = 0x2000
-#j.data.wAxisY = 0x7500
+    jspos.bHats    = 0
+    jspos.bHatsEx1 = 18000
+    jspos.bHatsEx2 = 0
+    jspos.bHatsEx3 = 18000
 
-#send data to vJoy device
-#vJoy.UpdateVJD()
+    jspos.lButtons = 0xFFFFFFFF
+    jspos.lButtonsEx1 = 0xFFFFFFFF
+    jspos.lButtonsEx2 = 0xFFFFFFFF
+    jspos.lButtonsEx3 = 0xFFFFFFFF
 
-#inverts logic for backwards Y axis.
-#prc = .25
-#print( round( abs(0x8000 * -prc) ) )
+    jspos.wAxisX = 0x8000
+    jspos.wAxisY = 0x0000
+    jspos.wAxisZ = 0x8000
+
+    jspos.wAxisXRot = 0x0000
+    jspos.wAxisYRot = 0x8000
+    jspos.wAxisZRot = 0x0000
+
+    jspos.wSlider = 0x8000
+    jspos.wDial = 0x0000
+
+    jspos.update()
+    time.sleep(1)
+
+    jspos.reset()
+
+    #The 'efficient' method as described in vJoy's docs - set multiple values at once
+    #j.data
+
+    #j.data.lButtons = 19 # buttons number 1,2 and 5 (1+2+16)
+    #j.data.wAxisX = 0x2000
+    #j.data.wAxisY = 0x7500
+
+    #send data to vJoy device
+    #vJoy.UpdateVJD()
+
+    #inverts logic for backwards Y axis.
+    #prc = .25
+    #print( round( abs(0x8000 * -prc) ) )

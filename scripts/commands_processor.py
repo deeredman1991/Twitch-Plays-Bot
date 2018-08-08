@@ -47,32 +47,42 @@ class CommandsProcessor(object):
             ':hold': commands.hold,       #For holding a button indefinitely.
             ':release': commands.release, #For releasing a held button.
             ':tilt': commands.tilt,       #For tilting axies.
-            ':set': commands.set_var}         #For setting user_variables.
+            ':hat': commands.hat,         #For using the dPad(s)
+            ':set': commands.set_var,     #For setting user_variables.
+            ':wait': commands.wait}       #For waiting a set period of time.
 
         #A call to a blocking command in a command string should; run all
         #   previous commands, in unison, run the blocking command, then run
         #   any additional commands(or atleast until the next
         #   blocking command) in unison.
-        self._blocking_commands = [':set']
+        self._blocking_commands = [':set', ':wait']
 
         #NOTE: When processing commands: Split by ';' first then by spaces.
         #       This way the user can submit multiple commands with a ; delimiter
         #       load all commands listed this way into threads and then start them.
         command_string = command_string.split(';')
 
+        cmd_threads = []
         for cmd in command_string:
             cmd_args = cmd.split(' ')
-            cmd_root = cmd.pop(0)
+            cmd_root = cmd_args.pop(0)
 
             #NOTE: This assertion shouldn't be needed after linter is working.
             assert cmd_root in self._commands_list,\
                 "%s is not a valid command." % cmd_root[0]
 
+            #print(command_string)
+            #print(cmd_root)
+            #print(cmd_args)
             cmd_thread = Thread(target=self._commands_list[cmd_root],
                                 args=(self.joystick, cmd_args))
+            cmd_threads.append( cmd_thread )
             cmd_thread.start()
             if cmd_root in self._blocking_commands:
                 cmd_thread.join()
+
+        for cmdt in cmd_threads:
+            cmdt.join()
 
         super(CommandsProcessor, self).__init__(*args, **kwargs)
 
@@ -80,6 +90,4 @@ class CommandsProcessor(object):
         #TODO: The commands linter should make sure that the
         #   user commands file 1). is a valid .json and 2). only contains
         #   valid commands.
-        #TODO: CommandsManager is not the place for this...move to another
-        #   file.
         pass

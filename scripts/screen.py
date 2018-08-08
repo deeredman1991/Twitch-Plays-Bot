@@ -10,10 +10,8 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen as KivyScreen
 
-from scripts.logger import AutoLogger
 
-
-class Screen(KivyScreen, AutoLogger):
+class Screen(KivyScreen):
     """ This is the main Screen class which all screens will inherit from.
 
         #TODO: doctest here.

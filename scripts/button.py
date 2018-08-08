@@ -4,9 +4,7 @@
 
 from kivy.uix.button import Button as KivyButton
 
-from scripts.logger import AutoLogger
-
-class Button(KivyButton, AutoLogger):
+class Button(KivyButton):
     """ This is the generic 'Button' class that all buttons should
         inherit from.
     """

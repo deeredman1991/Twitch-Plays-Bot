@@ -17,12 +17,11 @@ from kivy.uix.screenmanager import ShaderTransition, SlideTransition,\
                                    RiseInTransition, NoTransition,\
                                    CardTransition
 
-from scripts.logger import AutoLogger
 from screens.main_menu.main_menu import MainMenu
 from screens.session.session import Session
 from scripts.screen import Screen
 
-class ScreenManager(KivyScreenManager, AutoLogger):
+class ScreenManager(KivyScreenManager):
     """ Screen Manager class is responsible for swapping between screens.
 
         #TODO: doctest here
