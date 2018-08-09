@@ -9,3 +9,4 @@ images/resources/*
 audio/resources/*
 logs/*
 configs/.default/*
+configs/default/login.json
