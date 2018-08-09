@@ -13,11 +13,43 @@ from kivy.config import Config
 from pathlib import Path
 import random
 
+from kivy.logger import Logger
+
+#This function applies a monkey patch to the print statement so that it will never crash due to bad encoding.
+#   and so that it will log all print statements.
+#Must go here to catch potential errors in vJoy
+def monkey_patch_print_statement():
+    # Store the real print function in another variable otherwise
+    # it will be inaccessible after being modified.
+    _print = print  
+
+    # Actual implementation of the new print
+    def custom_print(*args, **options):
+        #_print(*args, **options)
+        #add logging and monkey patch in dumping crash reports to the log file.
+        try:
+            Logger.info( 'PRINT: {}'.format( *args ) )
+        except Exception as e:
+            try:
+                Logger.warning( "ERROR: Something failed to log.\n> {}\n> {}".format( e, traceback.print_stack() ) )
+            except Exception:
+                Logger.warning( "CRITICAL: Failed to log stack trace." )
+                
+    # Change the print function globally
+    import builtins
+    builtins.print = custom_print
+    
+monkey_patch_print_statement()
+
+#Must go here because it doesn't play nice with kivy...
+print("Creating vJoy Device")
+import scripts.vJoy as j
+j.vJoyNew(rID=1)
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.config import Config
 from kivy.utils import platform as PLATFORM
-from kivy.logger import Logger
 
 from scripts.screen_manager import ScreenManager
 
@@ -98,30 +130,6 @@ if __name__ == "__main__":
     #Config.set('kivy', 'log_name', 'log_%y-%m-%d_%_.txt')
     #LOG_DIR = os.path.dirname(os.path.abspath(__file__)) + '\\logs'
     #Config.set('kivy', 'log_dir', LOG_DIR)
-
-    #This function applies a monkey patch to the print statement so that it will never crash due to bad encoding.
-    def monkey_patch_print_statement():
-        # Store the real print function in another variable otherwise
-        # it will be inaccessible after being modified.
-        _print = print  
-
-        # Actual implementation of the new print
-        def custom_print(*args, **options):
-            #_print(*args, **options)
-            #add logging and monkey patch in dumping crash reports to the log file.
-            try:
-                Logger.info( 'PRINT: {}'.format( *args ) )
-            except Exception as e:
-                try:
-                    Logger.warning( "ERROR: Something failed to log.\n> {}\n> {}".format( e, traceback.print_stack() ) )
-                except Exception:
-                    Logger.warning( "CRITICAL: Failed to log stack trace." )
-                    
-        # Change the print function globally
-        import builtins
-        builtins.print = custom_print
-        
-    monkey_patch_print_statement()
 
     #Prints the os's environment variables to the logfile.
     #Logger.debug('Check - os.environ = %s(%s)',

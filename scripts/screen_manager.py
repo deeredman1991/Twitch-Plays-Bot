@@ -1,11 +1,13 @@
 """ The module containing the screen manager class
 
 """
+
 import os
 import shutil
 import ctypes
 import random
 from functools import partial
+
 
 from kivy.core.window import Window
 from kivy.uix.label import Label

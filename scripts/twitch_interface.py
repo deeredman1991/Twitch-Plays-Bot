@@ -73,7 +73,7 @@ class TwitchInterface(object):
     def _read_buffer(self):
         time.sleep(.5)
         buffer = self.socket.recv(1024).decode()
-        if buffer[-1] != '\n':
+        if buffer and buffer[-1] != '\n':
             buffer_end = '\n'
         else:
             buffer_end = ''

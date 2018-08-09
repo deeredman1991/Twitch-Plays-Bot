@@ -1,27 +1,46 @@
 
-from threading import Lock
+from threading import Lock, Thread
 import time
 import numbers
 import json
 import io
 
-import scripts.vJoy as j
+#from scripts.vJoy import vJoyNew, vJoy
+import scripts.vJoy.__init__ as j
+
 
 class JoystickError(Exception):
     pass
 
-
-class Joystick(object):
-
-    def __init__(self, *args, rID=1, configs={}, configs_filepath='', **kwargs):
+#class Joystick(object):
+#    def __init__(self, *args, **kwargs):
+#        j.vJoyNew(rID=1)
     
+#'''
+class Joystick(object):
+    def __init__(self, *args, rID=1, configs={}, configs_filepath='', **kwargs):
         self.rID = rID
-        
+
         #This is causing the "Please restart" prompt to appear... It only needs to 
         #   be called once and/or if we can't get ahold of a controller.
         #For now; Just quick and dirtily; hit "restart later".
-        j.vJoyConfig_Create(self.rID, force=True, buttons=128, analog_hat_switches=4)
-        j.vJoy.vJoyEnabled
+        #j.vJoyConfig_Delete( self.rID )
+        #j.vJoyConfig_Create( self.rID, force=True, buttons=25, analog_hat_switches=4 )
+        #j.vJoy.vJoyEnabled()
+        
+        #j.vJoyConfig_Delete(self.rID)
+        #j.vJoyConfig_Create(self.rID, force=True, buttons=57, analog_hat_switches=4)
+        #j.vJoy.vJoyEnabled()
+        #j.vJoy.AcquireVJD(self.rID)
+
+        #j.vJoyNew(rID=self.rID)
+        #tj = Thread( target=j.vJoyNew, kwargs={'rID':self.rID} )
+        
+        #tj.start()
+        
+        #tj.join()
+        
+        #print( j.vJoyConfig_Get_Config() )
     
         self.last_tilted_axis = None
         self.last_tilted_axis_lock = Lock()
@@ -55,15 +74,15 @@ class Joystick(object):
             'pausing': False, #if 1; pause emulator process between commands.
             'binding': False }
         """
-        '''
-        self._user_variable_locks = {}
-        for key, _ in self.user_variables.items():
-            self._user_variable_locks[key] = Lock()
-        self._user_variables_on_change = {
-            'smooth_movement': lambda: [self.release(axis) for axis in
-                                        self.axes],
-            'pausing': lambda: self.release()}
-        '''
+        
+        #self._user_variable_locks = {}
+        #for key, _ in self.user_variables.items():
+        #    self._user_variable_locks[key] = Lock()
+        #self._user_variables_on_change = {
+        #    'smooth_movement': lambda: [self.release(axis) for axis in
+        #                                self.axes],
+        #    'pausing': lambda: self.release()}
+        
         
     def set_user_variable(self, key, value):
         def write_json( dict, jsn ):
@@ -239,3 +258,4 @@ class Joystick(object):
                     not user_variables['smooth_movement']:
             j.vJoy.SetAxis( 0x4000, self.rID, axis )
             print('[JoyStick: {}] Setting axis {} to 0 degrees'.format(self.rID, axis-0x2F))
+#'''

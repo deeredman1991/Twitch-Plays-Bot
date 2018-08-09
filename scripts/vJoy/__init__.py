@@ -12,11 +12,13 @@ DLLPATH2 = VJOYPATH2 + "vJoyInterface.dll"
 
 try:
     vJoy = cdll.LoadLibrary(DLLPATH)
-except OSError:
+except OSError as o:
     try:
         vJoy = cdll.LoadLibrary(DLLPATH2)
         VJOYPATH = VJOYPATH2
-    except OSError:
+    except OSError as e:
+        print(o)
+        print(e)
         sys.exit("Unable to load vJoy SDK DLL.  Ensure that vJoyInterface.dll is present")
 
 '''
@@ -64,7 +66,7 @@ def _get_vJoy_path():
 
     #TODO: Make sure vJoyConfig.exe is actually there...
 
-    vJoyConfigPath = VJOYPATH
+    vJoyConfigPath = os.path.abspath( VJOYPATH )
     if vJoyConfigPath[-1] != os.sep:
         vJoyConfigPath += os.sep
     vJoyConfig = vJoyConfigPath + 'vJoyConfig.exe'
@@ -73,7 +75,7 @@ def _get_vJoy_path():
         raise vJoyConfigError('Failed to find vJoyConfig.exe are you sure '\
                               'this is the correct path? %s' % vJoyConfig)
 
-    return vJoyConfig
+    return '"{}"'.format(vJoyConfig)
 
 def vJoyConfig_Get_Config(rID=0):
     if int(rID) < 0 or int(rID) > 16:
@@ -91,13 +93,26 @@ def vJoyConfig_Get_Config(rID=0):
 def vJoyConfig_Disable():
     vJoyConfig = _get_vJoy_path()
     result = subprocess.run( '%s Enable off' % vJoyConfig )
+    #command_string = vJoyConfig + ' Enable off'
+    
+    #os.system(vJoyConfig + ' enable off')
+    
+    #result = subprocess.Popen( [vJoyConfig, 'enable', 'off'], shell=True )
+    #result.communicate()
+    print('vJoy: Disable returncode: {}'.format(result.returncode))
     if result.returncode != 0:
         raise vJoyConfigError('Failed to disable vJoy. Is your vJoy config '\
                               'path correct? %s' % vJoyConfig)
 
 def vJoyConfig_Enable():
     vJoyConfig = _get_vJoy_path()
+    #os.system( vJoyConfig + ' enable on' )
+    #result = subprocess.Popen( [vJoyConfig, 'enable', 'on'] )
+    #result.communicate()
+    
+    
     result = subprocess.run( '%s Enable on' % vJoyConfig )
+    print('vJoy: Enable returncode: {}'.format(result.returncode))
     if result.returncode != 0:
         raise vJoyConfigError('Failed to disable vJoy. Is your vJoy config '\
                               'path correct? %s' % vJoyConfig)
@@ -105,6 +120,10 @@ def vJoyConfig_Enable():
 def vJoyConfig_Reset():
     vJoyConfig = _get_vJoy_path()
     result = subprocess.run( '%s -r' % vJoyConfig )
+    #os.system( vJoyConfig + ' -r' )
+    #result = subprocess.call( [vJoyConfig, '-r'] )
+    #result.communicate()
+    print('vJoy: Reset returncode: {}'.format(result.returncode))
     if result.returncode != 0:
         raise vJoyConfigError('Failed to disable vJoy. Is your vJoy config '\
                               'path correct? %s' % vJoyConfig)
@@ -117,9 +136,12 @@ def vJoyConfig_Delete(rID, disable = True):
     if disable:
         vJoyConfig_Disable()
 
-    command_string = ' '.join([vJoyConfig, '-d', str(rID)])
-
-    if subprocess.run( command_string ) != 0:
+    #os.system( vJoyConfig + ' -d ' + str(rID) )
+    #result = subprocess.Popen( [vJoyConfig, '-d', str(rID)] )
+    #result.communicate()
+    result = subprocess.run( '{} -d {}'.format( vJoyConfig, str(rID) ) )
+    print('vJoy: Delete returncode: {}'.format(result.returncode))
+    if result.returncode != 0:
         raise vJoyConfigError('Failed to delete vJoy device')
 
 def vJoyConfig_Create(# The index of the target joystick device in the range of 1-16.
@@ -188,22 +210,61 @@ def vJoyConfig_Create(# The index of the target joystick device in the range of 
     if disable:
         vJoyConfig_Disable()
 
-    command_string = ' '.join( [vJoyConfig,
-                                str(rID),
-                                '-f' if force else '',
-                                '-l' if defer else '',
-                                '-a ' + ' '.join(axes),
-                                '-b ' + str(buttons),
-                                '-p ' + str(analog_hat_switches),
-                                '-s ' + str(discrete_hat_switches),
-                                '-e ' + ' '.join(force_feedback_effects)] )
+    #command_string = ' '.join( [vJoyConfig,
+    #                            str(rID),
+    #                            '-f' if force else '',
+    #                            '-l' if defer else '',
+    #                            '-a ' + ' '.join(axes),
+    #                            '-b ' + str(buttons),
+    #                            '-p ' + str(analog_hat_switches),
+    #                            '-s ' + str(discrete_hat_switches),
+    #                            '-e ' + ' '.join(force_feedback_effects)] )
 
-    result = subprocess.run(command_string)
+    #print('~~~~~~~')
+    #print(command_string)
+    #result = subprocess.run(command_string)
+    #print('Create returncode: {}'.format(result))
+    
+    cr_list = ['-a ' + ' '.join(axes),
+              '-b ' + str(buttons),
+              '-p ' + str(analog_hat_switches),
+              '-s ' + str(discrete_hat_switches),
+              '-e ' + ' '.join(force_feedback_effects),
+              vJoyConfig,
+              str(rID)]
+    
+    if defer:
+        cr_list.insert(0, '-l')
+    if force:
+        cr_list.insert(0, '-f')
+    
+    cr_list.insert( 0, cr_list.pop(-1) )
+    cr_list.insert( 0, cr_list.pop(-1) )
+    
+    print(cr_list)
+    
+    #result = subprocess.Popen( cr_list )
+    #result.communicate()
+    
+    #os.system( vJoyConfig + ' ' + ' '.join( cr_list ) )
+    
+    result = subprocess.run( ' '.join(cr_list) )
+    
+    print('vJoy: Create returncode: {}'.format(result.returncode))
     if result.returncode != 0:
         raise vJoyConfigError('Failed to create vJoy device.')
 
     time.sleep(wait_for)
 
+def vJoyNew(rID=1):
+    global vJoy
+    #vJoyConfig_Disable()
+    #vJoyConfig_Delete(rID)
+    vJoyConfig_Create(rID, force=True, buttons=128, analog_hat_switches=4)
+    vJoyConfig_Enable()
+    vJoy.vJoyEnabled()
+    vJoy.AcquireVJD(rID)
+    
 class JOYSTICK_POSITION_V2(Structure):
     _fields_ = [
     ('bDevice', c_byte), # Index of device. Range 1-16
@@ -452,16 +513,14 @@ class JOYSTICK_POSITION_V2(Structure):
 if __name__ == '__main__':
     rID = 1
 
-    vJoyConfig_Create(rID, force=True, buttons=128, analog_hat_switches=4)
-
+    vJoyNew(rID=rID)
+    
+    '''
     #vJoyConfig_Delete(rID)
 
     #vJoyConfig_Get_Config()
 
     #vJoyConfig_Reset
-    
-    vJoy.vJoyEnabled()
-    vJoy.AcquireVJD(rID)
 
     #Hat Controls.
     #    -1 or 36000 = neutral
@@ -550,3 +609,4 @@ if __name__ == '__main__':
     #inverts logic for backwards Y axis.
     #prc = .25
     #print( round( abs(0x8000 * -prc) ) )
+    '''

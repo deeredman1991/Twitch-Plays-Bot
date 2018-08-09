@@ -1,0 +1,8 @@
+{
+    "_comment": "WARNING! Axes and degrees cannot have the same alias.",
+	"ly": 1,
+	"lx": 2,
+	"z" : 3,
+	"ry": 4,
+	"rx": 5
+}

@@ -2,10 +2,10 @@
 import json
 import os
 import time
-from threading import Lock
+from threading import Lock, Thread
 from functools import partial
 
-from kivy.clock import Clock
+#from kivy.clock import Clock
 
 from scripts.commands_processor import CommandsProcessor
 from scripts.joystick import Joystick
@@ -47,9 +47,11 @@ class CommandsManager(object):
 
         self.configs_filepath = configs_filepath
 
-        self.read_configs(None)
+        self.read_configs()
 
-        Clock.schedule_interval(self.read_configs, 1)
+        #Clock.schedule_interval(self.read_configs, 1)
+        Thread(target=self.update_configs_thread, daemon=True).start()
+        
         
         print("Initializing Process Manager")
         self.process_manager = ProcessManager( configs=self.configs ).start()
@@ -68,6 +70,11 @@ class CommandsManager(object):
         self.interface.listen(on_recvd_callback=self.on_received)
 
         super(CommandsManager, self).__init__(*args, **kwargs)
+
+    def update_configs_thread(self):
+        while True:
+            self.read_configs()
+            time.sleep(1)
 
     def get_commands(self):
         self.interface.start()
@@ -120,11 +127,11 @@ class CommandsManager(object):
         #TODO: insert pausing stuff here
         if new_command_string != []:
             if self.joystick.user_variables['pausing'] == 1 or self.process_manager.paused == True:
-                print("unpausing")
+                #print("unpausing")
                 self.process_manager.resume_emulator()
             CommandsProcessor( self.joystick, self.command_delimiter.join( new_command_string ) )
             if self.joystick.user_variables['pausing'] == 1:
-                print("pausing")
+                #print("pausing")
                 self.process_manager.pause_emulator()
 
     def dealias(self, external_command, user_command, internal_command_string):
@@ -147,11 +154,15 @@ class CommandsManager(object):
         def strp(str):
             #Helper function for stripping the # and () from an argument.
             return str[2:-1]
-
+            
         user_command = user_command.split(' ')
         internal_command_string = internal_command_string.split(' ')
         external_command = external_command.split(' ')
 
+        print(user_command)
+        print(internal_command_string)
+        print(external_command)
+        
         aliased_internal_command_string = internal_command_string
         
         for cmd in external_command[:]:
@@ -198,9 +209,11 @@ class CommandsManager(object):
             if not cmd.replace('.','').replace('-','').isdigit() and \
                self.get_root( ' '.join(internal_command_string) ) != ":set":
                 return None
+                
+        print (' '.join( internal_command_string ))
         return ' '.join( internal_command_string )
 
-    def read_configs(self, dt):
+    def read_configs(self):
         if self.configs_filepath[-1] != os.sep:
             self.configs_filepath = self.configs_filepath + os.sep
 
