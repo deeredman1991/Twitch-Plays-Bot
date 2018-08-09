@@ -3,6 +3,8 @@
 """
 #pylint: disable=locally-disabled, too-many-ancestors
 
+import os
+
 from screens.session.buttons.back_button import BackButton
 from scripts.screen import Screen
 
@@ -26,4 +28,4 @@ class Session(Screen):
         self.add_widget(self._back_button)
         
     def on_enter(self):
-        self.commands_manager = CommandsManager('J:\ProgrammingStuff\Python Scripts\Twitch-Plays-Bot\configs\default')
+        self.commands_manager = CommandsManager( os.getcwd() + os.sep + 'configs' + os.sep + 'default' )
