@@ -39,8 +39,8 @@ def mash(joystick, args):
             'mash command takes between 1 and 3 argument, got %s; %s' %
             len(args), args)
 
-    button = args[0]          # Which button to press.
-    times = args[1]      # How many times to press it.
+    button = int( args[0] )          # Which button to press.
+    times = int( args[1] )      # How many times to press it.
     #TODO: Get defaults from config file for delay and hold_for.
     delay = args[2]   # How long to wait between each button press.
     hold_for = args[3] # How long to hold each button for.
