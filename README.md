@@ -25,7 +25,7 @@
 
 3. Setup emulator_settings so that it knows what emu it needs to boot.
 
-4. Open a cli and cd into the Twitch-Plays-Bot folder and then run python -B main.py and the bot will start. (type 'cd "<path to bot>"' no single quotes, yes double quotes, into the cli)
+4. Open a cli and cd into the Twitch-Plays-Bot folder and then run python -B main.py and the bot will start. (type 'cd "path/to/bot"' no single quotes, yes double quotes, into the cli)
 
 5. Hit start session and the bot will run. You will know the bot has connected when it says: GO! in the chat.
 
