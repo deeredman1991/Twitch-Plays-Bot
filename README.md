@@ -1,7 +1,8 @@
-  Twitch-Plays-Bot-Re-Write
+  **Twitch-Plays-Bot-Re-Write**
   
   
-  what you need to install
+ **what you need to install**
+  
   Python 3.5,(64 bit)  https://www.python.org/ftp/python/3.5.0/python-3.5.0-amd64.exe
   
   Kivy, https://github.com/KeyWeeUsr/KivyInstaller
@@ -12,7 +13,7 @@
 
 
 
-  (Pre alpha setup beta will run from a exe)
+  **Pre alpha setup beta will run from a exe**
 
 . dl the bot from the github page  
 
