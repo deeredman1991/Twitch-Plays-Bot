@@ -25,7 +25,8 @@ class CommandsManager(object):
                           'emulator_settings',
                           'login',
                           'user_commands',
-                          'user_variables']
+                          'user_variables',
+                          'dev_login']
         #'''
         
         #self.file_list = os.listdir('configs'+ os.sep + 'default')
@@ -61,11 +62,16 @@ class CommandsManager(object):
                                   configs_filepath = self.configs_filepath,
                                   process_manager = self.process_manager)
         
+        if 'dev_login' in self.configs:
+            login = self.configs['dev_login']
+        else:
+            login = self.configs['login']
+        
         print("Connecting to Twitch")
         self.interface = TwitchInterface(
-                self.configs['login']['bot_oAuth'],
-                self.configs['login']['bot_name'],
-                self.configs['login']['streamer_name'])
+                login['bot_oAuth'],
+                login['bot_name'],
+                login['streamer_name'])
         self.interface.start()
         self.interface.listen(on_recvd_callback=self.on_received)
 
@@ -222,13 +228,18 @@ class CommandsManager(object):
             self.read_json(self.configs_filepath + file + '.json', dict_key)
 
     def read_json(self, json_file, dict_key):
-        with open(json_file, 'r') as infile:
-            try:
-                json_string = json.load( infile )
-            except json.decoder.JSONDecodeError:
-                raise CommandsManagerError("\n\n-------\n\nPlease use a json lint utility to verify that {} is a valid .json file.".format(json_file))
-        if dict_key not in self.configs or self.configs[dict_key] != json_string:
-            with self.config_locks[dict_key]:
-                self.configs[dict_key] = json_string
-                if dict_key == 'user_variables' and self.joystick:
-                    self.joystick.update_configs(configs=self.configs)
+        try:
+            with open(json_file, 'r') as infile:
+                try:
+                    json_string = json.load( infile )
+                except json.decoder.JSONDecodeError:
+                    raise CommandsManagerError("\n\n-------\n\nPlease use a json lint utility to verify that {} is a valid .json file.".format(json_file))
+            if dict_key not in self.configs or self.configs[dict_key] != json_string:
+                with self.config_locks[dict_key]:
+                    self.configs[dict_key] = json_string
+                    if dict_key == 'user_variables' and self.joystick:
+                        self.joystick.update_configs(configs=self.configs)
+        except FileNotFoundError as e:
+            if json_file.split(os.sep)[-1] != 'dev_login.json':
+                raise FileNotFoundError(e)
+                
