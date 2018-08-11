@@ -1,4 +1,5 @@
-  **Twitch-Plays-Bot-Re-Write**
+ **Twitch-Plays-Bot-Re-Write**
+ ======
  
    #Dependencies: ( **what you need to install** )
    ------
