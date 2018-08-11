@@ -21,3 +21,4 @@
 . open up a cmd and cd into the Twitch-Plays-Bot folder and then run python -B main.py and the bot will start 
 
 . hit start session and the bot will run and send a go in the chat 
+. if you set binding": 0 to 1 in theuser_variables you can cofig the input cmds from chat 
