@@ -80,3 +80,8 @@
  * pausing; Pauses the emulator when buttons are not being pressed.; enabled = 1, disabled = 0.
  * smooth_movement; When tilting an axis it will continue to hold that axis between tilts so that running back to back tilt commands feel more fluid.; enabled = 1, disabled = 0
  * binding; Creates a 2 second delay between recieving a command, and executing a command. This is useful for setting up keybindings by yourself.; enabled = 1, disabled = 0
+ 
+#Multi-Commands:
+------
+ 1. It is possible to enter two commands at the same time or a sequence of commands using a multi-command. The syntax is as follows:
+ * root1 arg1 arg1; root2 arg2 arg2; root3 arg3 arg3
