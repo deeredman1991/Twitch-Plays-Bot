@@ -27,33 +27,26 @@
 ------
 1. Download the bot from this github page.
 
-2. Go into configs then default then setup login with the username of the bot, the oauth of the bot, and the
-*      streamer's chat that it should connect to.
+2. Go into configs then default then setup login with the username of the bot, the oauth of the bot, and the streamer's chat that it should connect to.
 
 3. Setup emulator_settings so that it knows what emu it needs to boot.
 
-4. Open a cli and cd into the Twitch-Plays-Bot folder and then run python -B main.py and the bot will start.
-*     (type 'cd "<path to bot>"' no single quotes, yes double quotes, into the cli)
+4. Open a cli and cd into the Twitch-Plays-Bot folder and then run python -B main.py and the bot will start. (type 'cd "<path to bot>"' no single quotes, yes double quotes, into the cli)
 
 5. Hit start session and the bot will run. You will know the bot has connected when it says: GO! in the chat.
 
-6. If you set binding": 0 to 1 in the user_variables binding 1 waits for 2 seconds after recieveing a command before
-*      executing it so that you can config the input keybinds from chat like up down and so on.
+6. If you set binding": 0 to 1 in the user_variables binding 1 waits for 2 seconds after recieveing a command before executing it so that you can config the input keybinds from chat like up down and so on.
 
 #Command Configuration:
 ------
  1. Command definitions are configured/created in "config\default\user_commands"
 
  2. A command definition consists of two properties; 
- *      an external command( that chat uses ) and an internal command( that the bot sees ) that
- *      use the following syntax "root arg1 arg2 arg3": "root arg1 arg2 arg3"
+ *      an external command ( that chat uses )
+ *      an internal command ( that the bot sees )
+ *      They use the following syntax "external_root arg1 arg2 arg3": "internal_root arg1 arg2 arg3"
        
- 3. Command definitions "link" the input of the external command to the input of the internal command useing
- *      "variables" and have the following syntax; "#(variable=default_value)" for external commands, located 
- *      (to the left of the ':') and "#(variable)" for internal commands (on the right of the ':')
- *      A variable inside an external command definition MUST include a default value. Instead of using a 
- *      variable; you may also pass a value directly into the internal command to limit the functionality 
- *      of that command.
+ 3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value)" for external commands, located (to the left of the ':') and "#(variable)" for internal commands (on the right of the ':') A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command to limit the functionality of that command.
        
  4. The internal commands are as follows;
  *      :mash buttonID times delay hold_for,
@@ -76,23 +69,15 @@
 
 #Aliasing Configuration:
 ------
-  1. The bot only sees numbers and so, to combat this problem; we have created an "aliasing" system. There are;
-  *      button aliases defined in the "button_aliases" file that are used by the internal ":mash" command, 
-  *      axes aliases defined in the "axes_aliases" file that are used by the internal ":tilt" command,
-  *      and degrees aliases definited in the "degrees_aliases" file that are used by both the ":tilt" command, and 
-  *      the ":hat" command.
+  1. The bot only sees numbers and so, to combat this problem; we have created an "aliasing" system. There are; button aliases defined in the "button_aliases" file that are used by the internal ":mash" command, axes aliases defined in the "axes_aliases" file that are used by the internal ":tilt" command, and degrees aliases definited in the "degrees_aliases" file that are used by both the ":tilt" command, and the ":hat" command.
        
- 2. An alias is definied as follows "key": "value" where "key" is a word without spaces and "value" is a
- *      number or decimal covered in sub-section 5 of the #Command Configuration section.
+ 2. An alias is definied as follows "key": "value" where "key" is a word without spaces and "value" is a number or decimal covered in sub-section 5 of the #Command Configuration section.
        
  3. Defined aliases can be used by chat and in the command definition.
 
 #Internal Variables:
 ------
- 1. Internal variables consist of a key and a value. Internal variables can have any combination of keys 
- *      and values but, at the moment, there are only 3 that are useful.
+ 1. Internal variables consist of a key and a value. Internal variables can have any combination of keys and values but, at the moment, there are only 3 that are useful.
  *          - pausing; Pauses the emulator when buttons are not being pressed.; enabled = 1, disabled = 0.
- *          - smooth_movement; When tilting an axis it will continue to hold that axis between tilts so 
- *               that running back to back tilt commands feel more fluid.; enabled = 1, disabled = 0
- *          - binding; Creates a 2 second delay between recieving a command, and executing a command. This
- *               is useful for setting up keybindings by yourself.; enabled = 1, disabled = 0
+ *          - smooth_movement; When tilting an axis it will continue to hold that axis between tilts so that running back to back tilt commands feel more fluid.; enabled = 1, disabled = 0
+ *          - binding; Creates a 2 second delay between recieving a command, and executing a command. This is useful for setting up keybindings by yourself.; enabled = 1, disabled = 0
