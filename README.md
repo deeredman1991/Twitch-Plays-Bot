@@ -22,4 +22,4 @@
 
 . hit start session and the bot will run and send a go in the chat 
 
-. if you set binding": 0 to 1 in theuser_variables you can cofig the input cmds from chat 
+. if you set binding": 0 to 1 in theuser_variables you can cofig the input cmds from chat like up down and so on 
