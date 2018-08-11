@@ -41,10 +41,9 @@
 ------
  1. Command definitions are configured/created in "config\default\user_commands"
 
- 2. A command definition consists of two properties; 
+ 2. A command definition has the following syntax ' "external_root arg1 arg2 arg3": "internal_root arg1 arg2 arg3" ' and consists of two properties; 
  *      an external command ( that chat uses )
  *      an internal command ( that the bot sees )
- *      They use the following syntax "external_root arg1 arg2 arg3": "internal_root arg1 arg2 arg3"
        
  3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value)" for external commands, located (to the left of the ':') and "#(variable)" for internal commands (on the right of the ':') A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command to limit the functionality of that command.
        
@@ -78,6 +77,6 @@
 #Internal Variables:
 ------
  1. Internal variables consist of a key and a value. Internal variables can have any combination of keys and values but, at the moment, there are only 3 that are useful.
- *          - pausing; Pauses the emulator when buttons are not being pressed.; enabled = 1, disabled = 0.
- *          - smooth_movement; When tilting an axis it will continue to hold that axis between tilts so that running back to back tilt commands feel more fluid.; enabled = 1, disabled = 0
- *          - binding; Creates a 2 second delay between recieving a command, and executing a command. This is useful for setting up keybindings by yourself.; enabled = 1, disabled = 0
+ * pausing; Pauses the emulator when buttons are not being pressed.; enabled = 1, disabled = 0.
+ * smooth_movement; When tilting an axis it will continue to hold that axis between tilts so that running back to back tilt commands feel more fluid.; enabled = 1, disabled = 0
+ * binding; Creates a 2 second delay between recieving a command, and executing a command. This is useful for setting up keybindings by yourself.; enabled = 1, disabled = 0
