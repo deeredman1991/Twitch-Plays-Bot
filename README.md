@@ -21,15 +21,16 @@
 ------
 1. Download the bot from this github page.
 
-2. Go into configs then default then setup login with the username of the bot, the oauth of the bot, and the streamer's chat that it should connect to.
+2. Go into configs/default open login and enter the username of the bot, the oauth of the bot, and the streamer's chat that it should connect to.
 
-3. Setup emulator_settings so that it knows what emu it needs to boot.
+3. Open emulator_settings and enter the path to the emulator, the process name, or the pid. This will allow the bot to get ahold of the emulator's process so that it can suspend and resume it for pausing and unpausing functionality. If you enter the emulator path, as an added convenience; the bot will start the emulator for you automatically. Only fill out one option. All other options should be set to 'false'.
 
-4. Open a cli and cd into the Twitch-Plays-Bot folder and then run python -B main.py and the bot will start. (type 'cd "path/to/bot"' no single quotes, yes double quotes, into the cli)
+4. Open a cli and cd into the Twitch-Plays-Bot folder and then run python -B main.py and the bot will start. 
+*     Type ' cd "path/to/bot" ' no single quotes, yes double quotes, into the cli and press 'enter'.
 
-5. Hit start session and the bot will run. You will know the bot has connected when it says: GO! in the chat.
+5. Hit start session and the bot will run. You will know the bot has connected when it says "GO!" in the chat.
 
-6. If you set binding": 0 to 1 in the user_variables binding 1 waits for 2 seconds after recieveing a command before executing it so that you can config the input keybinds from chat like up down and so on.
+6. If you set "binding": 0 to 1 in the user_variables binding 1 waits for 2 seconds after recieveing a command before executing it so that you can config the keybindings by yourself by typing in a command and clicking on the keybind option in the program that you are using.
 
 #Command Configuration:
 ------
