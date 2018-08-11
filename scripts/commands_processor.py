@@ -44,8 +44,6 @@ class CommandsProcessor(object):
 
         self._commands_list = {
             ':mash': commands.mash,       #For mashing buttons.
-            ':hold': commands.hold,       #For holding a button indefinitely.
-            ':release': commands.release, #For releasing a held button.
             ':tilt': commands.tilt,       #For tilting axies.
             ':hat': commands.hat,         #For using the dPad(s)
             ':set': commands.set_var,     #For setting user_variables.

@@ -5,32 +5,6 @@ import time
 class CommandError(Exception):
     pass
 
-
-def hold(joystick, args):
-    #If degree == -2; button.
-    #If degree == float; stick
-    #If degree == int; hat
-    args = args_to_nums(args)
-    #:hold command usage: :hold button_or_axis [degree]
-    if len(args) < 1 or len(args) > 2:
-        raise CommandError(
-            'hold command between 1 and 2 arguments, got %s; %s' %\
-            len(args), args)
-    button_or_axis = args[0]
-    degree = args[1]
-    joystick.hold(button_or_axis, degree)
-
-def release(joystick, args):
-    args = args_to_nums(args)
-    #:release command usage: :release [button_or_axis]
-    #       if button is not specified: release all held buttons and axes.
-    if len(args) > 1:
-        raise CommandError(
-            'release command takes between 0 and 1 arguments, '\
-            'got %s; %s' % len(args), args)
-    button_or_axis = args[0] or None
-    joystick.release(button_or_axis)
-
 def mash(joystick, args):
     args = args_to_nums(args)
     #:mash command usage: :mash button, [times, delay, hold_for]
