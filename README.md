@@ -12,7 +12,7 @@
 
 
 
-pre alpha setup beta will run from a exe
+  (Pre alpha setup beta will run from a exe)
 
 . dl the bot from the github page  
 
