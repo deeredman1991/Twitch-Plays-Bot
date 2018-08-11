@@ -1,17 +1,13 @@
   **Twitch-Plays-Bot-Re-Write**
-  
-  
- **what you need to install**
-  
-  [Python 3.5(64 bit)](https://www.python.org/ftp/python/3.5.0/python-3.5.0-amd64.exe)
-  
-  [Kivy](https://github.com/KeyWeeUsr/KivyInstaller)
-  
-  [psutil](https://pypi.org/project/psutil/)
-  
-  [vJoy](http://vjoystick.sourceforge.net/site/index.php/download-a-install/download)
  
- #Installation:
+   #Dependencies: ( **what you need to install** )
+   ------
+  - [Python 3.5(64 bit)](https://www.python.org/ftp/python/3.5.0/python-3.5.0-amd64.exe)
+  - [Kivy](https://github.com/KeyWeeUsr/KivyInstaller)
+  - [psutil](https://pypi.org/project/psutil/)
+  - [vJoy](http://vjoystick.sourceforge.net/site/index.php/download-a-install/download)
+ 
+ #Installation: ( **Pre-alpha installation. Beta will run from an exe** )
  ------
   1. Install Python, during the install. 
   2. Make sure the installer adds Python to the "System Path Environment Variable" it does not do this by default.
@@ -20,8 +16,6 @@
   5. Open a cli and run the command; "python -m pip install --upgrade pip"
   6. After that command finishes, run the coomand; "python -m pip install psutil"
   7. Configure your bot.
-
-  **Pre alpha setup beta will run from a exe**
 
 #Configuration:
 ------
