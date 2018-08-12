@@ -65,12 +65,12 @@ class Joystick(object):
             time.sleep(2)
 
         if hold_for != 0:
-            print('[JoyStick: {}] Pressing Button{}'.format(self.rID, button))
+            print('[JoyStick: {}] Pressing Button {}'.format(self.rID, button))
             j.vJoy.SetBtn( 1, self.rID, button )
         if hold_for >= 0:
             time.sleep( hold_for )
             j.vJoy.SetBtn( 0, self.rID, button )
-            print('[JoyStick: {}] Releasing Button{}'.format(self.rID, button))
+            print('[JoyStick: {}] Releasing Button {}'.format(self.rID, button))
             
     # Presses a Hat Switch.
     def hat(self, hat, degree, hold_for):

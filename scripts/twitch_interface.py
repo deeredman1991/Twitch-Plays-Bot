@@ -112,7 +112,8 @@ class TwitchInterface(object):
             msg = buffer.split(' ')
             if msg[0] == 'PING':
                 self._print_incoming(self.host, ' '.join(msg))
-                self._send('PONG {0}'.format(msg[1]))
+                msg[1] = msg[1].split('\n')
+                self._send('PONG {0}'.format(msg[1][0]))
             else:
                 if on_recvd_callback and callable(on_recvd_callback):
                     for msg in self._format_msg( buffer ):

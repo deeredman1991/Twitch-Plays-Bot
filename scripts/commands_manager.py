@@ -113,7 +113,7 @@ class CommandsManager(object):
         command_string = command_string.split(self.command_delimiter)
 
         new_command_string = []
-        for command in command_string: #command/command string comes from Twitch
+        for command in command_string[0:self.configs['user_variables']['multi_command_limit']]: #command/command string comes from Twitch
             for user_command_string, internal_command_string in \
                                         self.configs['user_commands'].items():
                                         #This config file is a list formatted
@@ -143,12 +143,9 @@ class CommandsManager(object):
     def dealias(self, external_command, external_command_definition, internal_command_definition):
         #This method should convert an "External Command" into an
         #   into an "Internal Command" using the user defined "Command Definition"
-
-        def strp(str):
-            #Helper function for stripping the # and () from an argument.
-            return str[2:-1]
             
-        
+        print ('[CommandsManager]: Detected External Command "{}"'.format( external_command ))
+
         external_command_definition = external_command_definition.split(' ') #Left side of user_commands.json.
         internal_command_definition = internal_command_definition.split(' ') #Right side of user_commands.json.
         external_command = external_command.split(' ')                       #Comes from twitch.
@@ -158,7 +155,12 @@ class CommandsManager(object):
             if cmd == ' ' or cmd == '':
                 external_command.pop( external_command.index(cmd) )
 
-        #Populate internal_command
+        def strp(str):
+            #Helper function for stripping the # and () from an argument.
+            return str[2:-1]
+                
+        #Create internal_command.
+        #TODO: This file is getting long, consider moving this out to another module during next refactoring pass.
         for external_command_def_arg_index, external_command_def_arg in enumerate(external_command_definition):
             if external_command_def_arg[0] == '#':
                 external_command_def_arg = strp(external_command_def_arg)
@@ -181,8 +183,7 @@ class CommandsManager(object):
                                 internal_command[internal_command_def_arg_index] = external_command[external_command_def_arg_index]
                             else:
                                 internal_command[internal_command_def_arg_index] = external_cmd_def_arg_default_values
-                                
-        
+
         #Get Aliases
         aliases = {}
         if self.get_root( ' '.join(internal_command) ) == ":mash":
@@ -202,16 +203,17 @@ class CommandsManager(object):
                     return False
             return True
 
-        #Dealias internal_command
+        #Assign internal command values.
         for internal_command_arg_key, internal_command_arg_value in enumerate(internal_command[:]):
             internal_command_arg_max_value = None
-
+            
             if ':' in internal_command_arg_value and \
                 internal_command_arg_value != self.get_root( ' '.join(internal_command) ):
                     internal_command_arg_value = internal_command_arg_value.split(':')
                     internal_command_arg_max_value = str( internal_command_arg_value.pop(-1) )
                     internal_command_arg_value = ''.join( internal_command_arg_value )
-        
+
+            #Dealias internal_command
             for alias, value in aliases.items():
                 if internal_command_arg_value == alias:
                     internal_command_arg_value = str(value)
@@ -219,18 +221,18 @@ class CommandsManager(object):
                 if internal_command_arg_max_value == alias:
                     internal_command_arg_max_value == str(value)
 
-                if self.get_root( ' '.join(internal_command) ) != ":set" and internal_command_arg_max_value and \
-                    float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
-                        internal_command_arg_value = internal_command_arg_max_value
+            if self.get_root( ' '.join(internal_command) ) != ":set" and internal_command_arg_max_value and \
+                float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
+                    internal_command_arg_value = internal_command_arg_max_value
                 
-                internal_command[internal_command_arg_key] = internal_command_arg_value
+            internal_command[internal_command_arg_key] = internal_command_arg_value
                 
             if not is_valid_argument( internal_command_arg_value, internal_command ) or \
                ( internal_command_arg_max_value and \
                not is_valid_argument( internal_command_arg_max_value, internal_command ) ):
                     return None
                 
-        print (' '.join( internal_command ))
+        print ('[CommandsManager]: Sending Internal Command "{}"'.format(' '.join( internal_command )))
         return ' '.join( internal_command )
 
     def read_configs(self):
