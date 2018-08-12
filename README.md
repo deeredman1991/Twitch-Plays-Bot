@@ -72,7 +72,7 @@
  
 #Multi-Commands:
 ------
- 1. It is possible to enter two commands at the same time or a sequence of commands using a multi-command. The syntax is as follows:
+ 1. It is possible to enter two or more commands at the same time using a multi-command. The syntax is as follows:
  *     root1 arg1 arg1; root2 arg2 arg2; root3 arg3 arg3
 
 #Internal Variables:
