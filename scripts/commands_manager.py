@@ -140,84 +140,98 @@ class CommandsManager(object):
                 #print("pausing")
                 self.process_manager.pause_emulator()
 
-    def dealias(self, external_command, user_command, internal_command_string):
-        #      In a command definition there are; roots, variables, and values
-        #      There are three types of commands:
-        #           1. a User Command = a command defined by the host of the
-        #              stream and used by the audiance.
-        #           2. an Internal Command = a command defined by us that the 
-        #              host of the stream can use to bind "User Commands" to.
-        #           3. an External Command = a command issued by the Audicance.
-        #"!root #(var1) #(var2=value1)": ":root value2 value3 #(var1) #(var2)"
-        #      only values have aliases
+    def dealias(self, external_command, external_command_definition, internal_command_definition):
         #This method should convert an "External Command" into an
-        #   into an "Internal Command" using the user defined "User Command" 
-
-        #external_command - Comes from twitch
-        #user_command - Left side of user_commands.json
-        #internal_command_string - Right side of user_commands.json
+        #   into an "Internal Command" using the user defined "Command Definition"
 
         def strp(str):
             #Helper function for stripping the # and () from an argument.
             return str[2:-1]
             
-        user_command = user_command.split(' ')
-        internal_command_string = internal_command_string.split(' ')
-        external_command = external_command.split(' ')
-
-        print(user_command)
-        print(internal_command_string)
-        print(external_command)
         
-        aliased_internal_command_string = internal_command_string
+        external_command_definition = external_command_definition.split(' ') #Left side of user_commands.json.
+        internal_command_definition = internal_command_definition.split(' ') #Right side of user_commands.json.
+        external_command = external_command.split(' ')                       #Comes from twitch.
+        internal_command = internal_command_definition                       #Created from the above 3. Output of this method.
         
         for cmd in external_command[:]:
             if cmd == ' ' or cmd == '':
                 external_command.pop( external_command.index(cmd) )
 
-        #Populate aliased_internal_command_string
-        for user_arg_index, user_arg in enumerate(user_command):
-            if user_arg[0] == '#':
-                user_arg = strp(user_arg)
-                user_arg = user_arg.split('=')
-                user_arg_key = user_arg[0]
-                user_arg_default_value = user_arg[1]
-
-                for internal_arg_index, internal_arg in enumerate(internal_command_string):
-                    if internal_arg[0] == '#':
-                        new_internal_arg = strp(internal_arg)
-                        if user_arg_key == new_internal_arg:
-                            if len( external_command ) > user_arg_index:
-                                aliased_internal_command_string[internal_arg_index] = external_command[user_arg_index]
+        #Populate internal_command
+        for external_command_def_arg_index, external_command_def_arg in enumerate(external_command_definition):
+            if external_command_def_arg[0] == '#':
+                external_command_def_arg = strp(external_command_def_arg)
+                external_command_def_arg = external_command_def_arg.split('=')
+                external_cmd_def_arg_key = external_command_def_arg[0]
+                external_cmd_def_arg_default_values = external_command_def_arg[1]
+                external_cmd_def_max_value = None
+                if ':' in external_cmd_def_arg_default_values:
+                    external_cmd_def_max_value = external_cmd_def_arg_default_values.split(':')[-1]
+                
+                for internal_command_def_arg_index, internal_command_def_arg in enumerate(internal_command_definition):
+                    if internal_command_def_arg[0] == '#':
+                        new_internal_arg = strp(internal_command_def_arg)
+                        if external_cmd_def_arg_key == new_internal_arg:
+                            if len( external_command ) > external_command_def_arg_index:
+                                if external_cmd_def_max_value:
+                                    external_command[external_command_def_arg_index] = '{}:{}'.format( 
+                                            external_command[external_command_def_arg_index], 
+                                            external_cmd_def_max_value )
+                                internal_command[internal_command_def_arg_index] = external_command[external_command_def_arg_index]
                             else:
-                                aliased_internal_command_string[internal_arg_index] = user_arg_default_value
+                                internal_command[internal_command_def_arg_index] = external_cmd_def_arg_default_values
                                 
-        #Dealias aliased_internal_command_string
+        
+        #Get Aliases
         aliases = {}
-        if self.get_root( ' '.join(internal_command_string) ) == ":mash":
+        if self.get_root( ' '.join(internal_command) ) == ":mash":
             aliases.update( self.configs['aliases_buttons'] )
-        elif self.get_root( ' '.join(internal_command_string) ) == ":tilt":
+        elif self.get_root( ' '.join(internal_command) ) == ":tilt":
             aliases.update( self.configs['aliases_degrees'] )
             aliases.update( self.configs['aliases_axes'] )
-        elif self.get_root( ' '.join(internal_command_string) ) == ":hat":
+        elif self.get_root( ' '.join(internal_command) ) == ":hat":
             aliases.update( self.configs['aliases_hats'] )
 
-        internal_command_string = aliased_internal_command_string
-        for aicKey, aicValue in enumerate(aliased_internal_command_string):
-            for alias, value in aliases.items():
-                if aicValue == alias:
-                    internal_command_string[aicKey] = str(value)
-                    
-        test_command_string = internal_command_string[:]
-        test_command_string.pop(0)
+        #Helper function to check if an argument of the internal command is valid
+        #   so that an invalid argument doesn't get passed to the commands processor.
+        def is_valid_argument(arg, internal_command):
+            if arg != self.get_root( ' '.join(internal_command) ):
+                if not arg.replace('.','').replace('-','').isdigit() and \
+                   self.get_root( ' '.join(internal_command) ) != ":set":
+                    return False
+            return True
 
-        for cmd in test_command_string:
-            if not cmd.replace('.','').replace('-','').isdigit() and \
-               self.get_root( ' '.join(internal_command_string) ) != ":set":
-                return None
+        #Dealias internal_command
+        for internal_command_arg_key, internal_command_arg_value in enumerate(internal_command[:]):
+            internal_command_arg_max_value = None
+
+            if ':' in internal_command_arg_value and \
+                internal_command_arg_value != self.get_root( ' '.join(internal_command) ):
+                    internal_command_arg_value = internal_command_arg_value.split(':')
+                    internal_command_arg_max_value = str( internal_command_arg_value.pop(-1) )
+                    internal_command_arg_value = ''.join( internal_command_arg_value )
+        
+            for alias, value in aliases.items():
+                if internal_command_arg_value == alias:
+                    internal_command_arg_value = str(value)
+
+                if internal_command_arg_max_value == alias:
+                    internal_command_arg_max_value == str(value)
+
+                if self.get_root( ' '.join(internal_command) ) != ":set" and internal_command_arg_max_value and \
+                    float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
+                        internal_command_arg_value = internal_command_arg_max_value
                 
-        print (' '.join( internal_command_string ))
-        return ' '.join( internal_command_string )
+                internal_command[internal_command_arg_key] = internal_command_arg_value
+                
+            if not is_valid_argument( internal_command_arg_value, internal_command ) or \
+               ( internal_command_arg_max_value and \
+               not is_valid_argument( internal_command_arg_max_value, internal_command ) ):
+                    return None
+                
+        print (' '.join( internal_command ))
+        return ' '.join( internal_command )
 
     def read_configs(self):
         if self.configs_filepath[-1] != os.sep:
