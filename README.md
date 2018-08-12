@@ -41,7 +41,7 @@
  *      an external command ( that chat uses )
  *      an internal command ( that the bot sees )
        
- 3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value)" for external commands, located (to the left of the ':') and "#(variable)" for internal commands (on the right of the ':') A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command to limit the functionality of that command.
+ 3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value:max_value)" for external commands, located on the left of each command definition and "#(variable)" for internal commands, located on the right of each command definition. A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command side of the command definition to limit the functionality of that command.
        
  4. The internal commands are as follows;
  *      :mash buttonID times delay hold_for,
@@ -55,9 +55,9 @@
  *      axisID = The ID of the axis. Integer between 1 and 8
  *      hatID = The ID of the hat. Integer between 1 and 4
  *      times = How many times to run the internal command. Integer between 1 and 128
- *      delay = The delay between each time the internal command is run when specifying the "times" arguments. Decimal between 0.0 and infinity.
- *      hold_for = How long to hold the button/axis for in seconds. Decimal between 0.1 and infinity.
- *      degree = The degree at which an axis is tilted or a hat is pushed. For axes; Integer between -1 and 1, For hats; Integer between 0 (north) and 360. ( -1 is release )
+ *      delay = The delay between each time the internal command is run when the "times" argument is not 1. Decimal between 0.0 and infinity.
+ *      hold_for = How long to hold the button/axis for in seconds. If hold_for is -1 the button/axis/hat will be held forever, if 0, the button will be released. Decimal between -1.0 and infinity.
+ *      degree = The degree at which an axis is tilted or a hat is pushed. For axes; Integer between -1 and 1, For hats; Integer between -1 (north) and 360. ( -1 is release )
  *      wait_time = The amount of time to wait in seconds. Decimal between 0.0 and infinity.
  *      internal_variable = Set an internal_variable, such as "pausing", or "binding" to a value. Any
 
