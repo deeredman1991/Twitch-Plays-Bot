@@ -36,7 +36,7 @@ import scripts.commands as commands
 class CommandsProcessor(object):
     """ This is the CommandsManager class that processes all incoming commands
     """
-    def __init__(self, joystick, command_string, *args, **kwargs):
+    def __init__(self, joystick, command_string_delimiter, command_string, *args, **kwargs):
         #TODO: Move these out to the joystick...
 
         #TODO: bind to window.close()???; release joystick!
@@ -54,12 +54,12 @@ class CommandsProcessor(object):
         #   any additional commands(or atleast until the next
         #   blocking command) in unison.
         self._blocking_commands = [':set', ':wait']
-
+        
         #NOTE: When processing commands: Split by ';' first then by spaces.
         #       This way the user can submit multiple commands with a ; delimiter
         #       load all commands listed this way into threads and then start them.
-        command_string = command_string.split(';')
-
+        command_string = command_string.split(command_string_delimiter)
+        
         cmd_threads = []
         for cmd in command_string:
             cmd_args = cmd.split(' ')

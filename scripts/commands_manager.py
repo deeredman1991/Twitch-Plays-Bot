@@ -34,8 +34,6 @@ class CommandsManager(object):
         for index, jsn in enumerate( self.file_list ):
             self.file_list[index] = jsn.split('.')[0]
         
-        self.command_delimiter = ';'
-        
         self.joystick = None
         
         print("Reading Configs")
@@ -52,8 +50,9 @@ class CommandsManager(object):
 
         #Clock.schedule_interval(self.read_configs, 1)
         Thread(target=self.update_configs_thread, daemon=True).start()
-        
-        
+
+        self.command_delimiter = self.configs['user_variables']['multi_command_delimiter']
+
         print("Initializing Process Manager")
         self.process_manager = ProcessManager( configs=self.configs ).start()
 
@@ -93,7 +92,7 @@ class CommandsManager(object):
             self.process_command_string(msg)
 
     def validate_command(self, external_command_string):
-        external_command_string = external_command_string.split(';')
+        external_command_string = external_command_string.split(self.command_delimiter)
         rtv = False
         for external_command in external_command_string:
             external_root = self.get_root(external_command)
@@ -133,11 +132,9 @@ class CommandsManager(object):
         #TODO: insert pausing stuff here
         if new_command_string != []:
             if self.joystick.user_variables['pausing'] == 1 or self.process_manager.paused == True:
-                #print("unpausing")
                 self.process_manager.resume_emulator()
-            CommandsProcessor( self.joystick, self.command_delimiter.join( new_command_string ) )
+            CommandsProcessor( self.joystick, self.command_delimiter, self.command_delimiter.join( new_command_string ) )
             if self.joystick.user_variables['pausing'] == 1:
-                #print("pausing")
                 self.process_manager.pause_emulator()
 
     def dealias(self, external_command, external_command_definition, internal_command_definition):
@@ -168,15 +165,24 @@ class CommandsManager(object):
                 external_cmd_def_arg_key = external_command_def_arg[0]
                 external_cmd_def_arg_default_values = external_command_def_arg[1]
                 external_cmd_def_max_value = None
+                external_cmd_def_min_value = None
                 if ':' in external_cmd_def_arg_default_values:
-                    external_cmd_def_max_value = external_cmd_def_arg_default_values.split(':')[-1]
+                    default_values = external_cmd_def_arg_default_values.split(':')
+                    external_cmd_def_max_value = default_values.pop(-1)
+                    if len(default_values) >= 2:
+                        external_cmd_def_min_value = default_values.pop(-1)
                 
                 for internal_command_def_arg_index, internal_command_def_arg in enumerate(internal_command_definition):
                     if internal_command_def_arg[0] == '#':
                         new_internal_arg = strp(internal_command_def_arg)
                         if external_cmd_def_arg_key == new_internal_arg:
                             if len( external_command ) > external_command_def_arg_index:
-                                if external_cmd_def_max_value:
+                                if external_cmd_def_min_value:
+                                    external_command[external_command_def_arg_index] = '{}:{}:{}'.format( 
+                                            external_command[external_command_def_arg_index],
+                                            external_cmd_def_min_value,
+                                            external_cmd_def_max_value )
+                                elif external_cmd_def_max_value:
                                     external_command[external_command_def_arg_index] = '{}:{}'.format( 
                                             external_command[external_command_def_arg_index], 
                                             external_cmd_def_max_value )
@@ -206,13 +212,17 @@ class CommandsManager(object):
         #Assign internal command values.
         for internal_command_arg_key, internal_command_arg_value in enumerate(internal_command[:]):
             internal_command_arg_max_value = None
+            internal_command_arg_min_value = None
             
             if ':' in internal_command_arg_value and \
                 internal_command_arg_value != self.get_root( ' '.join(internal_command) ):
                     internal_command_arg_value = internal_command_arg_value.split(':')
                     internal_command_arg_max_value = str( internal_command_arg_value.pop(-1) )
+                    if len( internal_command_arg_value ) > 1:
+                        internal_command_arg_min_value = str( internal_command_arg_value.pop(-1) )
+                        
                     internal_command_arg_value = ''.join( internal_command_arg_value )
-
+                    
             #Dealias internal_command
             for alias, value in aliases.items():
                 if internal_command_arg_value == alias:
@@ -221,9 +231,13 @@ class CommandsManager(object):
                 if internal_command_arg_max_value == alias:
                     internal_command_arg_max_value == str(value)
 
-            if self.get_root( ' '.join(internal_command) ) != ":set" and internal_command_arg_max_value and \
-                float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
-                    internal_command_arg_value = internal_command_arg_max_value
+            if self.get_root( ' '.join(internal_command) ) != ":set":            
+                if internal_command_arg_max_value and \
+                    float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
+                        internal_command_arg_value = internal_command_arg_max_value
+                elif internal_command_arg_min_value and \
+                    float( internal_command_arg_value ) < float( internal_command_arg_min_value ):
+                        internal_command_arg_value = internal_command_arg_min_value
                 
             internal_command[internal_command_arg_key] = internal_command_arg_value
                 

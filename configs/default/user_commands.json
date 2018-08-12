@@ -30,17 +30,15 @@
 
 	"!s": ":mash s 1 0.1 0.3",
 
-	"!a #(times=1:8) #(hold_for=0.3:3) #(delay=0.1:2)": ":mash a #(times) #(delay) #(hold_for)",
-	"!b #(times=1:8) #(hold_for=0.3:3) #(delay=0.1:2)": ":mash b #(times) #(delay) #(hold_for)",
-	"!x #(times=1:8) #(hold_for=0.3:3) #(delay=0.1:2)": ":mash x #(times) #(delay) #(hold_for)",
-	"!y #(times=1:8) #(hold_for=0.3:3) #(delay=0.1:2)": ":mash y #(times) #(delay) #(hold_for)",
-	"!z #(times=1:8) #(hold_for=0.3:3) #(delay=0.1:2)": ":mash z #(times) #(delay) #(hold_for)",
+	"!a #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash a #(times) #(delay) #(hold_for)",
+	"!b #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash b #(times) #(delay) #(hold_for)",
+	"!x #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash x #(times) #(delay) #(hold_for)",
+	"!y #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash y #(times) #(delay) #(hold_for)",
+	"!z #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash z #(times) #(delay) #(hold_for)",
 
-	"!press #(button) #(hold_for=0.3:5) #(delay=0.1:2)": ":mash #(button) #(times) #(delay) #(hold_for)",
+	"!press #(button) #(hold_for=0.3:0:5) #(delay=0.1:2)": ":mash #(button) #(times) #(delay) #(hold_for)",
 
     "!w #(wait_time=1:5)": ":wait #(wait_time)",
-    
-    "!h #(degree=-2) #(button_or_axis=a)": ":hold #(button_or_axis) #(degree)",
 
     "!pon": ":set pausing 1",
     "!poff": ":set pausing 0",
