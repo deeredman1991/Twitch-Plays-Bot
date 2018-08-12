@@ -41,7 +41,7 @@
  *      an external command ( that chat uses )
  *      an internal command ( that the bot sees )
        
- 3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value:max_value)" for external commands, located on the left of each command definition and "#(variable)" for internal commands, located on the right of each command definition. A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command side of the command definition to limit the functionality of that command.
+ 3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value[:min_value][:max_value])" ( examples: #(var=1:0:10) or #(var=1:10) ) for external commands, located on the left of each command definition if only two values are specified; the bot will assume the second value is "max_value" and "#(variable)" for internal commands, located on the right of each command definition. A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command side of the command definition to limit the functionality of that command.
        
  4. The internal commands are as follows;
  *      :mash buttonID times delay hold_for,
@@ -72,8 +72,11 @@
  
 #Multi-Commands:
 ------
- 1. It is possible to enter two or more commands at the same time using a multi-command. The syntax is as follows:
- *     root1 arg1 arg1; root2 arg2 arg2; root3 arg3 arg3
+ 1. It is possible to enter two or more commands at the same time using a multi-command. By default the syntax is as follows:
+ *     root1 arg arg; root arg arg; root arg arg
+ 
+ 2. It is also possible to specify a custom delimiter in the "user_variables.json" config file. For example; you may specify that the delimiter be "," and then the syntax of the above multi-command would change to the following:
+ *     root1 arg arg, root arg arg, root arg arg
 
 #Internal Variables:
 ------
@@ -82,3 +85,4 @@
  *     smooth_movement; When tilting an axis it will continue to hold that axis between tilts so that running back to back tilt commands feel more fluid.; enabled = 1, disabled = 0
  *     binding; Creates a 2 second delay between recieving a command, and executing a command. This is useful for setting up keybindings by yourself.; enabled = 1, disabled = 0
  *     multi_command_limit; The maximum number of commands a user is allowed to specify in one line with a Multi-Command.
+ *     multi_command_delimiter; The character to be used between separate commands in a Multi-Command.
