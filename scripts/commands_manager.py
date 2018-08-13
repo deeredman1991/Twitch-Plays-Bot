@@ -1,6 +1,7 @@
 
 import json
 import os
+import io
 import time
 from threading import Lock, Thread
 from functools import partial
@@ -25,6 +26,8 @@ class CommandsManager(object):
                           'login',
                           'user_commands',
                           'user_variables',
+                          'operators',
+                          'operator_commands',
                           'dev_login']
         #'''
         
@@ -64,6 +67,9 @@ class CommandsManager(object):
             login = self.configs['dev_login']
         else:
             login = self.configs['login']
+
+        if login['streamer_name'] not in self.configs['operators']:
+            self.set_config('operators', login['streamer_name'], 0)
         
         print("Connecting to Twitch")
         self.interface = TwitchInterface(
@@ -78,6 +84,17 @@ class CommandsManager(object):
 
         super(CommandsManager, self).__init__(*args, **kwargs)
 
+    def set_config(self, file, key, value):
+        def write_json( dict, jsn ):
+            with io.open( self.configs_filepath + jsn + '.json', 'w', encoding='utf-8' ) as outfile:
+                json.dump( dict, outfile, ensure_ascii=False )
+
+        with self.config_locks[file]:
+            print("[CommandsManager]: Setting {} in {} to {}".format(key, file, value))
+            self.configs[file][key] = value
+            write_json( self.configs[file], file )
+            print("[CommandsManager]: {} in {} was set to {}".format(key, file, self.configs[file][key]))
+        
     def update_configs_thread(self):
         while True:
             self.read_configs()
@@ -91,7 +108,7 @@ class CommandsManager(object):
         username, msg = recvd
 
         if self.validate_command(msg):
-            self.process_command_string(msg)
+            self.process_command_string(msg, username)
 
     def validate_command(self, external_command_string):
         external_command_string = external_command_string.split(self.command_delimiter)
@@ -110,33 +127,47 @@ class CommandsManager(object):
             command = command[1:]
         return command.split(' ')[0]
 
-    def process_command_string(self, command_string):
-        command_string = command_string.split(self.command_delimiter)
+    def process_command_string(self, external_commands, command_issuer):
+        external_commands = external_commands.split(self.command_delimiter)
 
-        new_command_string = []
-        for command in command_string[0:self.configs['user_variables']['multi_command_limit']]: #command/command string comes from Twitch
-            for user_command_string, internal_command_string in \
+        internal_commands_list = []
+        for external_command in external_commands[0:self.configs['user_variables']['multi_command_limit']]: #command/command string comes from Twitch
+            for external_command_definition, internal_command_definition in \
                                         self.configs['user_commands'].items():
-                                        #This config file is a list formatted
-                                        #   as; 
-                                        #User Command Definitions: Internal Commands
 
-                command_root = self.get_root(command)
-                user_command_root = self.get_root(user_command_string)
+                command_root = self.get_root(external_command)
+                user_command_root = self.get_root(external_command_definition)
                 if command_root == user_command_root:
-                    for internal_com_string_slice in internal_command_string.split(';'):
-                        internal_command = \
-                                        self.dealias(command, 
-                                                     user_command_string, 
-                                                     internal_com_string_slice)
-                        if internal_command is not None:
-                            new_command_string.append( internal_command )
+                    for internal_command_slice in internal_command_definition.split(';'):
+                        if command_root in self.configs['operator_commands']:
+                            print('[CommandsManager]: {} issued operator command {} of permission level {}'.format(command_issuer,
+                                                                                                                   command_root,
+                                                                                                                   self.configs['operator_commands'][command_root]
+                                                                                                                   ))
+                            if command_issuer not in self.configs['operators']:
+                                print('[CommandsManager]: Failed to execute {}. {} is not an operator.'.format(command_root,
+                                                                                                               command_issuer))
+                                continue
+                            if self.configs['operators'][command_issuer] > self.configs['operator_commands'][command_root]:
+                                print('[CommandsManager]: Failed to execute {}. '\
+                                    'User {}[{}] does not have required permission level {}.'.format(command_root,
+                                                                                                     command_issuer,
+                                                                                                     self.configs['operators'][command_issuer],
+                                                                                                     self.configs['operator_commands'][command_root]))
+                                continue
 
-        #TODO: insert pausing stuff here
-        if new_command_string != []:
+                        internal_command = \
+                                        self.dealias(external_command, 
+                                                     external_command_definition, 
+                                                     internal_command_slice)
+
+                        if internal_command is not None:
+                            internal_commands_list.append( internal_command )
+
+        if internal_commands_list != []:
             if self.joystick.user_variables['pausing'] == 1 or self.process_manager.paused == True:
                 self.process_manager.resume_emulator()
-            CommandsProcessor( self.joystick, self.command_delimiter, self.command_delimiter.join( new_command_string ) )
+            CommandsProcessor( self.joystick, self.command_delimiter, self.command_delimiter.join( internal_commands_list ) )
             if self.joystick.user_variables['pausing'] == 1:
                 self.process_manager.pause_emulator()
 
