@@ -44,7 +44,7 @@
  3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value[:min_value][:max_value])" ( examples: #(var=1:0:10) or #(var=1:10) ) for external commands, located on the left of each command definition (if only two values are specified; the bot will assume the second value is "max_value") and "#(variable)" for internal commands, located on the right of each command definition. A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command side of the command definition to limit the twitch user's ability to manipulate that command.
  
  4. It is possible to definine an external command that triggers multiple internal commands. Think of it like a macro. The syntax for this feature is; 
- *      "!external_cmd_root #(var1) (#var2)": ":internal_cmd_root #(var1) ; :internal_cmd_root #(var2)"
+ *      "!external_cmd_root #(var1=default_value) #(var2=default_value)": ":internal_cmd_root #(var1) ; :internal_cmd_root #(var2)"
 
  5. The internal commands are as follows;
  *      :mash buttonID times delay hold_for,
