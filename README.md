@@ -45,7 +45,7 @@
        
  4. The internal commands are as follows;
  *      :mash buttonID times delay hold_for,
- *      :tilt axisID degree hold_for,
+ *      :tilt axisID degree hold_for smoothness,
  *      :hat hatID degree times delay hold_for,
  *      :wait wait_time, and 
  *      :set internal_variable_key value
@@ -54,12 +54,13 @@
  *      buttonID = The ID of the button. Integer between 1 and 128
  *      axisID = The ID of the axis. Integer between 1 and 8
  *      hatID = The ID of the hat. Integer between 1 and 4
- *      times = How many times to run the internal command. Integer between 1 and 128
+ *      times = How many times to run the internal command. Integer between 1 and 128.
  *      delay = The delay between each time the internal command is run when the "times" argument is not 1. Decimal between 0.0 and infinity.
  *      hold_for = How long to hold the button/axis for in seconds. If hold_for is -1 the button/axis/hat will be held forever, if 0, the button will be released. Decimal between -1.0 and infinity.
- *      degree = The degree at which an axis is tilted or a hat is pushed. For axes; Integer between -1 and 1, For hats; Integer between -1 (north) and 360. ( -1 is release )
+ *      degree = The degree at which an axis is tilted or a hat is pushed. For axes; Integer between -1 and 1, For hats; Integer between -1 (north) and 360. ( -1 is release ).
+ *      smoothness = Will smooth movement be applied to this axis? (If pausing is 1 and smoothness is 1; smooth movement only resets this axis if another command is sent that doesn't tilt this axis.). Integer either 0 or 1.
  *      wait_time = The amount of time to wait in seconds. Decimal between 0.0 and infinity.
- *      internal_variable = Set an internal_variable, such as "pausing", or "binding" to a value. Any
+ *      internal_variable = Set an internal_variable, such as "pausing", or "binding" to a value. Any.
 
 
 #Aliasing Configuration:
@@ -82,7 +83,6 @@
 ------
  1. Internal variables consist of a key and a value. Internal variables can have any combination of keys and values but, at the moment, there are only 3 that are useful.
  *     pausing; Pauses the emulator when buttons are not being pressed.; enabled = 1, disabled = 0.
- *     smooth_movement; When tilting an axis it will continue to hold that axis between tilts so that running back to back tilt commands feel more fluid.; enabled = 1, disabled = 0
  *     binding; Creates a 2 second delay between recieving a command, and executing a command. This is useful for setting up keybindings by yourself.; enabled = 1, disabled = 0
  *     multi_command_limit; The maximum number of commands a user is allowed to specify in one line with a Multi-Command.
  *     multi_command_delimiter; The character to be used between separate commands in a Multi-Command.
