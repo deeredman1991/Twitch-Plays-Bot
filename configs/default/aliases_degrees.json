@@ -1,8 +1,0 @@
-{
-    "_comment": "WARNING! Degrees and Axes cannot have the same alias.",
-	"fd":  1.0,
-	"bk": -1.0,
-	"lf": -1.0,
-	"ri":  1.0,
-	"nu": -1
-}

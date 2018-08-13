@@ -41,18 +41,19 @@ def hat(joystick, args):
 def tilt(joystick, args):
     args = args_to_nums(args)
     #:tilt command usage: :tilt axis, degree, [hold_for]
-    if len(args) < 2 or len(args) > 3:
+    if len(args) != 4:
         raise CommandError(
-            'tilt command takes between 2 and 3 arguments, got %s; %s' %
+            'tilt command takes between 4 arguments, got %s; %s' %
             len(args), args)
             
     axis = args[0]             # Which axis to tilt
     degree = args[1]    # How far(and which direction) to tilt it.
     hold_for = args[2]  # How long to tilt axis.
+    smoothness = args[3] #Do smooth movement?
     
     #TODO: Don't forget to make the joystick create a copy of it's user
     #       variables instead of using the list directly.
-    joystick.tilt(axis, degree, hold_for)
+    joystick.tilt(axis, degree, hold_for, smoothness)
     
 def args_to_nums(args):
     new_args = []
@@ -67,7 +68,6 @@ def wait(_, args):
     time.sleep(wait_time)
 
 def set_var(joystick, args):
-    print("setVar")
     #:set command usage: :set var value
     if len(args) < 2 or len(args) > 3:
         raise CommandError(

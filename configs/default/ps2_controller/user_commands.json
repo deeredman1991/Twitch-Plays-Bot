@@ -1,56 +1,48 @@
 {
-    "_comment": "On the left is the Twitch/External Command and properties on the right is the Bot/Internal Command",
-	"_comment2": "Degrees for the 'tilt' internal command range from -1 : 1",
-    "!lu #(hold_for=1)": ":tilt lx fd #(hold_for)",
-	"!ld #(hold_for=1)": ":tilt lx bk #(hold_for)",
-	"!ll #(hold_for=1)": ":tilt ly lf #(hold_for)",
-	"!lr #(hold_for=1)": ":tilt ly ri #(hold_for)",
+    "!lu #(hold_for=1:10)": ":tilt lx fd #(hold_for) smooth",
+	"!ld #(hold_for=1:10)": ":tilt lx bk #(hold_for) smooth",
+	"!ll #(hold_for=1:10)": ":tilt ly lf #(hold_for) smooth",
+	"!lr #(hold_for=1:10)": ":tilt ly ri #(hold_for) smooth",
 
-	"!ru #(hold_for=1)": ":tilt rx fd #(hold_for)",
-	"!rd #(hold_for=1)": ":tilt rx bk #(hold_for)",
-	"!rl #(hold_for=1)": ":tilt ry lf #(hold_for)",
-	"!rr #(hold_for=1)": ":tilt ry ri #(hold_for)",
+	"!ru #(hold_for=1:10)": ":tilt rx fd #(hold_for) choppy",
+	"!rd #(hold_for=1:10)": ":tilt rx bk #(hold_for) choppy",
+	"!rl #(hold_for=1:10)": ":tilt ry lf #(hold_for) choppy",
+	"!rr #(hold_for=1:10)": ":tilt ry ri #(hold_for) choppy",
 
-	"!l1 #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash l1 #(times) #(delay) #(hold_for)",
-	"!r1 #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash r1 #(times) #(delay) #(hold_for)",
+	"!l1 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash l1 #(times) #(delay) #(hold_for)",
+	"!r1 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash r1 #(times) #(delay) #(hold_for)",
     
-    "!l2 #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash l2 #(times) #(delay) #(hold_for)",
-	"!r2 #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash r2 #(times) #(delay) #(hold_for)",
+    "!l2 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash l2 #(times) #(delay) #(hold_for)",
+	"!r2 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash r2 #(times) #(delay) #(hold_for)",
     
-    "!l3 #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash l3 #(times) #(delay) #(hold_for)",
-	"!r3 #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash r3 #(times) #(delay) #(hold_for)",
+    "!l3 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash l3 #(times) #(delay) #(hold_for)",
+	"!r3 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash r3 #(times) #(delay) #(hold_for)",
 
     "!tilt #(axis=lx) #(degree=fd) #(hold_for=1)": ":tilt #(axis) #(degree) #(hold_for)",
 
-    "_comment3": "Degrees for the 'hat' internal command range from 0-359 (with 360 or -1 being neutral).",
-	"!dn #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 n #(times) #(delay) #(hold_for)",
-    "!dne #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 ne #(times) #(delay) #(hold_for)",
-    "!de #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 e #(times) #(delay) #(hold_for)",
-    "!dse #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 se #(times) #(delay) #(hold_for)",
-	"!ds #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 s #(times) #(delay) #(hold_for)",
-    "!dsw #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 sw #(times) #(delay) #(hold_for)",
-	"!dw #(times=1) #(hold_for=0.3) #(delay=0.1)":  ":hat 1 w #(times) #(delay) #(hold_for)",
-    "!dnw #(times=1) #(hold_for=0.3) #(delay=0.1)": ":hat 1 nw #(times) #(delay) #(hold_for)",
+	"!dn #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 up #(times) #(delay) #(hold_for)",
+    "!dne #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 ur #(times) #(delay) #(hold_for)",
+    "!de #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 ri #(times) #(delay) #(hold_for)",
+    "!dse #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 dr #(times) #(delay) #(hold_for)",
+	"!ds #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 dn #(times) #(delay) #(hold_for)",
+    "!dsw #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 dl #(times) #(delay) #(hold_for)",
+	"!dw #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 lf #(times) #(delay) #(hold_for)",
+    "!dnw #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 ul #(times) #(delay) #(hold_for)",
 
-	"!dpad #(degree=nu) #(times=1) #(hold_for=0.3) #(delay=0.1": ":hat 1 #(degree) #(times) #(delay) #(hold_for)",
+	"!dpad #(degree=nu) #(times=1:8) #(hold_for=0.3:3) #(delay=0.1": ":hat 1 #(degree) #(times) #(delay) #(hold_for)",
 
 	"!st": ":mash st 1 0.1 0.3",
     "!se": ":mash se 1 0.1 0.3",
 
-	"!x #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash x #(times) #(delay) #(hold_for)",
-	"!o #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash o #(times) #(delay) #(hold_for)",
-	"!s #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash s #(times) #(delay) #(hold_for)",
-	"!t #(times=1) #(hold_for=0.3) #(delay=0.1)": ":mash t #(times) #(delay) #(hold_for)",
+	"!x #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash x #(times) #(delay) #(hold_for)",
+	"!o #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash o #(times) #(delay) #(hold_for)",
+	"!s #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash s #(times) #(delay) #(hold_for)",
+	"!t #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash t #(times) #(delay) #(hold_for)",
 
-	"!press #(button) #(hold_for=0.3) #(delay=0.1)": ":mash #(button) #(times) #(delay) #(hold_for)",
+	"!press #(button=a) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash #(button) #(times) #(delay) #(hold_for)",
 
-    "!w #(wait_time=1)": ":wait #(wait_time)",
-    
-    "!h #(degree=-2) #(button_or_axis=a)": ":hold #(button_or_axis) #(degree)",
+    "!w #(wait_time=1:5)": ":wait #(wait_time)",
 
     "!pon": ":set pausing 1",
-    "!poff": ":set pausing 0",
-    
-    "!smon": ":set smooth_movement 1",
-    "!smoff": ":set smooth_movement 0"
+    "!poff": ":set pausing 0"
 }

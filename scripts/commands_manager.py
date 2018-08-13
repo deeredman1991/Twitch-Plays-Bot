@@ -20,7 +20,6 @@ class CommandsManager(object):
         #'''
         self.file_list = ['aliases_axes',
                           'aliases_buttons',
-                          'aliases_degrees',
                           'aliases_hats',
                           'emulator_settings',
                           'login',
@@ -73,6 +72,9 @@ class CommandsManager(object):
                 login['streamer_name'])
         self.interface.start()
         self.interface.listen(on_recvd_callback=self.on_received)
+        
+        if self.joystick.user_variables['pausing'] == 1:
+            self.process_manager.pause_emulator()
 
         super(CommandsManager, self).__init__(*args, **kwargs)
 
@@ -195,7 +197,6 @@ class CommandsManager(object):
         if self.get_root( ' '.join(internal_command) ) == ":mash":
             aliases.update( self.configs['aliases_buttons'] )
         elif self.get_root( ' '.join(internal_command) ) == ":tilt":
-            aliases.update( self.configs['aliases_degrees'] )
             aliases.update( self.configs['aliases_axes'] )
         elif self.get_root( ' '.join(internal_command) ) == ":hat":
             aliases.update( self.configs['aliases_hats'] )

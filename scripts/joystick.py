@@ -12,6 +12,7 @@ class Joystick(object):
         self.rID = rID
     
         self.last_tilted_axis = None
+        self.last_tilted_axis_smoothness = 0
         self.last_tilted_axis_lock = Lock()
         
         self.configs_filepath = configs_filepath
@@ -26,8 +27,10 @@ class Joystick(object):
                 json.dump( dict, outfile, ensure_ascii=False )
 
         with self.user_variables_lock:
+            print("[JoyStick: {}]: Setting {} to {}".format(self.rID, key, value))
             self.user_variables[key] = value
             write_json( self.user_variables, 'user_variables' )
+            print("[JoyStick: {}]: {} was set to {}".format(self.rID, key, self.user_variables[key]))
             
     #Updates the user_variables from configs.
     def update_configs(self, configs={}):
@@ -64,6 +67,9 @@ class Joystick(object):
         if user_variables['binding']:
             time.sleep(2)
 
+        # Checks to see if the last axis was smooth, if it was; resets it to a neutral position.
+        self.check_last_smooth_axis()
+            
         if hold_for != 0:
             print('[JoyStick: {}] Pressing Button {}'.format(self.rID, button))
             j.vJoy.SetBtn( 1, self.rID, button )
@@ -118,6 +124,9 @@ class Joystick(object):
         if user_variables['binding']:
             time.sleep(2)
 
+        # Checks to see if the last axis was smooth, if it was; resets it to a neutral position.
+        self.check_last_smooth_axis()
+            
         # A hold_for of 0 will release but not push.
         if hold_for != 0:
             print('[JoyStick: {}] Setting Hat #{} to {} degrees for {} seconds'.format(
@@ -138,8 +147,16 @@ class Joystick(object):
             print('[JoyStick: {}] Releasing Hat #{}'.format(
                             self.rID, hat))
 
+    # Checks to see if the last axis was smooth, if it was; resets it to a neutral position.
+    def check_last_smooth_axis(self, current_axis=None):
+        #If smooth_movement is on and the axis being tilted is not the last axis that was tilted; 
+        #   release the last axis that was tilted.
+        if current_axis != self.last_tilted_axis and self.last_tilted_axis_smoothness:
+            j.vJoy.SetAxis( 0x4000, self.rID, self.last_tilted_axis )
+            print('[JoyStick: {}] Setting axis {} to 0 degrees'.format(self.rID, self.last_tilted_axis-0x2F))
+
     # Tilts an axis.
-    def tilt(self, axis, degree, hold_for):
+    def tilt(self, axis, degree, hold_for, smoothness):
         #degree between -1 and 1
         
         if type(axis) != type(1):
@@ -174,11 +191,8 @@ class Joystick(object):
         if user_variables['binding']:
             time.sleep(2)
 
-        #If smooth_movement is on and the axis being tilted is not the last axis that was tilted; 
-        #   release the last axis that was tilted.
-        if axis != self.last_tilted_axis and ( user_variables['pausing'] and user_variables['smooth_movement'] ):
-            j.vJoy.SetAxis( 0x4000, self.rID, self.last_tilted_axis )
-            print('[JoyStick: {}] Setting axis {} to 0 degrees'.format(self.rID, self.last_tilted_axis-0x2F))
+        # Checks to see if the last axis was smooth, if it was; resets it to a neutral position.
+        self.check_last_smooth_axis(current_axis=axis)
 
         #A hold_for of 0 will release but not tilt.
         if hold_for != 0:
@@ -207,12 +221,12 @@ class Joystick(object):
             #Store the current axis as the last_tilted_axis
             #   for smooth_movement.
             self.last_tilted_axis = axis
+            self.last_tilted_axis_smoothness = smoothness
 
         # A hold_for of -1 (or any negative value) will tilt, but not release.
         if hold_for >= 0:
             # Only release if smooth_movement is not active.
-            if not user_variables['pausing'] or \
-                        not user_variables['smooth_movement']:
+            if not user_variables['pausing'] or not smoothness:
                 # Wait between press and release.
                 time.sleep( hold_for )
                 # Tilt Axis.

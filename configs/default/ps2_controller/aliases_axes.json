@@ -2,7 +2,13 @@
     "_comment": "WARNING! Axes and degrees cannot have the same alias.",
 	"ly": 1,
 	"lx": 2,
-	"z" : 3,
-	"ry": 4,
-	"rx": 5
+	"ry": 3,
+	"rx": 4,
+    "fd":  1.0,
+	"bk": -1.0,
+	"lf": -1.0,
+	"ri":  1.0,
+	"nu": -1,
+    "smooth": 1,
+    "choppy": 0
 }

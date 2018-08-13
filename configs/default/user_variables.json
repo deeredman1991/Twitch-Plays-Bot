@@ -1,7 +1,1 @@
-{
-"binding": 0, 
-"smooth_movement": 0, 
-"pausing": 0,
-"multi_command_limit": 5,
-"multi_command_delimiter": ","
-}
+{"multi_command_limit": 5, "pausing": 0, "multi_command_delimiter": ";", "binding": 0}
