@@ -36,7 +36,7 @@ import scripts.commands as commands
 class CommandsProcessor(object):
     """ This is the CommandsManager class that processes all incoming commands
     """
-    def __init__(self, joystick, command_string_delimiter, command_string, *args, **kwargs):
+    def __init__(self, joystick, cmd_mngr, issuer_username, command_string_delimiter, command_string, *args, **kwargs):
         #TODO: Move these out to the joystick...
 
         #TODO: bind to window.close()???; release joystick!
@@ -47,8 +47,10 @@ class CommandsProcessor(object):
             ':tilt': commands.tilt,       #For tilting axies.
             ':hat': commands.hat,         #For using the dPad(s)
             ':set': commands.set_var,     #For setting user_variables.
-            ':wait': commands.wait}       #For waiting a set period of time.
-
+            ':wait': commands.wait,       #For waiting a set period of time.
+            ':op': commands.op,           #For promoting/demoting operators.
+            ':deop': commands.deop}       #For removing operators
+            
         #A call to a blocking command in a command string should; run all
         #   previous commands, in unison, run the blocking command, then run
         #   any additional commands(or atleast until the next
@@ -69,9 +71,10 @@ class CommandsProcessor(object):
             assert cmd_root in self._commands_list,\
                 "%s is not a valid command." % cmd_root[0]
 
-            #print(command_string)
-            #print(cmd_root)
-            #print(cmd_args)
+            if cmd_root == ':op' or cmd_root == ':deop':
+                cmd_args.insert(0, issuer_username)
+                cmd_args.insert(0, cmd_mngr)
+
             cmd_thread = Thread(target=self._commands_list[cmd_root],
                                 args=(self.joystick, cmd_args))
             cmd_threads.append( cmd_thread )

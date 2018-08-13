@@ -43,5 +43,8 @@
     "!jump_forward #(hold_button_for=1) #(hold_axis_for=1)": ":tilt ly fd #(hold_axis_for) smooth ; :mash a 1 0.1 #(hold_button_for)",
 
     "!bindon": ":set binding 1",
-    "!bindoff": ":set binding 0"
+    "!bindoff": ":set binding 0",
+    
+    "!op #(username=None) #(to_level=5)": ":op #(username) #(to_level)",
+    "!deop #(username=None)": ":deop #(username)"
 }

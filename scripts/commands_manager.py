@@ -88,12 +88,17 @@ class CommandsManager(object):
         def write_json( dict, jsn ):
             with io.open( self.configs_filepath + jsn + '.json', 'w', encoding='utf-8' ) as outfile:
                 json.dump( dict, outfile, ensure_ascii=False )
+                print('[CommandsManager]: Dumping configs json.')
 
         with self.config_locks[file]:
-            print("[CommandsManager]: Setting {} in {} to {}".format(key, file, value))
-            self.configs[file][key] = value
+            if value is not None:
+                self.configs[file][key] = value
+                print("[CommandsManager]: {} in {} has been set to {}.".format(key, file, self.configs[file][key]))
+            else:
+                self.configs[file].pop(key)
+                print("[CommandsManager]: {} has been removed from {}.".format(key, file))
             write_json( self.configs[file], file )
-            print("[CommandsManager]: {} in {} was set to {}".format(key, file, self.configs[file][key]))
+            
         
     def update_configs_thread(self):
         while True:
@@ -167,7 +172,7 @@ class CommandsManager(object):
         if internal_commands_list != []:
             if self.joystick.user_variables['pausing'] == 1 or self.process_manager.paused == True:
                 self.process_manager.resume_emulator()
-            CommandsProcessor( self.joystick, self.command_delimiter, self.command_delimiter.join( internal_commands_list ) )
+            CommandsProcessor( self.joystick, self, command_issuer, self.command_delimiter, self.command_delimiter.join( internal_commands_list ) )
             if self.joystick.user_variables['pausing'] == 1:
                 self.process_manager.pause_emulator()
 
@@ -190,7 +195,7 @@ class CommandsManager(object):
                 internal_command_definition.pop( internal_command_definition.index(cmd) )
 
         internal_command = internal_command_definition #Created from the above 3 and becomes the eventual output of this method.
-        
+        internal_command_root = self.get_root( ' '.join(internal_command) )
                 
         def strp(str):
             #Helper function for stripping the # and () from an argument.
@@ -213,7 +218,6 @@ class CommandsManager(object):
                         external_cmd_def_min_value = default_values.pop(-1)
                 
                 for internal_command_def_arg_index, internal_command_def_arg in enumerate(internal_command_definition):
-                    print(internal_command_def_arg)
                     if internal_command_def_arg[0] == '#':
                         new_internal_arg = strp(internal_command_def_arg)
                         if external_cmd_def_arg_key == new_internal_arg:
@@ -230,22 +234,24 @@ class CommandsManager(object):
                                 internal_command[internal_command_def_arg_index] = external_command[external_command_def_arg_index]
                             else:
                                 internal_command[internal_command_def_arg_index] = external_cmd_def_arg_default_values
-
+        
         #Get Aliases
         aliases = {}
-        if self.get_root( ' '.join(internal_command) ) == ":mash":
+        if internal_command_root == ":mash":
             aliases.update( self.configs['aliases_buttons'] )
-        elif self.get_root( ' '.join(internal_command) ) == ":tilt":
+        elif internal_command_root == ":tilt":
             aliases.update( self.configs['aliases_axes'] )
-        elif self.get_root( ' '.join(internal_command) ) == ":hat":
+        elif internal_command_root == ":hat":
             aliases.update( self.configs['aliases_hats'] )
 
+        validator_exceptions = [':set', ':op', ':deop']
+            
         #Helper function to check if an argument of the internal command is valid
         #   so that an invalid argument doesn't get passed to the commands processor.
         def is_valid_argument(arg, internal_command):
-            if arg != self.get_root( ' '.join(internal_command) ):
+            if arg != internal_command_root:
                 if not arg.replace('.','').replace('-','').isdigit() and \
-                   self.get_root( ' '.join(internal_command) ) != ":set":
+                   internal_command_root not in validator_exceptions:
                     return False
             return True
 
@@ -255,7 +261,7 @@ class CommandsManager(object):
             internal_command_arg_min_value = None
             
             if ':' in internal_command_arg_value and \
-                internal_command_arg_value != self.get_root( ' '.join(internal_command) ):
+                internal_command_arg_value != internal_command_root:
                     internal_command_arg_value = internal_command_arg_value.split(':')
                     internal_command_arg_max_value = str( internal_command_arg_value.pop(-1) )
                     if len( internal_command_arg_value ) > 1:
@@ -271,7 +277,7 @@ class CommandsManager(object):
                 if internal_command_arg_max_value == alias:
                     internal_command_arg_max_value == str(value)
 
-            if self.get_root( ' '.join(internal_command) ) != ":set":            
+            if internal_command_root not in validator_exceptions:
                 if internal_command_arg_max_value and \
                     float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
                         internal_command_arg_value = internal_command_arg_max_value

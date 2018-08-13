@@ -66,6 +66,58 @@ def wait(_, args):
     wait_time = args[0]
     print( 'Waiting for {} seconds'.format(wait_time) )
     time.sleep(wait_time)
+    
+def op(_, args):
+    cmds_mngr = args[0]
+    issuer_username = args[1]
+    target_username = args[2]
+    to_level = args[3]
+
+    operators = cmds_mngr.configs['operators']
+    
+    if target_username.lower() == "none" or not to_level.isdigit():
+        return False
+        
+    to_level = int(to_level)
+    
+    if issuer_username in operators:
+        if to_level > operators[issuer_username]:
+            if target_username in operators:
+                if operators[target_username] > operators[issuer_username]:
+                    cmds_mngr.set_config('operators', target_username, to_level)
+                    cmds_mngr.interface.say('{} has set {}\'s operator rank to {}.'.format(issuer_username,
+                                                                                           target_username,
+                                                                                           cmds_mngr.configs['operators'][target_username]))
+                else:
+                    cmds_mngr.interface.say('Cannot set permission level of equal or superior operator.')
+            else:
+                cmds_mngr.set_config('operators', target_username, to_level)
+                cmds_mngr.interface.say('Congratulations! ' \
+                    '{} has promoted {} to operator status.'.format(issuer_username,
+                                                                    target_username))
+        else:
+            cmds_mngr.interface.say('Cannot promote someone to your own rank or above.')
+
+def deop(_, args):
+    cmds_mngr = args[0]
+    issuer_username = args[1]
+    target_username = args[2]
+
+    operators = cmds_mngr.configs['operators']
+    
+    if target_username.lower() == "none":
+        return False
+    
+    if issuer_username in operators:
+        if target_username in operators:
+            if operators[target_username] > operators[issuer_username]:
+                cmds_mngr.set_config('operators', target_username, None)
+                cmds_mngr.interface.say('{} has revoked {}\'s operator status.'.format(issuer_username,
+                                                                                       target_username))
+            else:
+                cmds_mngr.interface.say('Cannot deop equal or superior operator.')
+        else:
+            cmds_mngr.interface.say('Cannot deop. {} is not an operator. '.format(target_username))
 
 def set_var(joystick, args):
     #:set command usage: :set var value
@@ -74,16 +126,9 @@ def set_var(joystick, args):
             'set command takes between 2 and 3 argument, got %s; %s' %
             len(args), args)
 
-    #TODO: func is for mods...Create a mod that writes all
-    #      commands processed to a file.
     key = args[0]           # Which variable to set
     val = int( args[1] )           # What to set it to.
-    #func = args[2]  # Register on_change callback.
 
-    #if func is not None:
-    #    joystick.user_variables_on_change[key] = func
-    #if callable(joystick.user_variables_on_change[key]):
-    #    joystick.user_variables_on_change[key]()
     joystick.set_user_variable(key, val)
 
     return joystick.user_variables[key]
