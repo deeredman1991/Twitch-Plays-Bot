@@ -50,7 +50,7 @@
  *      :mash buttonID times delay hold_for,
  *      :tilt axisID degree hold_for smoothness,
  *      :hat hatID degree times delay hold_for,
- *      :wait wait_time, and 
+ *      :wait wait_time 
  *      :set internal_variable_key value
        
  6. The arguments for internal commands are as follows;
