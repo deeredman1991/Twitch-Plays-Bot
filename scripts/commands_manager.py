@@ -124,12 +124,13 @@ class CommandsManager(object):
                 command_root = self.get_root(command)
                 user_command_root = self.get_root(user_command_string)
                 if command_root == user_command_root:
-                    internal_command = \
-                                    self.dealias(command, 
-                                                 user_command_string, 
-                                                 internal_command_string)
-                    if internal_command is not None:
-                        new_command_string.append( internal_command )
+                    for internal_com_string_slice in internal_command_string.split(';'):
+                        internal_command = \
+                                        self.dealias(command, 
+                                                     user_command_string, 
+                                                     internal_com_string_slice)
+                        if internal_command is not None:
+                            new_command_string.append( internal_command )
 
         #TODO: insert pausing stuff here
         if new_command_string != []:
@@ -144,16 +145,22 @@ class CommandsManager(object):
         #   into an "Internal Command" using the user defined "Command Definition"
             
         print ('[CommandsManager]: Detected External Command "{}"'.format( external_command ))
-
+        
         external_command_definition = external_command_definition.split(' ') #Left side of user_commands.json.
         internal_command_definition = internal_command_definition.split(' ') #Right side of user_commands.json.
         external_command = external_command.split(' ')                       #Comes from twitch.
-        internal_command = internal_command_definition                       #Created from the above 3. Output of this method.
         
         for cmd in external_command[:]:
             if cmd == ' ' or cmd == '':
                 external_command.pop( external_command.index(cmd) )
+                
+        for cmd in internal_command_definition[:]:
+            if cmd == ' ' or cmd == '':
+                internal_command_definition.pop( internal_command_definition.index(cmd) )
 
+        internal_command = internal_command_definition #Created from the above 3 and becomes the eventual output of this method.
+        
+                
         def strp(str):
             #Helper function for stripping the # and () from an argument.
             return str[2:-1]
@@ -175,6 +182,7 @@ class CommandsManager(object):
                         external_cmd_def_min_value = default_values.pop(-1)
                 
                 for internal_command_def_arg_index, internal_command_def_arg in enumerate(internal_command_definition):
+                    print(internal_command_def_arg)
                     if internal_command_def_arg[0] == '#':
                         new_internal_arg = strp(internal_command_def_arg)
                         if external_cmd_def_arg_key == new_internal_arg:
