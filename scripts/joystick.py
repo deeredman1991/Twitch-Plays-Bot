@@ -22,6 +22,8 @@ class Joystick(object):
         
     #Writes a new value to the user_variable list and then updates the .json with the new values.
     def set_user_variable(self, key, value):
+        self.check_last_smooth_axis()
+
         def write_json( dict, jsn ):
             with io.open( self.configs_filepath + jsn + '.json', 'w', encoding='utf-8' ) as outfile:
                 json.dump( dict, outfile, ensure_ascii=False )
