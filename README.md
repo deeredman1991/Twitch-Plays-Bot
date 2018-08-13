@@ -35,22 +35,25 @@
 
 #Command Configuration:
 ------
- 1. Command definitions are configured/created in "config\default\user_commands"
+ 1. Command definitions are configured/created in "config\default\user_commands" if this section doesn't make any sense; go look at that file and then come back and read this again.
 
  2. A command definition has the following syntax ' "external_root arg1 arg2 arg3": "internal_root arg1 arg2 arg3" ' and consists of two properties; 
  *      an external command ( that chat uses )
  *      an internal command ( that the bot sees )
        
- 3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value[:min_value][:max_value])" ( examples: #(var=1:0:10) or #(var=1:10) ) for external commands, located on the left of each command definition if only two values are specified; the bot will assume the second value is "max_value" and "#(variable)" for internal commands, located on the right of each command definition. A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command side of the command definition to limit the functionality of that command.
-       
- 4. The internal commands are as follows;
+ 3. Command definitions "link" the input of the external command to the input of the internal command useing "variables" and have the following syntax; "#(variable=default_value[:min_value][:max_value])" ( examples: #(var=1:0:10) or #(var=1:10) ) for external commands, located on the left of each command definition (if only two values are specified; the bot will assume the second value is "max_value") and "#(variable)" for internal commands, located on the right of each command definition. A variable inside an external command definition MUST include a default value. Instead of using a variable; you may also pass a value directly into the internal command side of the command definition to limit the twitch user's ability to manipulate that command.
+ 
+ 4. It is possible to definine an external command that triggers multiple internal commands. Think of it like a macro. The syntax for this feature is; 
+ *      "!external_cmd_root #(var1) (#var2)": ":internal_cmd_root #(var1) ; :internal_cmd_root #(var2)"
+
+ 5. The internal commands are as follows;
  *      :mash buttonID times delay hold_for,
  *      :tilt axisID degree hold_for smoothness,
  *      :hat hatID degree times delay hold_for,
  *      :wait wait_time, and 
  *      :set internal_variable_key value
        
- 5. The arguments for commands are as follows;
+ 6. The arguments for internal commands are as follows;
  *      buttonID = The ID of the button. Integer between 1 and 128
  *      axisID = The ID of the axis. Integer between 1 and 8
  *      hatID = The ID of the hat. Integer between 1 and 4
