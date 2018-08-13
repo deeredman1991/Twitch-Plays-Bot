@@ -65,7 +65,7 @@
 
 #Aliasing Configuration:
 ------
-  1. The bot only sees numbers and so, to combat this problem; we have created an "aliasing" system. There are; button aliases defined in the "button_aliases" file that are used by the internal ":mash" command, axes aliases defined in the "axes_aliases" file that are used by the internal ":tilt" command, and degrees aliases definited in the "degrees_aliases" file that are used by both the ":tilt" command, and the ":hat" command.
+  1. The bot only sees numbers and so, to combat this problem; we have created an "aliasing" system. There are; button aliases defined in the "button_aliases" file that are used by the internal ":mash" command, axes aliases defined in the "axes_aliases" file that are used by the internal ":tilt" command, and hat aliases definited in the "hat_aliases" file that are used by the internal ":hat" command.
        
  2. An alias is definied as follows "key": "value" where "key" is a word without spaces and "value" is a number or decimal covered in sub-section 5 of the #Command Configuration section.
        
