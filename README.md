@@ -94,7 +94,8 @@
  5. Other operators may not promote someone to their own rank or below.
  6. Other operators may not modify the operator rank of another operator who is at or below their rank.
  7. You may designate external commands as "operator commands" in operator_commands.json the syntax is as follows;
- *      "root": permission_level (example: | "!myCommand": 1 | in this example; a user must have an operator level of 1 or lower to use !myCommand )
+ *      "root": permission_level 
+    example: | "!myCommand": 1 | in this example; a user must have an operator level of 1 or lower to use !myCommand
  8. Users must be an operator and have an operator rank at or below the operator command's permission level to use that command.
  
 #Multi-Commands:
