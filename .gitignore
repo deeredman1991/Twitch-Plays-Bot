@@ -10,3 +10,5 @@ audio/resources/*
 logs/*
 configs/.default/*
 configs/default/dev_login.json
+build/*
+dist/*
