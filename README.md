@@ -47,13 +47,24 @@
  *      "!external_cmd_root #(var1=default_value) #(var2=default_value)": ":internal_cmd_root #(var1) ; :internal_cmd_root #(var2)"
 
  5. The internal commands are as follows;
- *      :mash buttonID times delay hold_for,
- *      :tilt axisID degree hold_for smoothness,
- *      :hat hatID degree times delay hold_for,
- *      :wait wait_time 
+ *      :mash buttonID times delay hold_for
+ *      :tilt axisID degree hold_for smoothness
+ *      :hat hatID degree times delay hold_for
+ *      :wait wait_time
  *      :set internal_variable_key value
-       
- 6. The arguments for internal commands are as follows;
+ *      :op username
+ *      :deop username
+ 
+ 6. The commands do the following;
+ *      :mash pushes a button on the controller.
+ *      :tilt tilts an axis on the controller.
+ *      :hat pushes a button on a hatswitch/dpad on the controller.
+ *      :wait waits for a given period of time (in seconds)
+ *      :set sets and internal variable to a value.
+ *      :op makes gives a user operator status or sets their operator rank. (Only if the issuer has a lower op status.)
+ *      :deop revoke's a users operator status. (Only if the issuer has a lower op status.)
+ 
+ 7. The arguments for internal commands are as follows;
  *      buttonID = The ID of the button. Integer between 1 and 128
  *      axisID = The ID of the axis. Integer between 1 and 8
  *      hatID = The ID of the hat. Integer between 1 and 4
@@ -73,6 +84,19 @@
  2. An alias is definied as follows "key": "value" where "key" is a word without spaces and "value" is a number or decimal covered in sub-section 5 of the #Command Configuration section.
        
  3. Defined aliases can be used by chat and in the command definition.
+ 
+#Permissions:
+------
+ 1. The bot has a type of user called "operators" and every operator has an associated "operator rank".
+ 2. With operator ranks: lower = more control, higher = less control.
+ 3. If the streamer is not an operator; the operator rank of the streamer is set to 0 by the bot.
+ 4. A person's operator rank can be set or removed entirely in "operators" or by using the :op and :deop internal commands.
+ 5. Other operators may not promote someone to their own rank or below.
+ 6. Other operators may not modify the operator rank of another operator who is at or below their rank.
+ 7. You may designate external commands as "operator commands" in operator_commands.json the syntax is as follows;
+ *      "root": permission_level 
+    example: | "!myCommand": 1 | in this example; a user must have an operator level of 1 or lower to use !myCommand
+ 8. Users must be an operator and have an operator rank at or below the operator command's permission level to use that command.
  
 #Multi-Commands:
 ------
