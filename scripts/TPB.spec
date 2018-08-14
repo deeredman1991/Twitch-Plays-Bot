@@ -24,7 +24,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True)
+          console=True , icon='J:\\ProgrammingStuff\\Python Scripts\\Twitch-Plays-Bot\\icon\\icon.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
