@@ -73,12 +73,12 @@ class Joystick(object):
         self.check_last_smooth_axis()
             
         if hold_for != 0:
-            print('[JoyStick: {}] Pressing Button {}'.format(self.rID, button))
+            print('[JoyStick: {}]: Pressing Button {}'.format(self.rID, button))
             j.vJoy.SetBtn( 1, self.rID, button )
         if hold_for >= 0:
             time.sleep( hold_for )
             j.vJoy.SetBtn( 0, self.rID, button )
-            print('[JoyStick: {}] Releasing Button {}'.format(self.rID, button))
+            print('[JoyStick: {}]: Releasing Button {}'.format(self.rID, button))
             
     # Presses a Hat Switch.
     def hat(self, hat, degree, hold_for):
@@ -131,7 +131,7 @@ class Joystick(object):
             
         # A hold_for of 0 will release but not push.
         if hold_for != 0:
-            print('[JoyStick: {}] Setting Hat #{} to {} degrees for {} seconds'.format(
+            print('[JoyStick: {}]: Setting Hat #{} to {} degrees for {} seconds'.format(
                         self.rID, hat, degree, hold_for))
 
             #We range from 0-360 while vJoy ranges from 0 to 36000 so
@@ -146,7 +146,7 @@ class Joystick(object):
             time.sleep( hold_for )
             # Release Hat Switch.
             j.vJoy.SetContPov(-1, self.rID, hat)
-            print('[JoyStick: {}] Releasing Hat #{}'.format(
+            print('[JoyStick: {}]: Releasing Hat #{}'.format(
                             self.rID, hat))
 
     # Checks to see if the last axis was smooth, if it was; resets it to a neutral position.
@@ -155,7 +155,7 @@ class Joystick(object):
         #   release the last axis that was tilted.
         if current_axis != self.last_tilted_axis and self.last_tilted_axis_smoothness:
             j.vJoy.SetAxis( 0x4000, self.rID, self.last_tilted_axis )
-            print('[JoyStick: {}] Setting axis {} to 0 degrees'.format(self.rID, self.last_tilted_axis-0x2F))
+            print('[JoyStick: {}]: Setting axis {} to 0 degrees'.format(self.rID, self.last_tilted_axis-0x2F))
 
     # Tilts an axis.
     def tilt(self, axis, degree, hold_for, smoothness):
@@ -198,7 +198,7 @@ class Joystick(object):
 
         #A hold_for of 0 will release but not tilt.
         if hold_for != 0:
-            print( '[JoyStick: {}] Setting axis {} to {} degrees for {} seconds'.format(self.rID, axis, degree, hold_for) )
+            print( '[JoyStick: {}]: Setting axis {} to {} degrees for {} seconds'.format(self.rID, axis, degree, hold_for) )
 
             # For some reason the axis in vJoy range from 48 or 0x30 to 54.
             #   We use a 1, 2, 3, 4, ... system. where x = 1, y = 2, etc... etc..
@@ -233,4 +233,4 @@ class Joystick(object):
                 time.sleep( hold_for )
                 # Tilt Axis.
                 j.vJoy.SetAxis( 0x4000, self.rID, axis )
-                print('[JoyStick: {}] Setting axis {} to 0 degrees'.format(self.rID, axis-0x2F))
+                print('[JoyStick: {}]: Setting axis {} to 0 degrees'.format(self.rID, axis-0x2F))

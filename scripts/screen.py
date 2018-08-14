@@ -9,6 +9,8 @@ from kivy.graphics import BorderImage
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen as KivyScreen
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 
 
 class Screen(KivyScreen):
@@ -35,6 +37,20 @@ class Screen(KivyScreen):
         self._scale_and_center(Window.width, Window.height)
         print(self)
 
+    def make_button(self, parent, text, on_press_callback, sx=1, sy=1):
+        btn = Button()
+        btn.text = text
+        btn.on_press = on_press_callback
+        btn.size_hint = [sx, sy]
+        parent.add_widget(btn)
+        return btn
+        
+    def make_box(self, parent, o='vertical', sx=1, sy=1):
+        bx = BoxLayout(orientation=o)
+        bx.size_hint = [sx, sy]
+        parent.add_widget(bx)
+        return bx
+        
     def _scale_and_center(self, width, height):
         """ Method gets called whenever the screen needs to
             reset it's size and center.

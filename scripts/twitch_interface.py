@@ -4,6 +4,8 @@ import threading
 
 class TwitchInterface(object):
     def __init__(self, oAuth, bot_name, streamer_name, host='irc.chat.twitch.tv', port=6667, connected_message = "GO!"):
+        self.is_alive = True
+        
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         self.host = host
@@ -30,6 +32,11 @@ class TwitchInterface(object):
         self._cap_req()
         time.sleep(3)
         self.say( self.connected_message )
+        
+    def kill(self):
+        print('[TwitchInterface]: Terminating.')
+        self.is_alive = False
+        print('[TwitchInterface]: Terminated.')
 
     #Public Input Method(s).
     def listen(self, *on_recvd_args, on_recvd_callback=None, **on_recvd_kwargs):
@@ -106,8 +113,9 @@ class TwitchInterface(object):
             print('[{:20.20}] {:20.20}: {}'.format(self.host, username, line))
 
     def _listen( self, *on_recvd_args, **on_recvd_kwargs ):
+        print('[TwitchInterface]: Listening.')
         on_recvd_callback = on_recvd_kwargs.pop('on_recvd_callback', None)
-        while True:
+        while self.is_alive:
             buffer = self._read_buffer()
             msg = buffer.split(' ')
             if msg[0] == 'PING':
@@ -121,6 +129,7 @@ class TwitchInterface(object):
                             self._print_incoming(user, text)
                             on_recvd_kwargs['recvd'] = user, text
                             on_recvd_callback( *on_recvd_args, **on_recvd_kwargs )
+        print('[TwitchInterface]: Old Listener Terminated.')
 
     #Private Output Method(s).
     def _send(self, msg):

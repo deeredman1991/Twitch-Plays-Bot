@@ -19,9 +19,8 @@ from kivy.uix.screenmanager import ShaderTransition, SlideTransition,\
                                    RiseInTransition, NoTransition,\
                                    CardTransition
 
-from screens.main_menu.main_menu import MainMenu
-from screens.session.session import Session
-from scripts.screen import Screen
+from screens.main_menu import MainMenu
+from screens.session import Session
 
 class ScreenManager(KivyScreenManager):
     """ Screen Manager class is responsible for swapping between screens.
@@ -47,11 +46,11 @@ class ScreenManager(KivyScreenManager):
         self.transition.direction = dirs[random.randrange(4)]
         modes = ['push', 'pop']
         self.transition.mode = modes[random.randrange(2)]
-
-        #NOTE: Consider moving this as it really doesn't belong here.
-        cd = os.getcwd()
-        default = cd+'\\configs\\default'
-        default_backup = cd+'\\configs\\.default'
+        
+        self.cfg_path = os.getcwd() + os.sep + 'configs' + os.sep
+        
+        default = self.cfg_path + 'default'
+        default_backup = self.cfg_path + '.default'
         if not os.path.isdir(default_backup):
             shutil.copytree(default, default_backup)
             if os.name == 'nt':

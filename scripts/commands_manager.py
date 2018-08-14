@@ -18,6 +18,10 @@ class CommandsManagerError(Exception):
 
 class CommandsManager(object):
     def __init__(self, configs_filepath, *args, **kwargs):
+        print("[CommandsManager]: Initializing.")
+
+        self.is_alive = True
+    
         #'''
         self.file_list = ['aliases_axes',
                           'aliases_buttons',
@@ -38,7 +42,7 @@ class CommandsManager(object):
         
         self.joystick = None
         
-        print("Reading Configs")
+        print("[CommandsManager]: Reading Configs.")
         self.config_locks = {}
 
         self.configs = {}
@@ -55,10 +59,10 @@ class CommandsManager(object):
 
         self.command_delimiter = self.configs['user_variables']['multi_command_delimiter']
 
-        print("Initializing Process Manager")
+        print("[CommandsManager]: Initializing Process Manager.")
         self.process_manager = ProcessManager( configs=self.configs ).start()
 
-        print("Initializing Joystick")
+        print("[CommandsManager]: Initializing Joystick.")
         self.joystick = Joystick( configs=self.configs, 
                                   configs_filepath = self.configs_filepath,
                                   process_manager = self.process_manager)
@@ -71,7 +75,7 @@ class CommandsManager(object):
         if login['streamer_name'] not in self.configs['operators']:
             self.set_config('operators', login['streamer_name'], 0)
         
-        print("Connecting to Twitch")
+        print("[CommandsManager]: Connecting to Twitch.")
         self.interface = TwitchInterface(
                 login['bot_oAuth'],
                 login['bot_name'],
@@ -84,6 +88,15 @@ class CommandsManager(object):
 
         super(CommandsManager, self).__init__(*args, **kwargs)
 
+    def kill(self):
+        print('[CommandsManager]: Terminating.')
+        self.is_alive = False
+        self.interface.kill()
+        self.process_manager.kill()
+        time.sleep(1)
+        print('[CommandsManager]: Terminated.')
+        return
+        
     def set_config(self, file, key, value):
         def write_json( dict, jsn ):
             with io.open( self.configs_filepath + jsn + '.json', 'w', encoding='utf-8' ) as outfile:
@@ -101,9 +114,10 @@ class CommandsManager(object):
             
         
     def update_configs_thread(self):
-        while True:
+        while self.is_alive:
             self.read_configs()
             time.sleep(1)
+        print('[CommandsManager]: Config Updater Terminated.')
 
     def get_commands(self):
         self.interface.start()

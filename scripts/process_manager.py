@@ -6,6 +6,7 @@ class ProcessManager(object):
         self.configs = configs
         self.paused = False
         self.process = None
+        self.self_launched = False
         
     def start(self):
         if self.open_emulator() or \
@@ -15,10 +16,17 @@ class ProcessManager(object):
                 return self
         assert False, 'ProcessManager could not find process. Please check "emulator_settings.json"'
         
+    def kill(self):
+        print('[ProcessManager]: Terminating')
+        if self.self_launched == True:
+            self.process.kill()
+        print('[ProcessManager]: Terminated')
+        
     def open_emulator(self):
         emu_path = self.configs['emulator_settings']['emu_path']
         if emu_path:
             self.process = psutil.Popen([emu_path])
+            self.self_launched = True
             return True
         return False
 
