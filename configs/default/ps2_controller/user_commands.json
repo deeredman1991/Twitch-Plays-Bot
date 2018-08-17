@@ -1,48 +1,47 @@
 {
-    "!lu #(hold_for=1:10)": ":tilt lx fd #(hold_for) smooth",
-	"!ld #(hold_for=1:10)": ":tilt lx bk #(hold_for) smooth",
-	"!ll #(hold_for=1:10)": ":tilt ly lf #(hold_for) smooth",
-	"!lr #(hold_for=1:10)": ":tilt ly ri #(hold_for) smooth",
+    "lu #(hold_for=1:10)": ":tilt lx fd #(hold_for) smooth",
+	"ld #(hold_for=1:10)": ":tilt lx bk #(hold_for) smooth",
+	"ll #(hold_for=1:10)": ":tilt ly lf #(hold_for) smooth",
+	"lr #(hold_for=1:10)": ":tilt ly ri #(hold_for) smooth",
 
-	"!ru #(hold_for=1:10)": ":tilt rx fd #(hold_for) choppy",
-	"!rd #(hold_for=1:10)": ":tilt rx bk #(hold_for) choppy",
-	"!rl #(hold_for=1:10)": ":tilt ry lf #(hold_for) choppy",
-	"!rr #(hold_for=1:10)": ":tilt ry ri #(hold_for) choppy",
+	"ru #(hold_for=1:10)": ":tilt rx fd #(hold_for) choppy",
+	"rd #(hold_for=1:10)": ":tilt rx bk #(hold_for) choppy",
+	"rl #(hold_for=1:10)": ":tilt ry lf #(hold_for) choppy",
+	"rr #(hold_for=1:10)": ":tilt ry ri #(hold_for) choppy",
 
-	"!l1 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash l1 #(times) #(delay) #(hold_for)",
-	"!r1 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash r1 #(times) #(delay) #(hold_for)",
+	"l1 #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash l1 #(times) #(delay) #(hold_for)",
+	"r1 #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash r1 #(times) #(delay) #(hold_for)",
     
-    "!l2 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash l2 #(times) #(delay) #(hold_for)",
-	"!r2 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash r2 #(times) #(delay) #(hold_for)",
+    "l2 #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash l2 #(times) #(delay) #(hold_for)",
+	"r2 #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash r2 #(times) #(delay) #(hold_for)",
     
-    "!l3 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash l3 #(times) #(delay) #(hold_for)",
-	"!r3 #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash r3 #(times) #(delay) #(hold_for)",
+    "l3 #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash l3 #(times) #(delay) #(hold_for)",
+	"r3 #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash r3 #(times) #(delay) #(hold_for)",
 
-    "!tilt #(axis=lx) #(degree=fd) #(hold_for=1)": ":tilt #(axis) #(degree) #(hold_for)",
+	"du #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)":  ":hat 1 up #(times) #(delay) #(hold_for)",
+    "dur #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 ur #(times) #(delay) #(hold_for)",
+    "dr #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)":  ":hat 1 ri #(times) #(delay) #(hold_for)",
+    "ddr #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 dr #(times) #(delay) #(hold_for)",
+	"dd #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)":  ":hat 1 dn #(times) #(delay) #(hold_for)",
+    "ddl #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 dl #(times) #(delay) #(hold_for)",
+	"dl #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)":  ":hat 1 lf #(times) #(delay) #(hold_for)",
+    "dul #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 ul #(times) #(delay) #(hold_for)",
 
-	"!dn #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 up #(times) #(delay) #(hold_for)",
-    "!dne #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 ur #(times) #(delay) #(hold_for)",
-    "!de #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 ri #(times) #(delay) #(hold_for)",
-    "!dse #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 dr #(times) #(delay) #(hold_for)",
-	"!ds #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 dn #(times) #(delay) #(hold_for)",
-    "!dsw #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 dl #(times) #(delay) #(hold_for)",
-	"!dw #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)":  ":hat 1 lf #(times) #(delay) #(hold_for)",
-    "!dnw #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":hat 1 ul #(times) #(delay) #(hold_for)",
+	"st": ":mash st 1 0.1 0.3",
+    "se": ":mash se 1 0.1 0.3",
 
-	"!dpad #(degree=nu) #(times=1:8) #(hold_for=0.3:3) #(delay=0.1": ":hat 1 #(degree) #(times) #(delay) #(hold_for)",
+	"x #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash x #(times) #(delay) #(hold_for)",
+	"o #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash o #(times) #(delay) #(hold_for)",
+	"s #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash s #(times) #(delay) #(hold_for)",
+	"t #(hold_for=0.1:3) #(times=1:8) #(delay=0.1:2)": ":mash t #(times) #(delay) #(hold_for)",
 
-	"!st": ":mash st 1 0.1 0.3",
-    "!se": ":mash se 1 0.1 0.3",
-
-	"!x #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash x #(times) #(delay) #(hold_for)",
-	"!o #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash o #(times) #(delay) #(hold_for)",
-	"!s #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash s #(times) #(delay) #(hold_for)",
-	"!t #(times=1:8) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash t #(times) #(delay) #(hold_for)",
-
-	"!press #(button=a) #(hold_for=0.3:0:3) #(delay=0.1:2)": ":mash #(button) #(times) #(delay) #(hold_for)",
-
-    "!w #(wait_time=1:5)": ":wait #(wait_time)",
+    "w #(wait_time=1:5)": ":wait #(wait_time)",
 
     "!pon": ":set pausing 1",
-    "!poff": ":set pausing 0"
+    "!poff": ":set pausing 0",
+    
+    "!bindon": ":set binding 1",
+    "!bindoff": ":set binding 0",
+    
+    "!help": ":send You are using TPB by Deeredman1991. See description for a list of commands. For more info go to the github - https://github.com/deeredman1991/Twitch-Plays-Bot"
 }

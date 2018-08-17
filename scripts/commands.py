@@ -4,6 +4,12 @@ import time
 
 class CommandError(Exception):
     pass
+    
+def send(_, args):
+    cmds_mngr = args.pop(0)
+    cmds_issuer = args.pop(0)
+    msg = ' '.join(args)
+    cmds_mngr.interface.say(msg)
 
 def mash(joystick, args):
     args = args_to_nums(args)
@@ -34,9 +40,10 @@ def hat(joystick, args):
     delay = args[3]
     hold_for = args[4]
     
-    for _ in range(times):
-        joystick.hat(hat, degree, hold_for)
-        time.sleep( delay )
+    if isinstance(times, int):
+        for _ in range(times):
+            joystick.hat(hat, degree, hold_for)
+            time.sleep( delay )
     
 def tilt(joystick, args):
     args = args_to_nums(args)
@@ -120,15 +127,19 @@ def deop(_, args):
             cmds_mngr.interface.say('Cannot deop. {} is not an operator. '.format(target_username))
 
 def set_var(joystick, args):
+    print(args)
     #:set command usage: :set var value
-    if len(args) < 2 or len(args) > 3:
-        raise CommandError(
-            'set command takes between 2 and 3 argument, got %s; %s' %
-            len(args), args)
+    if len(args) < 4 or len(args) > 5:
+        #print(len(args))
+        print(args)
+        #print( 'Set command takes between 2 and 3 argument, got {}; {}'.format( len(args), (args) ) )
+        raise CommandError()
 
-    key = args[0]           # Which variable to set
-    val = int( args[1] )           # What to set it to.
+    cmds_mngr = args[0]
+    issuer_username = [1]
+    key = args[2]           # Which variable to set
+    val = int( args[3] )           # What to set it to.
 
     joystick.set_user_variable(key, val)
 
-    return joystick.user_variables[key]
+    cmds_mngr.interface.say( '{} user variable has been set to {}.'.format(key, joystick.user_variables[key]) )

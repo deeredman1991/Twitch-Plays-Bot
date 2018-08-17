@@ -9,9 +9,9 @@ class ProcessManager(object):
         self.self_launched = False
         
     def start(self):
-        if self.open_emulator() or \
-           self.get_process_by_name() or \
+        if self.get_process_by_name() or \
            self.get_process_by_pid() or \
+           self.open_emulator() or \
            self.get_process_by_gui():
                 return self
         assert False, 'ProcessManager could not find process. Please check "emulator_settings.json"'
@@ -19,7 +19,11 @@ class ProcessManager(object):
     def kill(self):
         print('[ProcessManager]: Terminating')
         if self.self_launched == True:
-            self.process.kill()
+            try:
+                self.process.kill()
+            except NoSuchProcess as e:
+                print(e)
+                print("Did user close the emulator before reseting the bot?")
         print('[ProcessManager]: Terminated')
         
     def open_emulator(self):

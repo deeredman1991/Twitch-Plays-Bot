@@ -1,0 +1,52 @@
+{
+    "!su #(hold_for=1:10)": ":tilt ly fd #(hold_for) smooth",
+	"!sd #(hold_for=1:10)": ":tilt ly bk #(hold_for) smooth",
+	"!sl #(hold_for=1:10)": ":tilt lx lf #(hold_for) smooth",
+	"!sr #(hold_for=1:10)": ":tilt lx ri #(hold_for) smooth",
+
+	"!cu #(hold_for=1:10)": ":tilt cy fd #(hold_for) choppy",
+	"!cd #(hold_for=1:10)": ":tilt cy bk #(hold_for) choppy",
+	"!cl #(hold_for=1:10)": ":tilt cx lf #(hold_for) choppy",
+	"!cr #(hold_for=1:10)": ":tilt cx ri #(hold_for) choppy",
+
+	"!l #(hold_for=1:10)": ":tilt z lf #(hold_for) choppy",
+	"!r #(hold_for=1:10)": ":tilt z ri #(hold_for) choppy",
+
+    "!tilt #(axis=lx) #(degree=fd) #(hold_for=1:8) #(smoothness=choppy)": ":tilt #(axis) #(degree) #(hold_for) #(smoothness)",
+
+	"!du #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)":  ":hat 1 up #(times) #(delay) #(hold_for)",
+    "!dur #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 ur #(times) #(delay) #(hold_for)",
+    "!dr #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)":  ":hat 1 ri #(times) #(delay) #(hold_for)",
+    "!ddr #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 dr #(times) #(delay) #(hold_for)",
+	"!dd #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)":  ":hat 1 dn #(times) #(delay) #(hold_for)",
+    "!ddl #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 dl #(times) #(delay) #(hold_for)",
+	"!dl #(hold_for=0.3:0:3) #(times=1:8) delay=0.1:2)":  ":hat 1 lf #(times) #(delay) #(hold_for)",
+    "!dul #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":hat 1 ul #(times) #(delay) #(hold_for)",
+
+	"!dpad #(degree=nu) #(times=1:8) #(hold_for=0.3:3) #(delay=0.1:2)": ":hat 1 #(degree) #(times) #(delay) #(hold_for)",
+
+	"!s": ":mash s 1 0.1 0.3",
+
+	"!a #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":mash a #(times) #(delay) #(hold_for)",
+	"!b #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":mash b #(times) #(delay) #(hold_for)",
+	"!x #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":mash x #(times) #(delay) #(hold_for)",
+	"!y #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":mash y #(times) #(delay) #(hold_for)",
+	"!z #(hold_for=0.3:0:3) #(times=1:8) #(delay=0.1:2)": ":mash z #(times) #(delay) #(hold_for)",
+
+	"!press #(button=a) #(hold_for=0.3:0:5) #(delay=0.1:2)": ":mash #(button) #(times) #(delay) #(hold_for)",
+
+    "!w #(wait_time=1:5)": ":wait #(wait_time)",
+
+    "!pon": ":set pausing 1",
+    "!poff": ":set pausing 0",
+    
+    "!jump_forward #(hold_button_for=1) #(hold_axis_for=1)": ":tilt ly fd #(hold_axis_for) smooth ; :mash a 1 0.1 #(hold_button_for)",
+
+    "!bindon": ":set binding 1",
+    "!bindoff": ":set binding 0",
+    
+    "!op #(username=None) #(to_level=5)": ":op #(username) #(to_level)",
+    "!deop #(username=None)": ":deop #(username)",
+    
+    "!help": ":send You are using TPB by Deeredman1991. See description for a list of commands. For more info go to the github - https://github.com/deeredman1991/Twitch-Plays-Bot"
+}

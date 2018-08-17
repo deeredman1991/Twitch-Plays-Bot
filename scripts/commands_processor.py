@@ -45,17 +45,19 @@ class CommandsProcessor(object):
         self._commands_list = {
             ':mash': commands.mash,       #For mashing buttons.
             ':tilt': commands.tilt,       #For tilting axies.
-            ':hat': commands.hat,         #For using the dPad(s)
+            ':hat': commands.hat,         #For using the dPad(s).
             ':set': commands.set_var,     #For setting user_variables.
             ':wait': commands.wait,       #For waiting a set period of time.
             ':op': commands.op,           #For promoting/demoting operators.
-            ':deop': commands.deop}       #For removing operators
+            ':deop': commands.deop,        #For removing operators.
+            ':send': commands.send}       #For sending chat messages.
             
         #A call to a blocking command in a command string should; run all
         #   previous commands, in unison, run the blocking command, then run
         #   any additional commands(or atleast until the next
         #   blocking command) in unison.
         self._blocking_commands = [':set', ':wait']
+        self._mngr_commands = [':op', ':deop', ':send', ':set']
         
         #NOTE: When processing commands: Split by ';' first then by spaces.
         #       This way the user can submit multiple commands with a ; delimiter
@@ -71,7 +73,7 @@ class CommandsProcessor(object):
             assert cmd_root in self._commands_list,\
                 "%s is not a valid command." % cmd_root[0]
 
-            if cmd_root == ':op' or cmd_root == ':deop':
+            if cmd_root in self._mngr_commands:
                 cmd_args.insert(0, issuer_username)
                 cmd_args.insert(0, cmd_mngr)
 

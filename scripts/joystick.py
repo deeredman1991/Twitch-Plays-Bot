@@ -13,6 +13,7 @@ class Joystick(object):
     
         self.last_tilted_axis = None
         self.last_tilted_axis_smoothness = 0
+        self.last_tilted_axis_hold_for = 0
         self.last_tilted_axis_lock = Lock()
         
         self.configs_filepath = configs_filepath
@@ -153,7 +154,8 @@ class Joystick(object):
     def check_last_smooth_axis(self, current_axis=None):
         #If smooth_movement is on and the axis being tilted is not the last axis that was tilted; 
         #   release the last axis that was tilted.
-        if current_axis != self.last_tilted_axis and self.last_tilted_axis_smoothness:
+        if current_axis != self.last_tilted_axis and self.last_tilted_axis_smoothness and self.last_tilted_axis_hold_for > -1:
+            print(self.last_tilted_axis_hold_for)
             j.vJoy.SetAxis( 0x4000, self.rID, self.last_tilted_axis )
             print('[JoyStick: {}]: Setting axis {} to 0 degrees'.format(self.rID, self.last_tilted_axis-0x2F))
 
@@ -223,14 +225,15 @@ class Joystick(object):
             #Store the current axis as the last_tilted_axis
             #   for smooth_movement.
             self.last_tilted_axis = axis
+            self.last_tilted_axis_hold_for = hold_for
             self.last_tilted_axis_smoothness = smoothness
 
         # A hold_for of -1 (or any negative value) will tilt, but not release.
         if hold_for >= 0:
+            # Wait between press and release.
+            time.sleep( hold_for )
             # Only release if smooth_movement is not active.
             if not user_variables['pausing'] or not smoothness:
-                # Wait between press and release.
-                time.sleep( hold_for )
                 # Tilt Axis.
                 j.vJoy.SetAxis( 0x4000, self.rID, axis )
                 print('[JoyStick: {}]: Setting axis {} to 0 degrees'.format(self.rID, axis-0x2F))

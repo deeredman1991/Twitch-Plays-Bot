@@ -96,9 +96,12 @@ class TwitchInterface(object):
             try:
                 formatting_junk = buffer_list[0] or None
                 twitch_junk = buffer_list[-2] or None
-                issuing_user = twitch_junk.split('!')[0] or None
+                if twitch_junk is not None:
+                    issuing_user = twitch_junk.split('!')[0] or 'None'
+                else:
+                    issuing_user = 'None'
                 if len( buffer_list ) > 2:
-                    msg = buffer_list[-1]
+                    msg = buffer_list[-1] or 'None'
                     msgs.append({ issuing_user: msg })
             except IndexError:
                 pass

@@ -142,9 +142,12 @@ class CommandsManager(object):
         return rtv
 
     def get_root(self, command):
-        while command[0] == ' ':
-            command = command[1:]
-        return command.split(' ')[0]
+        if len(command) > 0:
+            while command[0] == ' ':
+                command = command[1:]
+            return command.split(' ')[0]
+        else:
+            return None
 
     def process_command_string(self, external_commands, command_issuer):
         external_commands = external_commands.split(self.command_delimiter)
@@ -258,14 +261,17 @@ class CommandsManager(object):
         elif internal_command_root == ":hat":
             aliases.update( self.configs['aliases_hats'] )
 
-        validator_exceptions = [':set', ':op', ':deop']
+        validator_exceptions = [':set', ':op', ':deop', ':send']
             
         #Helper function to check if an argument of the internal command is valid
         #   so that an invalid argument doesn't get passed to the commands processor.
         def is_valid_argument(arg, internal_command):
             if arg != internal_command_root:
-                if not arg.replace('.','').replace('-','').isdigit() and \
-                   internal_command_root not in validator_exceptions:
+                if hasattr(arg, 'replace'):
+                    if not arg.replace('.','').replace('-','').isdigit() and \
+                       internal_command_root not in validator_exceptions:
+                        return False
+                else:
                     return False
             return True
 
@@ -275,7 +281,7 @@ class CommandsManager(object):
             internal_command_arg_min_value = None
             
             if ':' in internal_command_arg_value and \
-                internal_command_arg_value != internal_command_root:
+                internal_command_arg_value != internal_command_root and internal_command_root != ':send':
                     internal_command_arg_value = internal_command_arg_value.split(':')
                     internal_command_arg_max_value = str( internal_command_arg_value.pop(-1) )
                     if len( internal_command_arg_value ) > 1:
@@ -291,6 +297,11 @@ class CommandsManager(object):
                 if internal_command_arg_max_value == alias:
                     internal_command_arg_max_value == str(value)
 
+            if not is_valid_argument( internal_command_arg_value, internal_command ) or \
+               ( internal_command_arg_max_value and \
+               not is_valid_argument( internal_command_arg_max_value, internal_command ) ):
+                    return None
+            
             if internal_command_root not in validator_exceptions:
                 if internal_command_arg_max_value and \
                     float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
@@ -300,11 +311,6 @@ class CommandsManager(object):
                         internal_command_arg_value = internal_command_arg_min_value
                 
             internal_command[internal_command_arg_key] = internal_command_arg_value
-                
-            if not is_valid_argument( internal_command_arg_value, internal_command ) or \
-               ( internal_command_arg_max_value and \
-               not is_valid_argument( internal_command_arg_max_value, internal_command ) ):
-                    return None
                 
         print ('[CommandsManager]: Sending Internal Command "{}"'.format(' '.join( internal_command )))
         return ' '.join( internal_command )
