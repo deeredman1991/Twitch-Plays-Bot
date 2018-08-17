@@ -43,5 +43,8 @@
     "!bindon": ":set binding 1",
     "!bindoff": ":set binding 0",
     
+    "!op #(username=None) #(to_level=5)": ":op #(username) #(to_level)",
+    "!deop #(username=None)": ":deop #(username)",
+    
     "!help": ":send You are using TPB by Deeredman1991. See description for a list of commands. For more info go to the github - https://github.com/deeredman1991/Twitch-Plays-Bot"
 }

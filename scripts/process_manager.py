@@ -21,7 +21,7 @@ class ProcessManager(object):
         if self.self_launched == True:
             try:
                 self.process.kill()
-            except NoSuchProcess as e:
+            except psutil.NoSuchProcess as e:
                 print(e)
                 print("Did user close the emulator before reseting the bot?")
         print('[ProcessManager]: Terminated')
