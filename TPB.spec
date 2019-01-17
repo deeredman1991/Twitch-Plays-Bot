@@ -4,8 +4,8 @@ from kivy.deps import sdl2, glew
 block_cipher = None
 
 
-a = Analysis(['J:\\ProgrammingStuff\\Python Scripts\\Twitch-Plays-Bot\\main.py'],
-             pathex=['J:\\ProgrammingStuff\\Python Scripts\\Twitch-Plays-Bot'],
+a = Analysis(['J:\\ProgrammingStuff\\Python_Scripts\\Twitch-Plays-Bot\\main.py'],
+             pathex=['J:\\ProgrammingStuff\\Python_Scripts\\Twitch-Plays-Bot'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -24,7 +24,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True , icon='J:\\ProgrammingStuff\\Python Scripts\\Twitch-Plays-Bot\\icon\\icon.ico')
+          console=True , icon='J:\\ProgrammingStuff\\Python_Scripts\\Twitch-Plays-Bot\\icon\\icon.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

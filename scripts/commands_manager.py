@@ -303,12 +303,16 @@ class CommandsManager(object):
                     return None
             
             if internal_command_root not in validator_exceptions:
-                if internal_command_arg_max_value and \
-                    float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
-                        internal_command_arg_value = internal_command_arg_max_value
-                elif internal_command_arg_min_value and \
-                    float( internal_command_arg_value ) < float( internal_command_arg_min_value ):
-                        internal_command_arg_value = internal_command_arg_min_value
+                try:
+                    if internal_command_arg_max_value and \
+                        float( internal_command_arg_value ) > float( internal_command_arg_max_value ):
+                            internal_command_arg_value = internal_command_arg_max_value
+                    elif internal_command_arg_min_value and \
+                        float( internal_command_arg_value ) < float( internal_command_arg_min_value ):
+                            internal_command_arg_value = internal_command_arg_min_value
+                except ValueError:
+                    print("Invalid Command cannot convert {} to float".format(internal_command_arg_value))
+                    return None
                 
             internal_command[internal_command_arg_key] = internal_command_arg_value
                 

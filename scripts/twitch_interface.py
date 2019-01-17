@@ -2,6 +2,10 @@ import socket
 import time
 import threading
 
+
+
+
+
 class TwitchInterface(object):
     def __init__(self, oAuth, bot_name, streamer_name, host='irc.chat.twitch.tv', port=6667, connected_message = "GO!"):
         self.is_alive = True

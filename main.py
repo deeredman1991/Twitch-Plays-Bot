@@ -96,6 +96,7 @@ class GameApp(App):
         }
         Logger.debug('Declared - icons = %s(%s)', type(icons), icons)
 
+        """
         #Iterates over the icons list and logs each element seperately.
         for key, value in icons.items():
             Logger.debug('Iterating - icons[\'%4s\'] = %s(%s)',
@@ -116,7 +117,7 @@ class GameApp(App):
                     self.icon = str(icon)
         Logger.debug('Setting - %s.icon = %s(%s)',
                      self, type(self.icon), self.icon)
-
+        """
         #Creates a ScreenManager that will hold all our screens
         #   i.e. MainMenu(), TwitchPlaysSession(), etc..etc..
         _r = ScreenManager()
