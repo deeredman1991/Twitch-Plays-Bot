@@ -1,89 +1,63 @@
 """ This is the main module; where everything begins.
 """
-
 import os
-
-CURRENT_WORKING_DIRECTORY = os.getcwd()
-
-#Sets kivy's home to the current worlding directory.
-os.environ['KIVY_HOME'] = CURRENT_WORKING_DIRECTORY
-
-from kivy.config import Config
-
+import traceback
+import logging
 from pathlib import Path
 import random
-
+from kivy.config import Config
 from kivy.logger import Logger
-
-#This function applies a monkey patch to the print statement so that it will never crash due to bad encoding.
-#   and so that it will log all print statements.
-#Must go here to catch potential errors in vJoy
+# set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+# Define the current working directory
+CURRENT_WORKING_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
+# Set kivy's home to the current working directory
+os.environ['KIVY_HOME'] = CURRENT_WORKING_DIRECTORY
+# function to monkey patch the print statement
 def monkey_patch_print_statement():
-    # Store the real print function in another variable otherwise
-    # it will be inaccessible after being modified.
-    _print = print  
-
+    # Store the real print function
+    _print = print
     # Actual implementation of the new print
     def custom_print(*args, **options):
-        #_print(*args, **options)
-        #add logging and monkey patch in dumping crash reports to the log file.
         try:
-            Logger.info( 'PRINT: {}'.format( *args ) )
+            logger.info('PRINT: {}'.format(*args))
         except Exception as e:
             try:
-                Logger.warning( "ERROR: Something failed to log.\n> {}\n> {}".format( e, traceback.print_stack() ) )
+                logger.warning("Error: Something failed to log.\n> {}\n> {}".format(e, traceback.print_stack()))
             except Exception:
-                Logger.warning( "CRITICAL: Failed to log stack trace." )
-                
+                logger.warning("Critical: Failed to log stack trace.")
     # Change the print function globally
     import builtins
     builtins.print = custom_print
-    
 monkey_patch_print_statement()
-
-#Must go here because it doesn't play nice with kivy...
-print("Creating vJoy Device")
+# Import vJoy
 import scripts.vJoy as j
+# Create a new vJoy device
+logger.debug("Creating vJoy Device")
 j.vJoyNew(rID=1)
-
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.config import Config
 from kivy.utils import platform as PLATFORM
-
 from scripts.screen_manager import ScreenManager
-
 class GameApp(App):
-    """The GameApp class which contains the game.
-
-        #TODO: doctest here
-    """
+    """The GameApp class which contains the game."""
     def build(self):
         """ Method gets called by Python start, run() and before on_start()
                 see https://kivy.org/docs/guide/basic.html
-
-            #TODO: doctest here
         """
-        Logger.info('Running - build()')
-
-        #FIXME: Window.size gets set to a random size for debugging but
-        #   before release the window should have a default size and
-        #   should also save it's size on_resize() to a file and then
-        #   load in those settings.
+        logger.info('Running - build()')
         _x, _y = random.randint(500, 1000), random.randint(500, 1000)
-        Logger.debug('Declared - _x, _y = %s(%d), %s(%d)',
+        logger.debug('Declared - _x, _y = %s(%d), %s(%d)',
                      type(_x), _x, type(_y), _y)
-        Logger.debug('Setting - %s(%s).size = %s(%d), %s(%d)',
+        logger.debug('Setting - %s(%s).size = %s(%d), %s(%d)',
                      type(Window), Window, type(_x), _x, type(_y), _y)
-        Window.size = (random.randint(500, 1000), random.randint(500, 1000))
-        #Window.size = (300, 500)
-
-        #Sets the title of the application window.
+        Window.size = (_x, _y)
         self.title = 'Twitch Plays Bot'
-        Logger.debug('Setting - %s.title=%s(%s)',
+        logger.debug('Setting - %s.title=%s(%s)',
                      self, type(self.title), self.title)
 
-        #Declares a dictionary to hold icon file path objects.
+ #Declares a dictionary to hold icon file path objects.
         icons = {
             '16': Path('images/icons/icon-16.png'),
             '24': Path('images/icons/icon-24.png'),
@@ -101,7 +75,6 @@ class GameApp(App):
         for key, value in icons.items():
             Logger.debug('Iterating - icons[\'%4s\'] = %s(%s)',
                          key, type(value), value)
-
         #Trys to determine the size an icon should be based on the os.
         if  icons['256'].is_file() and PLATFORM == 'linux' or\
                                        PLATFORM == 'macosx':
