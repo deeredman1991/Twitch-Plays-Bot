@@ -31,6 +31,8 @@ Config.set('kivy', 'log_level', 'debug')
 Config.set('kivy', 'log_name', 'log_%y-%m-%d_%_.out')
 Config.set('kivy', 'log_dir', 'kivy_logs')
 Config.set('graphics', 'resizable', False)
+Config.set('graphics', 'width', '1920')
+Config.set('graphics', 'height', '1080')
 
 try:
     if Config.has_section('input'):
@@ -50,15 +52,15 @@ import threading
 import traceback
 
 # Constants
-MAX_WIDTH = 1280
-MIN_WIDTH = 720
-DEFAULT_SIZE = (1280, 720)
+MAX_WIDTH = 1920
+MIN_WIDTH = 1280
+DEFAULT_SIZE = (1920, 1080)
 
 # Configuration
 CONFIG = {
    'graphics': {
-       'width': '1280',
-       'height': '720',
+       'width': '1920',
+       'height': '1080',
        'resizable': '0',
    },
    'icons': {
@@ -78,9 +80,10 @@ class GameApp(App):
         _dbg('build()')
         Logger.info('Running - build()')
 
-        # Set the window size to 720p
+        # Set the window size to 1080p
         Config.set('graphics', 'width', CONFIG['graphics']['width'])
         Config.set('graphics', 'height', CONFIG['graphics']['height'])
+        Window.size = (int(CONFIG['graphics']['width']), int(CONFIG['graphics']['height']))
 
         self.title = 'Twitch Plays Bot'
 

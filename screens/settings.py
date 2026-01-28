@@ -1,7 +1,6 @@
 import os
 import io
 import json
-import time
 
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
@@ -93,21 +92,15 @@ class Settings(Screen):
         with io.open(path, 'r', encoding='utf-8') as f:
             return json.load(f)
 
-    def _backup_if_exists(self, path):
-        if os.path.isfile(path):
-            ts = time.strftime('%Y%m%d_%H%M%S')
-            bak = path + '.bak_' + ts
-            with io.open(path, 'r', encoding='utf-8') as src:
-                prev = src.read()
-            with io.open(bak, 'w', encoding='utf-8') as dst:
-                dst.write(prev)
-
     def _write_json(self, key, obj):
         path = self._file_path(key)
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        self._backup_if_exists(path)
-        with io.open(path, 'w', encoding='utf-8') as f:
+        tmp_path = path + '.tmp'
+        with io.open(tmp_path, 'w', encoding='utf-8') as f:
             json.dump(obj, f, ensure_ascii=False, indent=4)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, path)
 
     def reload_from_files(self):
         try:

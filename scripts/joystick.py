@@ -3,6 +3,7 @@ import time
 import numbers
 import json
 import io
+import os
 
 import scripts.vigem as j
 
@@ -26,8 +27,16 @@ class Joystick(object):
         self.check_last_smooth_axis()
 
         def write_json( dict, jsn ):
-            with io.open( self.configs_filepath + jsn + '.json', 'w', encoding='utf-8' ) as outfile:
-                json.dump( dict, outfile, ensure_ascii=False )
+            path = self.configs_filepath + jsn + '.json'
+            dir_name = os.path.dirname(path)
+            if dir_name:
+                os.makedirs(dir_name, exist_ok=True)
+            tmp_path = path + '.tmp'
+            with io.open(tmp_path, 'w', encoding='utf-8') as outfile:
+                json.dump(dict, outfile, ensure_ascii=False)
+                outfile.flush()
+                os.fsync(outfile.fileno())
+            os.replace(tmp_path, path)
 
         with self.user_variables_lock:
             print("[JoyStick: {}]: Setting {} to {}".format(self.rID, key, value))

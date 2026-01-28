@@ -99,9 +99,15 @@ class CommandsManager(object):
         
     def set_config(self, file, key, value):
         def write_json( dict, jsn ):
-            with io.open( self.configs_filepath + jsn + '.json', 'w', encoding='utf-8' ) as outfile:
-                json.dump( dict, outfile, ensure_ascii=False )
-                print('[CommandsManager]: Dumping configs json.')
+            path = self.configs_filepath + jsn + '.json'
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            tmp_path = path + '.tmp'
+            with io.open(tmp_path, 'w', encoding='utf-8') as outfile:
+                json.dump(dict, outfile, ensure_ascii=False)
+                outfile.flush()
+                os.fsync(outfile.fileno())
+            os.replace(tmp_path, path)
+            print('[CommandsManager]: Dumping configs json.')
 
         with self.config_locks[file]:
             if value is not None:
