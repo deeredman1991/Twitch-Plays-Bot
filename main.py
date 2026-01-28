@@ -1,5 +1,45 @@
+import os
+import time
+import faulthandler
+
+os.environ.setdefault('KIVY_NO_CONFIG', '1')
+
+os.makedirs('logs', exist_ok=True)
+os.makedirs('kivy_logs', exist_ok=True)
+
+_DEBUG_PATH = os.path.join(os.getcwd(), 'startup_debug.out')
+
+
+def _dbg(msg):
+    try:
+        with open(_DEBUG_PATH, 'a', encoding='utf-8') as f:
+            f.write('{}\t{}\n'.format(time.time(), msg))
+    except Exception:
+        pass
+
+
+try:
+    faulthandler.enable(open(_DEBUG_PATH, 'a', encoding='utf-8'))
+except Exception:
+    pass
+
+_dbg('startup')
+
 from kivy.config import Config
+Config.set('kivy', 'log_enable', '1')
+Config.set('kivy', 'log_level', 'debug')
+Config.set('kivy', 'log_name', 'log_%y-%m-%d_%_.out')
+Config.set('kivy', 'log_dir', 'kivy_logs')
 Config.set('graphics', 'resizable', False)
+
+try:
+    if Config.has_section('input'):
+        for key, _ in list(Config.items('input')):
+            if key.lower().startswith('tuio'):
+                Config.remove_option('input', key)
+except Exception:
+    pass
+
 from pathlib import Path
 from kivy.logger import Logger
 from kivy.app import App
@@ -7,6 +47,7 @@ from kivy.core.window import Window
 from kivy.utils import platform as PLATFORM
 from scripts.screen_manager import ScreenManager
 import threading
+import traceback
 
 # Constants
 MAX_WIDTH = 1280
@@ -34,6 +75,7 @@ CONFIG = {
 
 class GameApp(App):
     def build(self):
+        _dbg('build()')
         Logger.info('Running - build()')
 
         # Set the window size to 720p
@@ -55,15 +97,25 @@ class GameApp(App):
 
 if __name__ == "__main__":
    try:
+       _dbg('run() begin')
        GAMEAPP = GameApp()
        GAMEAPP.run()
+       _dbg('run() end')
    except IOError as e:
-       Logger.error(f"IO Error occurred: {e}")
+       Logger.exception("IO Error occurred")
+       _dbg('IOError: {}'.format(e))
+       traceback.print_exc()
    except AttributeError as e:
-       Logger.error(f"Attribute Error occurred: {e}")
+       Logger.exception("Attribute Error occurred")
+       _dbg('AttributeError: {}'.format(e))
+       traceback.print_exc()
    except SystemExit:
+       _dbg('SystemExit')
        pass
    except Exception as e:
-       Logger.error(f"An unexpected error occurred: {e}")
+       Logger.exception("An unexpected error occurred")
+       _dbg('Exception: {}'.format(e))
+       traceback.print_exc()
    finally:
+       _dbg('finally')
        quit()

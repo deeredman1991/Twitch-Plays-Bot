@@ -4,7 +4,7 @@ import numbers
 import json
 import io
 
-import scripts.vJoy as j
+import scripts.vigem as j
 
 
 class Joystick(object):
@@ -198,18 +198,16 @@ class Joystick(object):
         # Checks to see if the last axis was smooth, if it was; resets it to a neutral position.
         self.check_last_smooth_axis(current_axis=axis)
 
+        original_axis = axis
+        vjoy_axis = axis + 0x2F
+
         #A hold_for of 0 will release but not tilt.
         if hold_for != 0:
             print( '[JoyStick: {}]: Setting axis {} to {} degrees for {} seconds'.format(self.rID, axis, degree, hold_for) )
 
-            # For some reason the axis in vJoy range from 48 or 0x30 to 54.
-            #   We use a 1, 2, 3, 4, ... system. where x = 1, y = 2, etc... etc..
-            #   So we have to add 0x2F (aka 47) to convert our system to the vJoy system.
-            axis = axis+0x2F
-
             # For some reason vJoy inverts the y axis so that -1 is forwards while 1 is backwards.
             # So if we are dealing with the y axis (aka axis number 48 / 0x31) we have to invert our degrees.
-            if axis == 0x31:
+            if vjoy_axis == 0x31:
                 degree = -degree
 
             #degree can be -1, 0, or 1. In order to work with vJoy we need to convert our numbers to 
@@ -220,11 +218,11 @@ class Joystick(object):
             degree = int((degree+1)*0x4000)
 
             #Tilt Axis
-            j.vJoy.SetAxis( degree, self.rID, axis )
+            j.vJoy.SetAxis( degree, self.rID, vjoy_axis )
 
             #Store the current axis as the last_tilted_axis
             #   for smooth_movement.
-            self.last_tilted_axis = axis
+            self.last_tilted_axis = vjoy_axis
             self.last_tilted_axis_hold_for = hold_for
             self.last_tilted_axis_smoothness = smoothness
 
@@ -235,5 +233,5 @@ class Joystick(object):
             # Only release if smooth_movement is not active.
             if not user_variables['pausing'] or not smoothness:
                 # Tilt Axis.
-                j.vJoy.SetAxis( 0x4000, self.rID, axis )
-                print('[JoyStick: {}]: Setting axis {} to 0 degrees'.format(self.rID, axis-0x2F))
+                j.vJoy.SetAxis( 0x4000, self.rID, vjoy_axis )
+                print('[JoyStick: {}]: Setting axis {} to 0 degrees'.format(self.rID, original_axis))

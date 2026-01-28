@@ -21,6 +21,7 @@ from kivy.uix.screenmanager import ShaderTransition, SlideTransition,\
 
 from screens.main_menu import MainMenu
 from screens.session import Session
+from screens.settings import Settings
 
 class ScreenManager(KivyScreenManager):
     """ Screen Manager class is responsible for swapping between screens.
@@ -61,6 +62,7 @@ class ScreenManager(KivyScreenManager):
 
         self.add_widget(MainMenu(name='Main Menu'))
         self.add_widget(Session(name='Session'))
+        self.add_widget(Settings(name='Settings'))
 
         self.current = 'Main Menu'
 

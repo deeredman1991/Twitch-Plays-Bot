@@ -102,13 +102,8 @@ class MainMenu(Screen):
         screen_manager.current = 'Session'
 
     def settings_button_on_press(self):
-        #Creates a string equal to %cd%/configs/commands.json
-        _user_commands_file = str(os.getcwd()) + '/configs/' +\
-                self.parent.profile + '/user_commands.json'
+        screen_manager = self.parent
+        screen_manager.current = 'Settings'
 
-        #executes the string created earlier as a console command.
-        os.startfile(_user_commands_file)
-        
     def exit_button_on_press(self):
         Window.close()
-        

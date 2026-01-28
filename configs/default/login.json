@@ -1,5 +1,5 @@
 {
-	"bot_name": "username",
-	"bot_oAuth": "<Your oauth here>",
-	"streamer_name": "username"
+    "bot_name": "",
+    "bot_oAuth": "",
+    "streamer_name": ""
 }
