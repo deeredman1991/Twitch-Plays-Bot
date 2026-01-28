@@ -1,6 +1,6 @@
  \***Twitch-Plays-Bot-Re-Write**\*
  ======
- 
+ NEW v2.0 pre [update](https://github.com/deeredman1991/Twitch-Plays-Bot/releases) 
    #Dependencies: ( **what you need to install** )
    ------
   - [Python 3.5(64 bit)](https://www.python.org/ftp/python/3.5.0/python-3.5.0-amd64.exe)
