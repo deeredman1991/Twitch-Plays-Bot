@@ -6,6 +6,7 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
+from kivy.uix.switch import Switch
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
@@ -56,9 +57,10 @@ class Settings(Screen):
         root = self.make_box(self)
 
         nav = self.make_box(root, o='horizontal', sy=0.12)
-        self.make_button(nav, 'Twitch', lambda *a: self.show_page('twitch'), sx=0.33, sy=1)
-        self.make_button(nav, 'Emulator', lambda *a: self.show_page('emulator'), sx=0.33, sy=1)
-        self.make_button(nav, 'Bindings', lambda *a: self.show_page('bindings'), sx=0.34, sy=1)
+        self.make_button(nav, 'Twitch', lambda *a: self.show_page('twitch'), sx=0.25, sy=1)
+        self.make_button(nav, 'Emulator', lambda *a: self.show_page('emulator'), sx=0.25, sy=1)
+        self.make_button(nav, 'Bindings', lambda *a: self.show_page('bindings'), sx=0.25, sy=1)
+        self.make_button(nav, 'Plugins', lambda *a: self.show_page('plugins'), sx=0.25, sy=1)
 
         status_row = self.make_box(root, o='horizontal', sy=0.08)
         self._status_label = Label(text='')
@@ -84,8 +86,10 @@ class Settings(Screen):
             self._content_holder.add_widget(self._build_twitch_page())
         elif page == 'emulator':
             self._content_holder.add_widget(self._build_emulator_page())
-        else:
+        elif page == 'bindings':
             self._content_holder.add_widget(self._build_bindings_page())
+        else:
+            self._content_holder.add_widget(self._build_plugins_page())
 
     def _read_json(self, key):
         path = self._file_path(key)
@@ -135,8 +139,68 @@ class Settings(Screen):
             self._save_twitch()
         elif self._active_page == 'emulator':
             self._save_emulator()
-        else:
+        elif self._active_page == 'bindings':
             self._save_bindings()
+        else:
+            self._set_status('Plugins settings save automatically')
+
+    def _build_plugins_page(self):
+        root = BoxLayout(orientation='vertical')
+
+        plugin_manager = getattr(self.parent, 'plugin_manager', None)
+        if plugin_manager is None:
+            root.add_widget(Label(text='Plugin manager not available', size_hint_y=None, height=44))
+            return root
+
+        root.add_widget(Label(text='Enable/Disable plugins (restart app to apply changes)', size_hint_y=None, height=44))
+
+        infos = plugin_manager.infos()
+        if not infos:
+            root.add_widget(Label(text='No plugins found in /plugins', size_hint_y=None, height=44))
+            return root
+
+        rows = GridLayout(cols=1, size_hint_y=None)
+        rows.bind(minimum_height=rows.setter('height'))
+
+        sv = ScrollView(do_scroll_x=False)
+        sv.add_widget(rows)
+        root.add_widget(sv)
+
+        for plugin_id in sorted(infos.keys()):
+            info = infos[plugin_id]
+            row = BoxLayout(orientation='horizontal', size_hint_y=None, height=44)
+
+            label_text = '{} ({}) v{}'.format(info.name, info.plugin_id, info.version)
+            if getattr(info, 'error', None):
+                label_text = label_text + ' [ERROR]'
+
+            row.add_widget(Label(text=label_text, size_hint_x=0.70))
+
+            switch = Switch(active=plugin_manager.is_enabled(plugin_id), size_hint_x=0.15)
+            details = Button(text='Details', size_hint_x=0.15)
+
+            def _toggle(_switch, value, pid=plugin_id):
+                plugin_manager.set_enabled(pid, bool(value))
+                self._set_status('Plugin {} set to {} (restart required)'.format(pid, 'enabled' if value else 'disabled'))
+
+            def _details(_btn, pid=plugin_id):
+                i = plugin_manager.infos().get(pid)
+                if i is None:
+                    return
+                err = getattr(i, 'error', None)
+                if err:
+                    self._set_status('Plugin error: {}'.format(err.splitlines()[-1] if isinstance(err, str) else err))
+                else:
+                    self._set_status('Plugin ok: {}'.format(pid))
+
+            switch.bind(active=_toggle)
+            details.bind(on_press=_details)
+
+            row.add_widget(switch)
+            row.add_widget(details)
+            rows.add_widget(row)
+
+        return root
 
     def _build_twitch_page(self):
         root = BoxLayout(orientation='vertical')

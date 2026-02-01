@@ -29,6 +29,7 @@ class ScreenManager(KivyScreenManager):
         #TODO: doctest here
     """
     def __init__(self, *args, **kwargs):
+        self.plugin_manager = kwargs.pop('plugin_manager', None)
         super(ScreenManager, self).__init__(*args, **kwargs)
 
         #NOTE: This block is temporary while we decide which ones we like best.
@@ -75,3 +76,7 @@ class ScreenManager(KivyScreenManager):
                             'y': 0},
                   size_hint=[.3, .05],
                   outline_width=3))
+
+        if self.plugin_manager is not None:
+            self.plugin_manager.set_screen_manager(self)
+            self.plugin_manager.emit('screen_manager_ready', screen_manager=self)

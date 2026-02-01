@@ -1,0 +1,6 @@
+{
+  "id": "example.manifest",
+  "name": "Manifest Example",
+  "version": "1.0.0",
+  "entry": "plugin.py"
+}

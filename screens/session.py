@@ -48,10 +48,24 @@ class Session(Screen):
             
     def make_manager(self):
         self.commands_manager = CommandsManager( self.parent.cfg_path + self.parent.profile )
+        if hasattr(self.parent, 'plugin_manager') and self.parent.plugin_manager is not None:
+            self.parent.plugin_manager.emit(
+                'session_started',
+                commands_manager=self.commands_manager,
+                profile=self.parent.profile,
+                screen=self,
+            )
         
     def reset_manager_button_on_press(self):
         self.commands_manager.kill()
         self.make_manager()
+        if hasattr(self.parent, 'plugin_manager') and self.parent.plugin_manager is not None:
+            self.parent.plugin_manager.emit(
+                'session_reset',
+                commands_manager=self.commands_manager,
+                profile=self.parent.profile,
+                screen=self,
+            )
         
     def back_button_on_press(self):
         screen_manager = self.parent

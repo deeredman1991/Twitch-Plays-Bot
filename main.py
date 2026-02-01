@@ -48,6 +48,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.utils import platform as PLATFORM
 from scripts.screen_manager import ScreenManager
+from scripts.plugin_system import PluginManager
 import threading
 import traceback
 
@@ -95,8 +96,20 @@ class GameApp(App):
         icon_thread.daemon = True
         icon_thread.start()
 
-        _r = ScreenManager()
+        self.plugin_manager = PluginManager(os.path.join(os.getcwd(), 'plugins'), app_root=os.getcwd())
+        self.plugin_manager.load_all()
+        self.plugin_manager.emit('app_started', app=self)
+
+        _r = ScreenManager(plugin_manager=self.plugin_manager)
         return _r
+
+    def on_stop(self):
+        try:
+            if hasattr(self, 'plugin_manager') and self.plugin_manager is not None:
+                self.plugin_manager.emit('app_stopping', app=self)
+                self.plugin_manager.unload_all()
+        except Exception:
+            traceback.print_exc()
 
 if __name__ == "__main__":
    try:
