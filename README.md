@@ -1,6 +1,6 @@
  \***Twitch-Plays-Bot-Re-Write**\*
  ======
- NEW v2.0 pre [BETA 2](https://github.com/deeredman1991/Twitch-Plays-Bot/releases/tag/2.0) 
+ NEW v2.0 pre [BETA 4](https://github.com/deeredman1991/Twitch-Plays-Bot/releases/tag/2.0_beta_4) 
    
    #Dependencies: ( **what you need to install** )
    ------
