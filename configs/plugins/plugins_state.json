@@ -1,3 +1,5 @@
 {
-    "example.hello": true
+    "example.hello": false,
+    "example.manifest": false,
+    "games.rogue_trader": true
 }

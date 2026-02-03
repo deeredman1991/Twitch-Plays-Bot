@@ -4,7 +4,7 @@
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
+    binaries=[('E:\\tp bot\\New folder\\Twitch-Plays-Bot\\scripts\\ViGEmClient.dll', '.')],
     datas=[],
     hiddenimports=[],
     hookspath=[],

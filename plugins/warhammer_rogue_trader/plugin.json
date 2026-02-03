@@ -1,0 +1,6 @@
+{
+  "id": "games.rogue_trader",
+  "name": "WH40K: Rogue Trader Command Pack",
+  "version": "1.0.0",
+  "entry": "plugin.py"
+}

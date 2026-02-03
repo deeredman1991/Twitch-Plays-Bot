@@ -346,6 +346,31 @@ class CommandsManager(object):
                     if dict_key == 'user_variables' and self.joystick:
                         self.joystick.update_configs(configs=self.configs)
         except FileNotFoundError as e:
-            if json_file.split(os.sep)[-1] != 'dev_login.json':
+            missing_name = json_file.split(os.sep)[-1]
+            if missing_name == 'dev_login.json':
+                return
+
+            default_path = os.path.join('configs', 'default', missing_name)
+            default_data = None
+            try:
+                with open(default_path, 'r') as infile:
+                    default_data = json.load(infile)
+            except FileNotFoundError:
+                default_data = None
+
+            if default_data is None and missing_name == 'operator_commands.json':
+                default_data = {}
+
+            if default_data is None:
                 raise FileNotFoundError(e)
-                
+
+            with self.config_locks[dict_key]:
+                self.configs[dict_key] = default_data
+
+            os.makedirs(os.path.dirname(json_file), exist_ok=True)
+            tmp_path = json_file + '.tmp'
+            with io.open(tmp_path, 'w', encoding='utf-8') as outfile:
+                json.dump(default_data, outfile, ensure_ascii=False)
+                outfile.flush()
+                os.fsync(outfile.fileno())
+            os.replace(tmp_path, json_file)

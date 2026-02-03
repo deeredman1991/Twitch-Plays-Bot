@@ -1,4 +1,5 @@
 import os
+import sys
 import ctypes
 from ctypes import wintypes
 
@@ -57,7 +58,19 @@ def _find_vigemclient_dll():
     candidates = [
         os.path.join(os.path.dirname(__file__), "ViGEmClient.dll"),
         os.path.join(os.getcwd(), "ViGEmClient.dll"),
+        os.path.join(os.path.dirname(os.path.abspath(sys.argv[0] or '')), "ViGEmClient.dll"),
+        os.path.join(os.path.dirname(os.path.abspath(sys.executable or '')), "ViGEmClient.dll"),
     ]
+
+    meipass = getattr(sys, '_MEIPASS', None)
+    if meipass:
+        candidates.append(os.path.join(meipass, "ViGEmClient.dll"))
+
+    try:
+        app_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+        candidates.append(os.path.join(app_root, "ViGEmClient.dll"))
+    except Exception:
+        pass
 
     path_env = os.environ.get("PATH", "")
     for p in path_env.split(os.pathsep):
@@ -71,6 +84,45 @@ def _find_vigemclient_dll():
             return c
 
     return None
+
+
+def _vigemclient_search_candidates():
+    candidates = [
+        os.path.join(os.path.dirname(__file__), "ViGEmClient.dll"),
+        os.path.join(os.getcwd(), "ViGEmClient.dll"),
+        os.path.join(os.path.dirname(os.path.abspath(sys.argv[0] or '')), "ViGEmClient.dll"),
+        os.path.join(os.path.dirname(os.path.abspath(sys.executable or '')), "ViGEmClient.dll"),
+    ]
+
+    meipass = getattr(sys, '_MEIPASS', None)
+    if meipass:
+        candidates.append(os.path.join(meipass, "ViGEmClient.dll"))
+
+    try:
+        app_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+        candidates.append(os.path.join(app_root, "ViGEmClient.dll"))
+    except Exception:
+        pass
+
+    path_env = os.environ.get("PATH", "")
+    for p in path_env.split(os.pathsep):
+        p = p.strip('"')
+        if not p:
+            continue
+        candidates.append(os.path.join(p, "ViGEmClient.dll"))
+
+    seen = set()
+    out = []
+    for c in candidates:
+        try:
+            c = os.path.abspath(c)
+        except Exception:
+            pass
+        if c in seen:
+            continue
+        seen.add(c)
+        out.append(c)
+    return out
 
 
 def _to_short_from_vjoy_axis_value(vjoy_value):
@@ -99,12 +151,38 @@ class _ViGEmBackend(object):
 
         dll_path = _find_vigemclient_dll()
         if not dll_path:
+            searched = _vigemclient_search_candidates()
             raise ViGEmError(
                 "Unable to load ViGEmClient.dll. Place ViGEmClient.dll next to scripts/vigem.py "
-                "or set VIGEMCLIENT_DLL to its full path."
+                "or set VIGEMCLIENT_DLL to its full path.\n"
+                "CWD: {}\n"
+                "sys.argv[0]: {}\n"
+                "sys.executable: {}\n"
+                "Searched paths:\n- {}".format(os.getcwd(), sys.argv[0], sys.executable, "\n- ".join(searched))
             )
 
-        self._dll = ctypes.CDLL(dll_path)
+        dll_dir = os.path.dirname(os.path.abspath(dll_path))
+        add_dir = getattr(os, 'add_dll_directory', None)
+        cookie = None
+        try:
+            if callable(add_dir):
+                cookie = add_dir(dll_dir)
+            self._dll = ctypes.CDLL(dll_path)
+        except OSError as e:
+            raise ViGEmError(
+                "Unable to load ViGEmClient.dll from {}. {}\n"
+                "Common causes:\n"
+                "- Wrong architecture (32-bit vs 64-bit) between Python and ViGEmClient.dll\n"
+                "- Missing dependency DLLs (install Microsoft Visual C++ Redistributable)\n"
+                "- ViGEmBus driver not installed/running\n"
+                "If you are sure the file is in the right folder, try a dependency check tool (Dependencies/Dependency Walker).".format(dll_path, e)
+            )
+        finally:
+            try:
+                if cookie is not None:
+                    cookie.close()
+            except Exception:
+                pass
 
         self._dll.vigem_alloc.restype = ctypes.c_void_p
 
